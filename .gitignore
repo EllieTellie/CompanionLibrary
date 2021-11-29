@@ -1,0 +1,21 @@
+##########################################
+# Visual Studio / MonoDevelop generated
+##########################################
+
+Generated Code/
+ExportedObj/
+obj/
+.vs/
+**/bin/Debug/
+**/bin/Release/
+*.vsconfig
+*.svd
+*.userprefs
+*.pidb
+*.suo
+*.user
+*.unityproj
+*.booproj
+*.symcache
+*.symcache.meta
+**/MSTest.*/
