@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CompanionData</name>
+    </assembly>
+    <members>
+        <member name="M:Companion.Data.StringExtensions.Trim(System.String[])">
+            <summary>
+            Trim all the whitespace from the strings in this array.
+            </summary>
+            <param name="arr">Array</param>
+        </member>
+        <member name="F:Companion.Data.SelectionEntry.parent">
+            <summary>
+            Parent selection if available.
+            </summary>
+        </member>
+        <member name="F:Companion.Data.Selection.parent">
+            <summary>
+            Parent selection if available.
+            </summary>
+        </member>
+        <member name="F:Companion.Data.XmlData.comment">
+            <summary>
+            Optional comment for data.
+            </summary>
+        </member>
+        <member name="F:Companion.Data.XmlData.fields">
+            <summary>
+            List of xml lists containing all the nodes after parsing.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.XmlData.InitFields">
+            <summary>
+            Init the fields usually lists to a new empty list. By default does nothing.
+            </summary>
+        </member>
+        <member name="T:Companion.Data.GameSystemGroup">
+            <summary>
+            Group of catalogues and systems used in a roster. Mostly for roster detection speed.
+            </summary>
+        </member>
+        <member name="E:Companion.Data.RosterReader.OnRosterParsed">
+            <summary>
+            Dispatched on the main unity thread. Source is roster. EventArgs is null.
+            </summary>
+        </member>
+        <member name="T:Companion.Data.WordReader">
+            <summary>
+            Simple reader that reads words. 
+            </summary>
+        </member>
+        <member name="E:RosterManager.OnRostersLoaded">
+            <summary>
+            Fired when all rosters are loaded.
+            </summary>
+        </member>
+        <member name="E:RosterManager.OnRostersAdded">
+            <summary>
+            Fired whenever a roster is added.
+            </summary>
+        </member>
+        <member name="M:RosterManager.AddRoster(System.Byte[])">
+            <summary>
+            Parse the roster and add it to the roster manager.
+            </summary>
+            <param name="data">Roster data</param>
+        </member>
+        <member name="E:SystemManager.OnGameSystemsLoaded">
+            <summary>
+            Dispatched on the main thread. Source is this. EventArgs is null.
+            </summary>
+        </member>
+    </members>
+</doc>

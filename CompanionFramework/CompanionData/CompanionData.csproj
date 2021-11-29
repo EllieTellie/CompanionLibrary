@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Companion</RootNamespace>
+    <AssemblyName>CompanionData</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>C:\Projects\CompanionLibrary\CompanionFramework\CompanionData\CompanionData.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CompanionFramework\CompanionFramework.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="&quot;$(ProjectDir)DeployHelper.exe&quot; -path=&quot;C:\\Projects\\&quot; -lib=&quot;$(TargetDir)$(ProjectName).dll&quot; -deploy=&quot;true&quot; -debug=&quot;true&quot; -tools=&quot;false&quot;" />
+  </Target>
+
+</Project>

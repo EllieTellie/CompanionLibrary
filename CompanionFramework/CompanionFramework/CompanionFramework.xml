@@ -1,0 +1,1300 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CompanionFramework</name>
+    </assembly>
+    <members>
+        <member name="T:CompanionFramework.Core.Log.DisabledLogger">
+            <summary>
+            The disabled logger does exactly what is says on the tin.
+            </summary>
+        </member>
+        <member name="T:CompanionFramework.Core.Log.FrameworkLogger">
+            <summary>
+            Logs messages through a singleton that is lazily initialized.
+            By default it uses the <see cref="T:CompanionFramework.Core.Log.DisabledLogger"/> and won't log anything. The log level by default is LogLevel.All.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Core.Log.FrameworkLogger.instance">
+            <summary>
+            Singleton instance that starts of null.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Core.Log.FrameworkLogger.Instance">
+            <summary>
+            Gets the framework logger singleton and creates an instance if required.
+            </summary>
+            <returns>Framework logger instance</returns>
+        </member>
+        <member name="M:CompanionFramework.Core.Log.FrameworkLogger.GetLogger">
+            <summary>
+            Get the logger for the framework. By default logging is disabled.
+            </summary>
+            <returns>current logger instance</returns>
+        </member>
+        <member name="M:CompanionFramework.Core.Log.FrameworkLogger.SetLogger(CompanionFramework.Core.Log.ILogger)">
+            <summary>
+            Set the logger for the framework.
+            </summary>
+            <param name="logger">new logger instance</param>
+        </member>
+        <member name="T:CompanionFramework.Core.Log.ILogger">
+            <summary>
+            Interface for logging framework.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Core.Log.ILogger.MessageLog(System.String)">
+            <summary>
+            Log a message.
+            </summary>
+            <param name="message">message</param>
+        </member>
+        <member name="M:CompanionFramework.Core.Log.ILogger.MessageLogWarning(System.String)">
+            <summary>
+            Log a warning.
+            </summary>
+            <param name="message">message</param>
+        </member>
+        <member name="M:CompanionFramework.Core.Log.ILogger.MessageLogError(System.String)">
+            <summary>
+            Log an error.
+            </summary>
+            <param name="message">message</param>
+        </member>
+        <member name="M:CompanionFramework.Core.Log.ILogger.MessageLogException(System.Exception)">
+            <summary>
+            Log an exception.
+            </summary>
+            <param name="exception">message</param>
+        </member>
+        <member name="F:CompanionFramework.Core.Log.LogLevel.All">
+            <summary>
+            Logs everything.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Core.Log.LogLevel.Debug">
+            <summary>
+            Logs Debug, Message, Warning, Error and Exceptions.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Core.Log.LogLevel.Message">
+            <summary>
+            Logs Message, Warning, Error and Exceptions.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Core.Log.LogLevel.Warning">
+            <summary>
+            Logs Warning, Error and Exceptions.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Core.Log.LogLevel.Error">
+            <summary>
+            Logs Error and Exceptions.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Core.Log.LogLevel.Exception">
+            <summary>
+            Logs Exceptions.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Core.Log.LogLevel.None">
+            <summary>
+            Logs nothing.
+            </summary>
+        </member>
+        <member name="T:CompanionFramework.Core.Threading.Messaging.DoubleBufferList`1">
+            <summary>
+            Attempt at making a thread safe double buffer list. In theory it should allow writes to the list while the list is being read.
+            </summary>
+            <typeparam name="T">The type contained in the list</typeparam>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.Messaging.DoubleBufferList`1.Add(`0)">
+            <summary>
+            Add to the write list.
+            </summary>
+            <param name="data">data to add</param>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.Messaging.DoubleBufferList`1.Swap">
+            <summary>
+            Get the list for reading.
+            </summary>
+            <returns>List for reading</returns>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.Messaging.DoubleBufferList`1.HasInput">
+            <summary>
+            Whether the list has any data.
+            </summary>
+            <returns>True if the list has data</returns>
+        </member>
+        <member name="T:CompanionFramework.Core.Threading.Messaging.IMessageDispatcher`1">
+            <summary>
+            Interface for dispatching messages on the event queue.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.Messaging.IMessageDispatcher`1.Dispatch(System.Object,`0)">
+            <summary>
+            Fire this message on the dispatcher.
+            </summary>
+            <param name="source">Event Source</param>
+            <param name="eventArgs">Event Arguments</param>
+        </member>
+        <member name="T:CompanionFramework.Core.Threading.Messaging.MessageEvent">
+            <summary>
+            Wrapper for source and event arguments. Copies the <see cref="T:System.EventHandler"/> to avoid modifications to the list.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.Messaging.MessageEvent.GetSource">
+            <summary>
+            Get the event source.
+            </summary>
+            <returns>Event source</returns>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.Messaging.MessageEvent.GetEventArgs">
+            <summary>
+            Get the event arguments.
+            </summary>
+            <returns>Event arguments</returns>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.Messaging.MessageEvent.Dispatch">
+            <summary>
+            Dispatch the event. This executes the event immediately.
+            </summary>
+        </member>
+        <member name="T:CompanionFramework.Core.Threading.Messaging.MessageHandler">
+            <summary>
+            Wrapper class for the message queue. Accessed by lazy initialized singleton.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.Messaging.MessageHandler.Instance">
+            <summary>
+            Access the message handler singleton. If it's not set it will create a new message handler.
+            </summary>
+            <returns>Message handler singleton</returns>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.Messaging.MessageHandler.#ctor">
+            <summary>
+            Create a new message handler with a message queue.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.Messaging.MessageHandler.GetMessageQueue">
+            <summary>
+            Get the message queue.
+            </summary>
+            <returns>Returns the message queue</returns>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.Messaging.MessageHandler.ProcessQueue">
+            <summary>
+            Fires any messages in the message queue. Should be called from a main loop or timer loop.
+            </summary>
+        </member>
+        <member name="T:CompanionFramework.Core.Threading.Messaging.MessageQueue">
+            <summary>
+            A simple message queue for throwing events back to the Unity main loop.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.Messaging.MessageQueue.Invoke(System.EventHandler)">
+            <summary>
+            Invoke this event on the unity thread. There may be a delay until the event gets fired.
+            Note: The source object and event arguments are set to null in this helper method.
+            </summary>
+            <param name="invokeEvent">The event to fire</param>
+            <returns>True if successful</returns>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.Messaging.MessageQueue.Invoke(System.EventHandler,System.Object)">
+            <summary>
+            Invoke this event on the unity thread. There may be a delay until the event gets fired.
+            Note: The event arguments are set to null in this helper method.
+            </summary>
+            <param name="invokeEvent">The event to fire</param>
+            <param name="source">The source object</param>
+            <returns>True if successful</returns>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.Messaging.MessageQueue.Invoke(System.EventHandler,System.Object,System.EventArgs)">
+            <summary>
+            Invoke this event on the unity thread. There may be a delay until the event gets fired.
+            </summary>
+            <param name="invokeEvent">The event to fire</param>
+            <param name="source">The source object</param>
+            <param name="eventArgs">The event arguments</param>
+            <returns>True if successful</returns>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.Messaging.MessageQueue.HasInput">
+            <summary>
+            Whether the queue has any messages queued.
+            </summary>
+            <returns>True if the queue contains messages</returns>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.Messaging.MessageQueue.Dispatch">
+            <summary>
+            Dispatch should be called from a main loop or timer loop. Dispatch processes any messages currently in the queue.
+            </summary>
+        </member>
+        <member name="T:CompanionFramework.Core.Threading.ThreadPool.CancelToken">
+            <summary>
+            Class used to cancel threaded operations thread safe.
+            </summary>
+        </member>
+        <member name="T:CompanionFramework.Core.Threading.ThreadPool.IBaseThreadedTask">
+            <summary>
+            Simple task for use in the thread pool.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.ThreadPool.IBaseThreadedTask.Run">
+            <summary>
+            Run the task.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.ThreadPool.IBaseThreadedTask.Cancel">
+            <summary>
+            Attempt to cancel the task.
+            </summary>
+        </member>
+        <member name="T:CompanionFramework.Core.Threading.ThreadPool.IThreadedTask">
+            <summary>
+            Threaded task with events for when the task starts and finishes.
+            </summary>
+        </member>
+        <member name="E:CompanionFramework.Core.Threading.ThreadPool.IThreadedTask.TaskStarted">
+            <summary>
+            Fired when the task started.
+            </summary>
+        </member>
+        <member name="E:CompanionFramework.Core.Threading.ThreadPool.IThreadedTask.TaskFinished">
+            <summary>
+            Fired when the task is finished.
+            </summary>
+        </member>
+        <member name="T:CompanionFramework.Core.Threading.ThreadPool.SimpleThreadPool">
+            <summary>
+            Simple thread pool that can store multiple threads and execute tasks on the threads.
+            </summary>
+        </member>
+        <member name="P:CompanionFramework.Core.Threading.ThreadPool.SimpleThreadPool.Destroyed">
+            <summary>
+            Whether the thread pool is destroyed.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.ThreadPool.SimpleThreadPool.#ctor">
+            <summary>
+            Create a thread pool with a maximum capacity of 1.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.ThreadPool.SimpleThreadPool.#ctor(System.Int32)">
+            <summary>
+            Create a thread pool with a specified maximum capacity.
+            </summary>
+            <param name="workerThreads">How many threads to create</param>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.ThreadPool.SimpleThreadPool.Add(CompanionFramework.Core.Threading.ThreadPool.IBaseThreadedTask)">
+            <summary>
+            Add a task to the queue for processing, helper method that passes ITask.Run to Add()
+            </summary>
+            <param name="task">The task to be processed</param>
+            <returns>true if the task was added</returns>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.ThreadPool.SimpleThreadPool.Add(System.Action)">
+            <summary>
+            Add an action to the queue for processing
+            </summary>
+            <param name="action">The action to be processed</param>
+            <returns>true if the action was added</returns>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.ThreadPool.SimpleThreadPool.SpawnWorkerThreads">
+            <summary>
+            Creates the initial threads. This could be improved to lazily init or spawn more as desired.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.ThreadPool.SimpleThreadPool.Dispose">
+            <summary>
+            Destroy the thread pool, don't wait on the threads to finish
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.ThreadPool.SimpleThreadPool.Destroy(System.Boolean)">
+            <summary>
+            Destroy the thread pool.
+            </summary>
+            <param name="waitOnThreads">Whether to wait on all running threads to complete.</param>
+        </member>
+        <member name="M:CompanionFramework.Core.Threading.ThreadPool.SimpleThreadPool.Count">
+            <summary>
+            How many tasks are currently queued.
+            </summary>
+            <returns>Queue count</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.CompressionUtils.DecompressGZipToPath(System.Byte[],System.String)">
+            <summary>
+            Extract byte array to the specified path. Uses GZip.
+            </summary>
+            <param name="data">byte array to unzip</param>
+            <param name="outputPath">path to save to</param>
+            <returns>FileSaveResult.Success if successful</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.CompressionUtils.DecompressFileFromZip(System.Byte[],System.String)">
+            <summary>
+            Decompress a .zip file into a byte[] data. The file inside the zip must have the extension provided.
+            </summary>
+            <param name="data">Data</param>
+            <param name="extension">extension of the filename in the zip</param>
+            <returns>Decompressed data</returns>
+        </member>
+        <member name="T:CompanionFramework.IO.Utils.FileSearchUtils">
+            <summary>
+            Used for file searching. Added so tools can benefit from it without having to copy the class.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileSearchUtils.FindFileNamesByExtension(System.String,System.String,System.Int32)">
+            <summary>
+            Find file names by extension. This recursively searches directories until max depth is reached. By default it searches the first directory and the next directory.
+            </summary>
+            <param name="searchDirectory">Search directory</param>
+            <param name="searchExtension">Search extension</param>
+            <param name="maxDepth">Max Depth</param>
+            <returns>Returns the list of files</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileSearchUtils.FindFileName(System.String,System.String,System.Int32)">
+            <summary>
+            Find file by exact file name. This recursively searches directories until max depth is reached. By default it searches the first directory and the next directory.
+            </summary>
+            <param name="searchDirectory">Search directory</param>
+            <param name="searchName">Search name</param>
+            <param name="maxDepth">Max Depth</param>
+            <returns>Returns the file</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileSearchUtils.FindFileNames(System.String,System.String,System.Int32)">
+            <summary>
+            Find file names by exact file name. This recursively searches directories until max depth is reached. By default it searches the first directory and the next directory.
+            </summary>
+            <param name="searchDirectory">Search directory</param>
+            <param name="searchName">Search name</param>
+            <param name="maxDepth">Max Depth</param>
+            <returns>Returns the list of files</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileSearchUtils.FindDirectoryNames(System.String,System.String,System.Int32)">
+            <summary>
+            Find directories by exact directory name. This recursively searches directories until max depth is reached. By default it searches the first directory and the next directory.
+            </summary>
+            <param name="searchDirectory">Search directory</param>
+            <param name="directoryName">Search name</param>
+            <param name="maxDepth">Max Depth</param>
+            <returns>Returns the list of files</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileSearchUtils.FindDirectoryName(System.String,System.String,System.Int32)">
+            <summary>
+            Find the first directory name inside the search directory. This recursively searches directories until max depth is reached. By default it searches the first directory and the next directory.
+            </summary>
+            <param name="searchDirectory">Search directory</param>
+            <param name="directoryName">Directory name to search for</param>
+            <param name="maxDepth">Max Depth</param>
+            <returns>Directory name if found</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileSearchUtils.FindMatchingDirectories(System.String,System.String[])">
+            <summary>
+            Find the first directory that contains all provided directories. This recursively searches directories until max depth is reached. By default it searches the first directory and the next directory.
+            </summary>
+            <param name="searchDirectory">Search directory</param>
+            <param name="directoryNames">Directory names that must be present</param>
+            <returns>Directory name if found</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileSearchUtils.FindMatchingDirectories(System.String,System.Int32,System.String[])">
+            <summary>
+            Find the first directory name inside the search directory. This recursively searches directories until max depth is reached. By default it searches the first directory and the next directory.
+            </summary>
+            <param name="searchDirectory">Search directory</param>
+            <param name="maxDepth">Max Depth</param>
+            <param name="directoryNames">Directory names to search for</param>
+            <returns>Directory name if found</returns>
+        </member>
+        <member name="F:CompanionFramework.IO.Utils.FileSaveResult.Success">
+            <summary>
+            Success.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.IO.Utils.FileSaveResult.Failed">
+            <summary>
+            Generic failed to save file.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.IO.Utils.FileSaveResult.MissingPermission">
+            <summary>
+            Permission issue.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.IO.Utils.FileSaveResult.NoDiskSpace">
+            <summary>
+            No disk space error was thrown.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.IO.Utils.FileUtils.DefaultEncoding">
+            <summary>
+            The default encoding: <see cref="P:System.Text.Encoding.UTF8"/>.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.GetString(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Get a string from a buffered byte array using UTF8 encoding. Returns null if an exception occurred.
+            </summary>
+            <param name="data">byte array</param>
+            <param name="index">index to start</param>
+            <param name="count">amount of bytes</param>
+            <returns>string from bytes or null</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.GetString(System.Byte[])">
+            <summary>
+             Get string from a byte array using UTF8 encoding. Returns null if an exception occurred.
+            </summary>
+            <param name="data">byte array</param>
+            <returns>string from bytes or null</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.GetString(System.Byte[],System.Text.Encoding)">
+            <summary>
+            Get string from a byte array using the specified encoding. Returns null if an exception occurred.
+            </summary>
+            <param name="data">byte array</param>
+            <param name="encoding">encoding to convert</param>
+            <returns>string from bytes or null</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.GetBytes(System.String)">
+            <summary>
+            Get bytes from a string using UTF8 encoding. Returns null if an exception occurred.
+            </summary>
+            <param name="text">text to convert</param>
+            <returns>byte array of the text or null</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.GetDirectoryFromUri(System.String)">
+            <summary>
+            Get the directory from a uri. This converts the string to a <see cref="T:System.Uri"/> and then strips the file name off the end to get the directory.
+            Can return null if not a valid uri. Returns the whole uri if it does not have a file name at the end.
+            </summary>
+            <param name="uriLocation">Uri location to convert</param>
+            <returns>Directory from the uri</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.GetDirectoryFromPath(System.String)">
+            <summary>
+            Get the directory from a path. If it does not have an extension it appends a directory separator and gets the directory from that.
+            </summary>
+            <param name="path">Path to convert</param>
+            <returns>Directory from the path</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.GetFileNameFromUriString(System.String)">
+            <summary>
+            Get the file name from a uri string. Can be null if the string passed is not a <see cref="T:System.Uri"/>.
+            </summary>
+            <param name="uriString">String to get the filename from</param>
+            <returns>Filename or null</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.GetExtension(System.String)">
+            <summary>
+            Simply grabs the extension by finding the period and returning it. This includes the period. Returns an empty string if there's no extension.
+            </summary>
+            <param name="fileName">Filename to get extension from</param>
+            <returns>Extension from the period</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.GetExtensionSafe(System.String)">
+            <summary>
+            Get an extension from the filename. This includes the period. Returns an empty string if the filename is invalid.
+            </summary>
+            <param name="fileName">Filename to get extension from</param>
+            <returns>Extension from the period</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.GetFileNameWithoutExtensionSafe(System.String)">
+            <summary>
+            Get an extension from the filename without the extension. Returns an empty string if the filename is invalid.
+            </summary>
+            <param name="url">url</param>
+            <returns>Filename without extension</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.StripExtension(System.String)">
+            <summary>
+            Remove the file extension from the string by finding the last period and removing that.
+            </summary>
+            <param name="fileName">Filename to strip extension from</param>
+            <returns>Filename without extension</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.GetFileNameFromUri(System.Uri)">
+            <summary>
+            Get filename from a <see cref="T:System.Uri"/> by returning the last segment.
+            </summary>
+            <param name="uri">Uri to get filename from</param>
+            <returns>Filename from uri or null if no segments are present</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.GetSafeUri(System.String)">
+            <summary>
+            Convert a string to a <see cref="T:System.Uri"/> which returns null if it cannot convert.
+            </summary>
+            <param name="uri">String to convert</param>
+            <returns>Uri or null if it failed</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.ReadTextFileSimple(System.String)">
+            <summary>
+            Read a text file completely using UTF8. Returns null if the file does not exist. This uses File.ReadAllText.
+            </summary>
+            <param name="path">Path to read</param>
+            <returns>Text file or null if it does not exist</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.ReadTextFile(System.String)">
+            <summary>
+            Read a text file completely using UTF8. Returns null if the file does not exist.
+            </summary>
+            <param name="path">Path to read</param>
+            <returns>Text file or null if it does not exist</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.ReadTextFile(System.String,System.Text.Encoding)">
+            <summary>
+            Read a text file completely using the specified encoding. Returns null if the file does not exist.
+            </summary>
+            <param name="path">Path to read</param>
+            <param name="encoding">Encoding to use</param>
+            <returns>Text file or null if it does not exist</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.ReadFileSimple(System.String)">
+            <summary>
+            Read a binary file completely. Returns null if the file does not exist. This uses File.ReadAllbytes.
+            </summary>
+            <param name="path">Path to read</param>
+            <returns>Byte array or null if it does not exist</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.ReadFile(System.String,CompanionFramework.Net.Http.Common.IStreamProgress)">
+            <summary>
+            Buffered read a binary file completely. Returns null if the file does not exist.
+            </summary>
+            <param name="path">Path to read</param>
+            <param name="progress">Optional progress tracker</param>
+            <returns>Byte array or null if it does not exist</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.GetByteArrayFromStream(System.IO.Stream,CompanionFramework.Net.Http.Common.IStreamProgress,System.Int64)">
+            <summary>
+            Read the whole stream of bytes and return the array.
+            </summary>
+            <param name="stream">Stream to read from</param>
+            <param name="progress">Optional progress tracker</param>
+            <param name="contentLength">Content length or zero if not provided</param>
+            <returns>Byte array or null if the stream is null</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.Save(System.Byte[],System.String)">
+            <summary>
+            Save a byte array to the specified path synchronously.
+            </summary>
+            <param name="data">Byte array to save</param>
+            <param name="path">Path to save to</param>
+            <returns>FileSaveResult.Success if save succeeded</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.SaveTextFile(System.String,System.String)">
+            <summary>
+            Save a string to the specified path synchronously.
+            </summary>
+            <param name="text">String to save</param>
+            <param name="path">Path to save to</param>
+            <returns>FileSaveResult.Success if save succeeded</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.SaveAsync(System.Byte[],System.String)">
+            <summary>
+            Save a byte array to the specified path asynchronously.
+            </summary>
+            <param name="data">Byte array to save</param>
+            <param name="path">Path to save to</param>
+            <returns>Async result or null if failed</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.EndSave(System.IAsyncResult)">
+            <summary>
+            Finish the async saving of the byte array.
+            </summary>
+            <param name="result">result</param>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.IsExceptionDiskFull(System.Exception)">
+            <summary>
+            Check if the exception is because of the disk being full. This checks the error result and works on .net 4.6+ only.
+            </summary>
+            <param name="e">Exception to check</param>
+            <returns>True if exception was caused by disk being full</returns>
+        </member>
+        <member name="T:CompanionFramework.Json.Extensions.CommonJsonDataExtensions">
+            <summary>
+            Extensions for LitJson JsonData objects.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetInt(LitJson.JsonData)">
+            <summary>
+            Get the int value of this json. If it's not an int or null it will return -1.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <returns>Int value or -1 if not an int</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetInt(LitJson.JsonData,System.String)">
+            <summary>
+            Get the int value of this json. If it's not an int or null it will return -1.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <param name="key">key to look for</param>
+            <returns>Int value or -1 if not an int</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetInt(LitJson.JsonData,System.Boolean)">
+            <summary>
+            Get the int value of this json. If it's not an int or null it will return -1.
+            Will log a warning if the data is not an int if the warn flag is set.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <param name="warn">Whether to warn if the data is not an int</param>
+            <returns>Int value or -1 if not an int</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetFloat(LitJson.JsonData)">
+            <summary>
+            Get the float value of this json. If it's not a float or null it will return -1f.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <returns>Float value or -1f if not a float</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetDouble(LitJson.JsonData)">
+            <summary>
+            Get the double value of this json. If it's not a double or null it will return -1f.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <returns>Double value or -1 if not a double</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetDouble(LitJson.JsonData,System.String)">
+            <summary>
+            Get the double value of this json. If it's not a double or null it will return -1f.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <param name="key">key to look for</param>
+            <returns>Double value or -1 if not a double</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetLong(LitJson.JsonData)">
+            <summary>
+            Get the long value of this json. If it's not a long or null it will return -1.
+            Will log a warning if the data is not a long.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <returns>Long value or -1 if not a long</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetLong(LitJson.JsonData,System.String)">
+            <summary>
+            Get the long value of this json. If it's not a long or null it will return -1.
+            Will log a warning if the data is not a long.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <param name="key">key to look for</param>
+            <returns>Long value or -1 if not a long</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetLong(LitJson.JsonData,System.Boolean)">
+            <summary>
+            Get the long value of this json. If it's not a long or null it will return -1.
+            Will log a warning if the data is not a long if the warn flag is set.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <param name="warn">Whether to warn if the data is not a long</param>
+            <returns>Long value or -1 if not a long</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetIntArray(LitJson.JsonData,System.Boolean)">
+            <summary>
+            Get an integer array of this json. If it's not an array or does not contain integers it will return null.
+            Will log a warning if the data is not valid if the warn flag is set.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <param name="warn">Whether to warn if the data is not valid</param>
+            <returns>Int array or null if not an int array</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetString(LitJson.JsonData,System.Boolean)">
+            <summary>
+            Get the string value of this json. If it's not a string or null it will return false.
+            Will log a warning if the data is not a string if the warn flag is set.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <param name="warn">Whether to warn if the data is not a string</param>
+            <returns>String value or null if not a string</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetPropertyString(LitJson.JsonData,System.String)">
+            <summary>
+            Get the key value from the JsonData and convert to string.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <param name="key">key to look for</param>
+            <returns>Returns the string for this key or null if not a string</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetBoolean(LitJson.JsonData,System.Boolean)">
+            <summary>
+            Get the boolean value of this json. If it's not a boolean or null it will return false.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <param name="warn">Whether to warn if the data is not a string</param>
+            <returns>Boolean value or null if not a boolean</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetBoolean(LitJson.JsonData,System.String)">
+            <summary>
+            Get the boolean value of this json. If it's not a boolean or null it will return false.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <param name="key">key to look for</param>
+            <returns>Boolean value or null if not a boolean</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.Get(LitJson.JsonData,System.String)">
+            <summary>
+            Get the key value from the JsonData in a safe way. The jsonData must be an object, not be null and contain the key.
+            If it's invalid it will return null.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <param name="key">key to look for</param>
+            <returns>JsonData for the key or null if not found</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Utils.JsonUtils.ConvertToCompactJson(System.String)">
+            <summary>
+            Convert file to compact json. This reads the file and overwrites it with the compact json.
+            NOTE: There is no guarantee that the order of the file is preserved.
+            </summary>
+            <param name="filePath">File path</param>
+            <returns>True if compacted and saved</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Utils.JsonUtils.ConvertToJsonData(System.String)">
+            <summary>
+            Attempt to parse the text to <see cref="T:LitJson.JsonData"/>. If it does not succeed it returns null.
+            </summary>
+            <param name="text">text to parse</param>
+            <returns>Json data or null if failed to parse</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Utils.JsonUtils.ConvertToJsonDataAndLogText(System.String)">
+            <summary>
+            Attempt to parse the text to <see cref="T:LitJson.JsonData"/>. If it does not succeed it returns null and attempts to log the text to the error logs.
+            </summary>
+            <param name="text">text to parse</param>
+            <returns>Json data or null if failed to parse</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Utils.JsonUtils.ConvertToJsonDataReader(System.IO.TextReader)">
+            <summary>
+            Attempt to parse the text from <see cref="T:System.IO.TextReader"/> to <see cref="T:LitJson.JsonData"/>. If it does not succeed return null.
+            </summary>
+            <param name="textReader">text to parse</param>
+            <returns>Json data or null if failed to parse</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Utils.JsonUtils.ConvertToObject(System.String)">
+            <summary>
+            Attempt to parse the text to <see cref="T:LitJson.JsonData"/>. If it does not succeed it returns null.
+            </summary>
+            <param name="text">text to parse</param>
+            <returns>Json data or null if failed to parse</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Utils.JsonUtils.ConvertToObject``1(System.String)">
+            <summary>
+            Convert to a serialised object.
+            </summary>
+            <typeparam name="T">Type of serialised object</typeparam>
+            <param name="text">Text to parse</param>
+            <returns>Serialised object or null if failed to parse</returns>
+        </member>
+        <member name="T:CompanionFramework.Net.Http.Common.HttpFormParamBuilder">
+            <summary>
+            String builder that builds form body parameters for http requests.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.Common.HttpFormParamBuilder.#ctor">
+            <summary>
+            Create a new form builder.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.Common.HttpFormParamBuilder.AddParam(System.String,System.String)">
+            <summary>
+            Add a parameter with a string value.
+            </summary>
+            <param name="key">key</param>
+            <param name="value">value</param>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.Common.HttpFormParamBuilder.AddBinaryFile(System.String,System.Byte[])">
+            <summary>
+            Add a file to the http body.
+            </summary>
+            <param name="key">Key</param>
+            <param name="data">File data</param>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.Common.HttpFormParamBuilder.AddBinaryFile(System.String,System.String,System.String,System.Byte[])">
+            <summary>
+            Add a file to the body with optional filename and content type.
+            </summary>
+            <param name="key">Key</param>
+            <param name="fileName">File data</param>
+            <param name="contentType">Content type</param>
+            <param name="data">File data</param>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.Common.HttpFormParamBuilder.EndForm">
+            <summary>
+            End the form by adding the form boundary. Should only be called once.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.Common.HttpFormParamBuilder.GetData">
+            <summary>
+            Get all the data. Call <see cref="M:CompanionFramework.Net.Http.Common.HttpFormParamBuilder.EndForm"/> before calling this method.
+            </summary>
+            <returns>Byte data</returns>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.Common.HttpFormParamBuilder.GetContentType">
+            <summary>
+            Get the form content type for the http request including the boundary.
+            </summary>
+            <returns>Content type for the http request</returns>
+        </member>
+        <member name="T:CompanionFramework.Net.Http.Common.HttpPostParamBuilder">
+            <summary>
+            String builder that builds post parameters and escapes string data for sending over http.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.Common.HttpPostParamBuilder.#ctor">
+            <summary>
+            Create a new builder which creates an empty string builder.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.Common.HttpPostParamBuilder.#ctor(System.String)">
+            <summary>
+            Create a new builder with the text provided. The text does not get validated.
+            </summary>
+            <param name="text">initial text</param>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.Common.HttpPostParamBuilder.AddParams(System.String)">
+            <summary>
+            Add multiple parameters. These parameters should already be escaped.
+            </summary>
+            <param name="formattedParams">string to append</param>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.Common.HttpPostParamBuilder.AddParam(System.String,System.Int64)">
+            <summary>
+            Add a parameter with a long value.
+            </summary>
+            <param name="key">key</param>
+            <param name="value">value</param>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.Common.HttpPostParamBuilder.AddParam(System.String,System.Int32)">
+            <summary>
+            Add a parameter with an integer value.
+            </summary>
+            <param name="key">key</param>
+            <param name="value">value</param>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.Common.HttpPostParamBuilder.AddParam(System.String,System.String)">
+            <summary>
+            Add a parameter with a string value.
+            </summary>
+            <param name="key">key</param>
+            <param name="value">value</param>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.Common.HttpPostParamBuilder.AddArrayParam``1(System.String,System.Collections.Generic.IList{``0})">
+            <summary>
+            Send array of values as a command.
+            </summary>
+            <typeparam name="T">The object to send strings normally</typeparam>
+            <param name="key">The key for example fields[]</param>
+            <param name="values">The array values to send</param>
+        </member>
+        <member name="T:CompanionFramework.Net.Http.Common.IStreamProgress">
+            <summary>
+            Update stream reading progress.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.Common.IStreamProgress.UpdateProgress(System.Int64,System.Int64)">
+            <summary>
+            Update progress of the stream reading.
+            </summary>
+            <param name="bytesReceived">Bytes received</param>
+            <param name="totalBytes">Total bytes</param>
+        </member>
+        <member name="T:CompanionFramework.Net.Http.Common.JsonPath">
+            <summary>
+            Stores a path in the json for easy retrieval.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Net.Http.Common.JsonPath.ResultPath">
+            <summary>
+            Constant define for ["data"]["result"]. Commonly used path in network results.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.Common.JsonPath.#ctor(System.String[])">
+            <summary>
+            Create a path with the params matching the order of the params, for example: "data", "result" for the path: ["data"]["result"].
+            </summary>
+            <param name="path">Path as params</param>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.Common.JsonPath.IsPath(LitJson.JsonData)">
+            <summary>
+            Whether this path exists in the json data.
+            </summary>
+            <param name="rootObject">Root object</param>
+            <returns>True if this path exist in the json data</returns>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.Common.JsonPath.Get(LitJson.JsonData)">
+            <summary>
+            Get the json data at this path or null if this path was not found in the data.
+            </summary>
+            <param name="rootObject">Root object</param>
+            <returns>JsonData for this path or null</returns>
+        </member>
+        <member name="T:CompanionFramework.Net.Http.Common.HttpEventArgs">
+            <summary>
+            Wrapper class containing <see cref="T:CompanionFramework.Net.Http.Common.HttpResponse"/>.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Net.Http.Common.HttpEventArgs.response">
+            <summary>
+            Http response from the request. Holds information about failure or success.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.Common.HttpEventArgs.GetText(System.EventArgs)">
+            <summary>
+            Helper to get text from the response data. This will return null if the data is binary (non-string).
+            </summary>
+            <param name="e">EventArgs</param>
+            <returns>Text from response or null if none present or not text</returns>
+        </member>
+        <member name="T:CompanionFramework.Net.Http.Common.HttpRequest">
+            <summary>
+            Http request that uses System.Net.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Net.Http.Common.HttpRequest.ResponseEvent">
+            <summary>
+            Fired as a delegate when a response is received.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.Common.HttpRequest.Run">
+            <summary>
+            Execute this http request synchronously.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.Common.HttpRequest.Run(System.Boolean)">
+            <summary>
+            Execute this http request synchronously or asynchronously.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.Common.HttpRequest.Cancel">
+            <summary>
+            Attempt to cancel the http request.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.Common.HttpRequest.GetRequestData">
+            <summary>
+            Get the request data belong to this request.
+            </summary>
+            <returns>Request data</returns>
+        </member>
+        <member name="T:CompanionFramework.Net.Http.Common.HttpRequestData">
+            <summary>
+            Wrapper for all the parameters for a request over http.
+            This allow for abstraction between Unity and .NET.
+            </summary>
+        </member>
+        <member name="E:CompanionFramework.Net.Http.Common.HttpRequestData.ResponseEvent">
+            <summary>
+            Fired on the main thread when an <see cref="T:CompanionFramework.Net.Http.Common.HttpResponse"/> is received for this request. Source is <see cref="T:CompanionFramework.Net.Http.Common.HttpRequestData"/> and event arguments is <see cref="T:CompanionFramework.Net.Http.Common.HttpEventArgs"/>
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Net.Http.Common.NetworkResult.Success">
+            <summary>
+            The http request was a success.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Net.Http.Common.NetworkResult.Error">
+            <summary>
+            The http request resulted in error.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Net.Http.Common.NetworkResult.Cancelled">
+            <summary>
+            The http request was cancelled.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Net.Http.Common.NetworkResult.TimedOut">
+            <summary>
+            The http request timed out.
+            </summary>
+        </member>
+        <member name="T:CompanionFramework.Net.Http.Common.HttpResponse">
+            <summary>
+            Stores the result of the http response. Holds the data that was received from the http stream.
+            </summary>
+        </member>
+        <member name="T:CompanionFramework.Net.Http.HttpDownload">
+            <summary>
+            Download class to download files over http and saves them to disk.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Net.Http.HttpDownload.httpHandler">
+            <summary>
+            The http handler to run the request through.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Net.Http.HttpDownload.requestData">
+            <summary>
+            The request data for the download.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Net.Http.HttpDownload.storagePath">
+            <summary>
+            The path this file will be stored at.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Net.Http.HttpDownload.retries">
+            <summary>
+            How many times to retry.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Net.Http.HttpDownload.numAttempts">
+            <summary>
+            How many times we have attempted the download.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Net.Http.HttpDownload.cancelToken">
+            <summary>
+            Cancel token to cancel thread safe.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Net.Http.HttpDownload.progress">
+            <summary>
+            Optional stream downloading progress reporter.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Net.Http.HttpDownload.DownloadFailed">
+            <summary>
+            Fired on the event system when the download failed. Source is <see cref="T:CompanionFramework.Net.Http.HttpDownload"/>. EventArgs is <see cref="T:CompanionFramework.Net.Http.Common.HttpEventArgs"/>.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Net.Http.HttpDownload.DownloadCompleted">
+            <summary>
+            Fired on the event system when the download completed. Source is <see cref="T:CompanionFramework.Net.Http.HttpDownload"/>.  EventArgs is <see cref="T:CompanionFramework.Net.Http.Common.HttpEventArgs"/>.
+            </summary>
+        </member>
+        <member name="E:CompanionFramework.Net.Http.HttpDownload.TaskStarted">
+            <summary>
+            Fired immediately every time we attempt the download. Can be called multiple times when retrying.
+            </summary>
+        </member>
+        <member name="E:CompanionFramework.Net.Http.HttpDownload.TaskFinished">
+            <summary>
+            Fired immediately when the download completed or failed. Only fired once.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Net.Http.HttpDownload.optional">
+            <summary>
+            Whether this download is optional and the game can continue without. By default it's never optional. See: <see cref="T:CompanionFramework.Net.Http.HttpDownloadSet"/>.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpDownload.Run">
+            <summary>
+            Start the download.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpDownload.Cancel">
+            <summary>
+            Attempt to cancel the download.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpDownload.Complete(CompanionFramework.Net.Http.Common.HttpEventArgs)">
+            <summary>
+            Called when this download is completed and fires DownloadCompleted and TaskFinished.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpDownload.Failed(CompanionFramework.Net.Http.Common.HttpEventArgs)">
+            <summary>
+            Called when this download failed and fires DownloadFailed and TaskFinished.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpDownload.GetStoragePath">
+            <summary>
+            Return the storage path where this file will be saved.
+            </summary>
+            <returns>Storage path</returns>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpDownload.SetProgressTracker(CompanionFramework.Net.Http.Common.IStreamProgress)">
+            <summary>
+            Set the download progress tracker.
+            </summary>
+            <param name="progress">Stream progress</param>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpDownload.GetSaveError">
+            <summary>
+            Save result is success by default, if an error occurred the save result will not be success.
+            </summary>
+            <returns>File save result</returns>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpDownload.IsOptional">
+            <summary>
+            Whether this download is optional and can fail silently if it's missing.
+            </summary>
+            <returns>True if optional</returns>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpDownload.SetOptional">
+            <summary>
+            Make this download optional.
+            </summary>
+        </member>
+        <member name="T:CompanionFramework.Net.Http.HttpDownloadFailure">
+            <summary>
+            Describes type of download failure
+            </summary>
+        </member>
+        <member name="T:CompanionFramework.Net.Http.HttpDownloadFailureEventArgs">
+            <summary>
+            Stores download failure reason
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Net.Http.HttpDownloadFailureEventArgs.failure">
+            <summary>
+            Type of download failure.
+            </summary>
+        </member>
+        <member name="F:CompanionFramework.Net.Http.HttpDownloadFailureEventArgs.saveResult">
+            <summary>
+            If the download failure was SaveFailed you can use this to determine the error.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpDownloadFailureEventArgs.#ctor(CompanionFramework.Net.Http.HttpDownloadFailure)">
+            <summary>
+            Create a new download failure class. For save failures use the other constructor.
+            </summary>
+            <param name="failure">Type of failure</param>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpDownloadFailureEventArgs.#ctor(CompanionFramework.IO.Utils.FileSaveResult)">
+            <summary>
+            Create a new download failure class. For net failures use the other constructor.
+            </summary>
+            <param name="result">File save result</param>
+        </member>
+        <member name="E:CompanionFramework.Net.Http.HttpDownloadProgress.OnDownloadUpdate">
+            <summary>
+            Fire download update delegate. Source is <see cref="T:CompanionFramework.Net.Http.HttpDownloadProgress"/>.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpDownloadProgress.#ctor(CompanionFramework.Net.Http.HttpDownload)">
+            <summary>
+            Create a new progress class that tracks the progress for the download. This registers itself with the download automatically.
+            </summary>
+            <param name="download">Download to track progress</param>
+        </member>
+        <member name="T:CompanionFramework.Net.Http.HttpDownloadSet">
+            <summary>
+            Class to allow downloading multiple files easily.
+            </summary>
+        </member>
+        <member name="E:CompanionFramework.Net.Http.HttpDownloadSet.DownloadsFailed">
+            <summary>
+            Fired when any or all downloads have failed/cancelled. Source is <see cref="T:CompanionFramework.Net.Http.HttpDownloadSet"/>. EventArgs is <see cref="T:CompanionFramework.Net.Http.HttpDownloadFailureEventArgs"/>.
+            </summary>
+        </member>
+        <member name="E:CompanionFramework.Net.Http.HttpDownloadSet.DownloadsCompleted">
+            <summary>
+            Fired when all downloads have completed. Source is <see cref="T:CompanionFramework.Net.Http.HttpDownloadSet"/>. EventArgs is null.
+            </summary>
+        </member>
+        <member name="E:CompanionFramework.Net.Http.HttpDownloadSet.OnDownloadUpdate">
+            <summary>
+            Fire download update on the main thread. Source is <see cref="T:CompanionFramework.Net.Http.HttpDownloadProgress"/>. This only happens when progress tracking is set to true.
+            </summary>
+        </member>
+        <member name="P:CompanionFramework.Net.Http.HttpDownloadSet.DownloadedFiles">
+            <summary>
+            Returns a list of files that have been downloaded.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpDownloadSet.Cancel">
+            <summary>
+            Attempt to cancel the downloads.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpDownloadSet.Run">
+            <summary>
+            Start the downloads.
+            </summary>
+        </member>
+        <member name="T:CompanionFramework.Net.Http.HttpHandler">
+            <summary>
+            Handles System.Net http requests on multiple threads using <see cref="T:CompanionFramework.Core.Threading.ThreadPool.SimpleThreadPool"/>. The user can specify the number of threads it should use.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpHandler.#ctor">
+            <summary>
+            Creates the http handler with one thread.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpHandler.#ctor(System.Int32)">
+            <summary>
+            Creates the http handler with the specified number of threads.
+            </summary>
+            <param name="threads">Number of threads</param>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpHandler.QueueHttpRequest(CompanionFramework.Net.Http.Common.HttpRequestData)">
+            <summary>
+            Add the http request to the thread pool to run it.
+            </summary>
+            <param name="requestData">Request data</param>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpHandler.QueueHttpRequest(CompanionFramework.Net.Http.Common.HttpRequestData,CompanionFramework.Net.Http.Common.IStreamProgress)">
+            <summary>
+            Add the http request to the thread pool to run it.
+            </summary>
+            <param name="requestData">Request data</param>
+            <param name="progress">Progress tracker</param>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpHandler.QueuedRequestCount">
+            <summary>
+            How many requests are currently queued.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:CompanionFramework.Net.Http.HttpUnzipDownload">
+            <summary>
+            Unzips a gzip compressed file received from a url to a file.
+            </summary>
+        </member>
+        <member name="E:CompanionFramework.Net.Http.HttpUnzipDownload.CompleteEvent">
+            <summary>
+            Fired when completed.
+            </summary>
+        </member>
+        <member name="E:CompanionFramework.Net.Http.HttpUnzipDownload.FailedEvent">
+            <summary>
+            Fired when failed.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpUnzipDownload.#ctor(CompanionFramework.Net.Http.Common.HttpRequestData,System.String,System.String,System.Boolean)">
+            <summary>
+            Download class to download a file and unzip it immediately.
+            </summary>
+            <param name="requestData">Request data</param>
+            <param name="storagePath">Storage path</param>
+            <param name="outputExtension">Output extension</param>
+            <param name="saveZippedData">True if we want to also save the zipped data</param>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpUnzipDownload.Abort">
+            <summary>
+            Fires the failed event.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpUnzipDownload.Complete">
+            <summary>
+            Fires the complete event.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpUnzipDownload.Download">
+            <summary>
+            Starts the download.
+            </summary>
+        </member>
+        <member name="T:CompanionFramework.Net.Http.IHttpHandler">
+            <summary>
+            Interface to allow http requests to be handled differently.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.IHttpHandler.QueueHttpRequest(CompanionFramework.Net.Http.Common.HttpRequestData)">
+            <summary>
+            Queue this http request. The request may not execute immediately.
+            </summary>
+            <param name="requestData">Request Data for this request</param>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.IHttpHandler.QueueHttpRequest(CompanionFramework.Net.Http.Common.HttpRequestData,CompanionFramework.Net.Http.Common.IStreamProgress)">
+            <summary>
+            Queue this http request. The request may not execute immediately.
+            </summary>
+            <param name="requestData">Request Data for this request</param>
+            <param name="progress">Download progress tracker or null if not required</param>
+        </member>
+        <member name="T:CompanionFramework.Net.NetLogger">
+            <summary>
+            Wrapper for logging from the network library. Default log level is everything.
+            </summary>
+        </member>
+    </members>
+</doc>
