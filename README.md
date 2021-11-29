@@ -40,7 +40,7 @@ if (roster != null)
 ```
 
 You will need to call dispatch on the message queue on your main thread if you use the async/event functionality.
-This is primarily so Unity calls are guaranteed to be on the Unity main thread.
+This is primarily so Unity calls are guaranteed to be on the Unity main thread. If you don't use Unity you can find your main thread and execute it on its tick/update loop.
 ```
 public void Update()
 {
