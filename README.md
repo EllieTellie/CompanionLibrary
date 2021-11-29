@@ -21,6 +21,24 @@ Loading GameSystems from path:
 SystemManager.LoadGameSystemAsync("path_to_folder")
 ```
 
+Retrieving game systems from SystemManager once loaded:
+```
+GameSystem gameSystem = SystemManager.Instance.GetGameSystemByName("Warhammer 40,000 9th Edition");
+```
+
+Converting a copy paste roster to classes (slow operation because there's a lot of searching involved)
+```
+SystemManager.Instance.LoadGameSystems("C:\Users\YourUser\BattleScribe\data\Warhammer 40,000 9th Edition\");
+string rosterText = FileUtils.ReadTextFile(inputPath);
+
+RosterReader reader = new RosterReader(rosterText);
+Roster roster = reader.Parse();
+if (roster != null)
+{
+  Console.WriteLine("Points: " + roster.costs.GetByName("pts").value);
+}
+```
+
 You will need to call dispatch on the message queue on your main thread if you use the async/event functionality.
 This is primarily so Unity calls are guaranteed to be on the Unity main thread.
 ```
