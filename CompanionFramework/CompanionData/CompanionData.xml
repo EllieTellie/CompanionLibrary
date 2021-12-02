@@ -50,6 +50,97 @@
             Simple reader that reads words. 
             </summary>
         </member>
+        <member name="E:Companion.Data.System.Update.CoreUpdateProcess.LoadingComplete">
+            <summary>
+            Fired when the process completed.
+            </summary>
+        </member>
+        <member name="E:Companion.Data.System.Update.CoreUpdateProcess.LoadingAborted">
+            <summary>
+            Fired when the process is aborted.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.System.Update.CoreUpdateProcess.Execute(Companion.Data.System.Update.UpdateStateData)">
+            <summary>
+            Execute the loading process and passes any state through.
+            </summary>
+            <param name="state">current state</param>
+        </member>
+        <member name="M:Companion.Data.System.Update.CoreUpdateProcess.GetState">
+            <summary>
+            The update state this process handles.
+            </summary>
+            <returns>update state</returns>
+        </member>
+        <member name="M:Companion.Data.System.Update.CoreUpdateProcess.Abort">
+            <summary>
+            Aborts the process. Fires the abort event.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.System.Update.CoreUpdateProcess.Complete">
+            <summary>
+            Complete the process. Fires the complete event.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.System.Update.CoreUpdateProcess.Complete(System.Object)">
+            <summary>
+            Complete the process. Fires the complete event.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.System.Update.CoreUpdateProcess.Cleanup">
+            <summary>
+            Cleanup. Fired from Abort() and Complete(). By default does nothing.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.System.Update.CoreUpdateProcess.GetMaxRetries">
+            <summary>
+            How many times it should retry. By default it does not.
+            </summary>
+            <returns>Maximum retries</returns>
+        </member>
+        <member name="M:Companion.Data.System.Update.CoreUpdateProcess.Retry(Companion.Data.System.Update.UpdateStateData)">
+            <summary>
+            Retry the operation.
+            </summary>
+            <param name="state">State</param>
+        </member>
+        <member name="T:Companion.Data.System.Update.IUpdateProcess">
+            <summary>
+            Handles updating the data files.
+            </summary>
+        </member>
+        <member name="E:Companion.Data.System.Update.IUpdateProcess.LoadingComplete">
+            <summary>
+            Fired when the process completed.
+            </summary>
+        </member>
+        <member name="E:Companion.Data.System.Update.IUpdateProcess.LoadingAborted">
+            <summary>
+            Fired when the process is aborted.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.System.Update.IUpdateProcess.Execute(Companion.Data.System.Update.UpdateStateData)">
+            <summary>
+            Execute the update process and passes any state through.
+            </summary>
+            <param name="state">current state</param>
+        </member>
+        <member name="M:Companion.Data.System.Update.IUpdateProcess.Abort">
+            <summary>
+            Aborts the process.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.System.Update.IUpdateProcess.GetState">
+            <summary>
+            The update state this process handles.
+            </summary>
+            <returns>update state</returns>
+        </member>
+        <member name="T:Companion.Data.System.Update.UpdateStateData">
+            <summary>
+            Store state during loading
+            </summary>
+        </member>
         <member name="E:RosterManager.OnRostersLoaded">
             <summary>
             Fired when all rosters are loaded.
