@@ -608,6 +608,178 @@
             <param name="e">Exception to check</param>
             <returns>True if exception was caused by disk being full</returns>
         </member>
+        <member name="T:CompanionFramework.Json.Extensions.CommonJsonDataExtensions">
+            <summary>
+            Extensions for LitJson JsonData objects.
+            </summary>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetInt(LitJson.JsonData)">
+            <summary>
+            Get the int value of this json. If it's not an int or null it will return -1.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <returns>Int value or -1 if not an int</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetInt(LitJson.JsonData,System.String)">
+            <summary>
+            Get the int value of this json. If it's not an int or null it will return -1.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <param name="key">key to look for</param>
+            <returns>Int value or -1 if not an int</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetInt(LitJson.JsonData,System.Boolean)">
+            <summary>
+            Get the int value of this json. If it's not an int or null it will return -1.
+            Will log a warning if the data is not an int if the warn flag is set.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <param name="warn">Whether to warn if the data is not an int</param>
+            <returns>Int value or -1 if not an int</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetFloat(LitJson.JsonData)">
+            <summary>
+            Get the float value of this json. If it's not a float or null it will return -1f.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <returns>Float value or -1f if not a float</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetDouble(LitJson.JsonData)">
+            <summary>
+            Get the double value of this json. If it's not a double or null it will return -1f.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <returns>Double value or -1 if not a double</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetDouble(LitJson.JsonData,System.String)">
+            <summary>
+            Get the double value of this json. If it's not a double or null it will return -1f.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <param name="key">key to look for</param>
+            <returns>Double value or -1 if not a double</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetLong(LitJson.JsonData)">
+            <summary>
+            Get the long value of this json. If it's not a long or null it will return -1.
+            Will log a warning if the data is not a long.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <returns>Long value or -1 if not a long</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetLong(LitJson.JsonData,System.String)">
+            <summary>
+            Get the long value of this json. If it's not a long or null it will return -1.
+            Will log a warning if the data is not a long.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <param name="key">key to look for</param>
+            <returns>Long value or -1 if not a long</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetLong(LitJson.JsonData,System.Boolean)">
+            <summary>
+            Get the long value of this json. If it's not a long or null it will return -1.
+            Will log a warning if the data is not a long if the warn flag is set.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <param name="warn">Whether to warn if the data is not a long</param>
+            <returns>Long value or -1 if not a long</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetIntArray(LitJson.JsonData,System.Boolean)">
+            <summary>
+            Get an integer array of this json. If it's not an array or does not contain integers it will return null.
+            Will log a warning if the data is not valid if the warn flag is set.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <param name="warn">Whether to warn if the data is not valid</param>
+            <returns>Int array or null if not an int array</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetString(LitJson.JsonData,System.Boolean)">
+            <summary>
+            Get the string value of this json. If it's not a string or null it will return false.
+            Will log a warning if the data is not a string if the warn flag is set.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <param name="warn">Whether to warn if the data is not a string</param>
+            <returns>String value or null if not a string</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetPropertyString(LitJson.JsonData,System.String)">
+            <summary>
+            Get the key value from the JsonData and convert to string.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <param name="key">key to look for</param>
+            <returns>Returns the string for this key or null if not a string</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetBoolean(LitJson.JsonData,System.Boolean)">
+            <summary>
+            Get the boolean value of this json. If it's not a boolean or null it will return false.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <param name="warn">Whether to warn if the data is not a string</param>
+            <returns>Boolean value or null if not a boolean</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.GetBoolean(LitJson.JsonData,System.String)">
+            <summary>
+            Get the boolean value of this json. If it's not a boolean or null it will return false.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <param name="key">key to look for</param>
+            <returns>Boolean value or null if not a boolean</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Extensions.CommonJsonDataExtensions.Get(LitJson.JsonData,System.String)">
+            <summary>
+            Get the key value from the JsonData in a safe way. The jsonData must be an object, not be null and contain the key.
+            If it's invalid it will return null.
+            </summary>
+            <param name="jsonData">JsonData</param>
+            <param name="key">key to look for</param>
+            <returns>JsonData for the key or null if not found</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Utils.JsonUtils.ConvertToCompactJson(System.String)">
+            <summary>
+            Convert file to compact json. This reads the file and overwrites it with the compact json.
+            NOTE: There is no guarantee that the order of the file is preserved.
+            </summary>
+            <param name="filePath">File path</param>
+            <returns>True if compacted and saved</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Utils.JsonUtils.ConvertToJsonData(System.String)">
+            <summary>
+            Attempt to parse the text to <see cref="T:LitJson.JsonData"/>. If it does not succeed it returns null.
+            </summary>
+            <param name="text">text to parse</param>
+            <returns>Json data or null if failed to parse</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Utils.JsonUtils.ConvertToJsonDataAndLogText(System.String)">
+            <summary>
+            Attempt to parse the text to <see cref="T:LitJson.JsonData"/>. If it does not succeed it returns null and attempts to log the text to the error logs.
+            </summary>
+            <param name="text">text to parse</param>
+            <returns>Json data or null if failed to parse</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Utils.JsonUtils.ConvertToJsonDataReader(System.IO.TextReader)">
+            <summary>
+            Attempt to parse the text from <see cref="T:System.IO.TextReader"/> to <see cref="T:LitJson.JsonData"/>. If it does not succeed return null.
+            </summary>
+            <param name="textReader">text to parse</param>
+            <returns>Json data or null if failed to parse</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Utils.JsonUtils.ConvertToObject(System.String)">
+            <summary>
+            Attempt to parse the text to <see cref="T:LitJson.JsonData"/>. If it does not succeed it returns null.
+            </summary>
+            <param name="text">text to parse</param>
+            <returns>Json data or null if failed to parse</returns>
+        </member>
+        <member name="M:CompanionFramework.Json.Utils.JsonUtils.ConvertToObject``1(System.String)">
+            <summary>
+            Convert to a serialised object.
+            </summary>
+            <typeparam name="T">Type of serialised object</typeparam>
+            <param name="text">Text to parse</param>
+            <returns>Serialised object or null if failed to parse</returns>
+        </member>
         <member name="T:CompanionFramework.Net.Http.Common.HttpFormParamBuilder">
             <summary>
             String builder that builds form body parameters for http requests.
