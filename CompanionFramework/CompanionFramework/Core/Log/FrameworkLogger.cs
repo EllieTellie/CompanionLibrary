@@ -23,7 +23,7 @@ namespace CompanionFramework.Core.Log
 
 		public FrameworkLogger()
 		{
-			logger = new DisabledLogger();
+			logger = new ConsoleLogger(); // log everything to console by default instead of disabled
 
 			LogLevel = LogLevel.All;
 		}

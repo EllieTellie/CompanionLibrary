@@ -95,7 +95,7 @@ namespace Companion.Data
 
 			while ((rosterToken = tokenReader.ReadRosterToken()) != null)
 			{
-				Console.WriteLine("Type: " + rosterToken.tokenType + " Content: " + rosterToken.content);
+				FrameworkLogger.Message("Type: " + rosterToken.tokenType + " Content: " + rosterToken.content);
 
 				if (rosterToken.tokenType == RosterTokenType.Force)
 				{
@@ -149,7 +149,7 @@ namespace Companion.Data
 						string selectionName;
 						int selectionNumber = ReaderUtils.GetSelectionNumberFromName(selectionToken.name, out selectionName);
 
-						Console.WriteLine("Found selection: " + selectionToken.name);
+						FrameworkLogger.Message("Found selection: " + selectionToken.name);
 
 						Selection parent = selectionStack.Count > 0 ? selectionStack.Peek() : null;
 						bool hasParent = parent != null && tokenIndex > 0; // if token index is > 0 and we have a parent then we know we are a child
@@ -194,7 +194,7 @@ namespace Companion.Data
 										//}
 										//else
 										//{
-											Console.WriteLine("Unable to find: " + subSelectionName);
+										FrameworkLogger.Message("Unable to find: " + subSelectionName);
 										//}
 									}
 								}
@@ -252,7 +252,7 @@ namespace Companion.Data
 						}
 						else
 						{
-							Console.WriteLine("Unable to find: " + selectionToken.name);
+							FrameworkLogger.Message("Unable to find: " + selectionToken.name);
 						}
 					}
 				}
@@ -273,7 +273,7 @@ namespace Companion.Data
 				{
 					if (condition.IsConditionMet(gameSystem, roster, selection))
 					{
-						Console.WriteLine("Met condition!");
+						FrameworkLogger.Debug("Met condition!");
 
 						//modifier.Apply(gameSystem, selection, selectionEntry);
 					}
