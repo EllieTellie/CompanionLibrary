@@ -12,7 +12,7 @@ namespace Companion.Data.System.Update
 		public string battleScribeVersion;
 		public string version;
 		public string lastUpdated;
-		public string lastUpdatedDescription;
+		public string lastUpdateDescription;
 		public string indexUrl;
 		public string repositoryUrl;
 		public string githubUrl;
@@ -30,7 +30,7 @@ namespace Companion.Data.System.Update
 			battleScribeVersion = jsonData.Get("battleScribeVersion").GetString();
 			version = jsonData.Get("version").GetString();
 			lastUpdated = jsonData.Get("lastUpdated").GetString();
-			lastUpdatedDescription = jsonData.Get("lastUpdatedDescription").GetString();
+			lastUpdateDescription = jsonData.Get("lastUpdateDescription").GetString();
 			indexUrl = jsonData.Get("indexUrl").GetString();
 			repositoryUrl = jsonData.Get("repositoryUrl").GetString();
 			githubUrl = jsonData.Get("githubUrl").GetString();

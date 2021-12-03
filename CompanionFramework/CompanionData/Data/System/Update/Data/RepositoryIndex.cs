@@ -42,7 +42,7 @@ namespace Companion.Data.System.Update
 				for (int i = 0; i < repositoryData.Count; i++)
 				{
 					JsonData repositoryJson = repositoryData[i];
-					if (repositoryData != null && repositoryData.IsObject)
+					if (repositoryJson != null && repositoryJson.IsObject)
 					{
 						Repository repository = Repository.Parse(repositoryJson);
 						if (repository != null)

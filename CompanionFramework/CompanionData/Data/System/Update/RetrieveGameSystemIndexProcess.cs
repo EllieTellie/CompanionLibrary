@@ -47,7 +47,13 @@ namespace Companion.Data.System.Update
 				return;
 			}
 
-			RepositoryIndex repositoryIndex = new RepositoryIndex(jsonData);
+			RepositoryIndex repositoryIndex = RepositoryIndex.Parse(jsonData);
+			if (repositoryIndex == null)
+			{
+				FrameworkLogger.Error("Unable to parse repo");
+				Abort();
+				return;
+			}
 
 			if (state != null)
 				state.repositoryIndex = repositoryIndex;

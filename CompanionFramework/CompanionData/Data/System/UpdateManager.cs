@@ -23,6 +23,14 @@ public class UpdateManager
 		ExecuteProcess(GetLoadingProcess(currentState));
 	}
 
+	/// <summary>
+	/// Add repository to the update manager
+	/// </summary>
+	public void AddRepository()
+	{
+
+	}
+
 	public void ExecuteProcess(IUpdateProcess process)
 	{
 		process.Execute(stateData);
