@@ -12,6 +12,11 @@ namespace Companion.Data
 		/// </summary>
 		public string comment;
 
+		/// <summary>
+		/// Optional xml schema.
+		/// </summary>
+		public string xmlns;
+
 		protected readonly XmlNode node;
 
 		/// <summary>
@@ -56,6 +61,8 @@ namespace Companion.Data
 			XmlNode commentNode = node.GetNode("comment");
 			if (commentNode != null)
 				comment = commentNode.InnerText;
+
+			xmlns = node.GetAttribute("xmlns");
 		}
 
 		protected abstract void OnParseNode();

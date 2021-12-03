@@ -25,6 +25,11 @@
             Optional comment for data.
             </summary>
         </member>
+        <member name="F:Companion.Data.XmlData.xmlns">
+            <summary>
+            Optional xml schema.
+            </summary>
+        </member>
         <member name="F:Companion.Data.XmlData.fields">
             <summary>
             List of xml lists containing all the nodes after parsing.
@@ -160,6 +165,21 @@
         <member name="E:SystemManager.OnGameSystemsLoaded">
             <summary>
             Dispatched on the main thread. Source is this. EventArgs is null.
+            </summary>
+        </member>
+        <member name="E:UpdateManager.OnGameSystemIndexReceived">
+            <summary>
+            Fired when game system index is received. Source is UpdateStateData.
+            </summary>
+        </member>
+        <member name="E:UpdateManager.OnRepositoryIndexReceived">
+            <summary>
+            Fired when repository index is received. Source is UpdateStateData.
+            </summary>
+        </member>
+        <member name="M:UpdateManager.AddRepository">
+            <summary>
+            Add repository to the update manager
             </summary>
         </member>
     </members>

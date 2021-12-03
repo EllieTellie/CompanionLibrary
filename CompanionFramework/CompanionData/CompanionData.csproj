@@ -10,6 +10,10 @@
     <DocumentationFile>C:\Projects\CompanionLibrary\CompanionFramework\CompanionData\CompanionData.xml</DocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Projects\CompanionLibrary\CompanionFramework\CompanionData\CompanionData.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\CompanionFramework\CompanionFramework.csproj" />
   </ItemGroup>

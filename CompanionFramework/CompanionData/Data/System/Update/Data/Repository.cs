@@ -53,5 +53,10 @@ namespace Companion.Data.System.Update
 				return null;
 			}
 		}
+
+		public override string ToString()
+		{
+			return name;
+		}
 	}
 }

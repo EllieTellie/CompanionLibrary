@@ -6,5 +6,6 @@
 	public class UpdateStateData
 	{
 		public RepositoryIndex repositoryIndex;
+		public DataIndex dataIndex;
 	}
 }

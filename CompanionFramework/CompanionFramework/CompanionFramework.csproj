@@ -8,6 +8,10 @@
     <DocumentationFile>C:\Projects\CompanionLibrary\CompanionFramework\CompanionFramework\CompanionFramework.xml</DocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Projects\CompanionLibrary\CompanionFramework\CompanionFramework\CompanionFramework.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <Reference Include="LitJson">
       <HintPath>..\..\Libs\LitJson.dll</HintPath>

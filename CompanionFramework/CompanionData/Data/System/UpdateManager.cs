@@ -1,4 +1,6 @@
 ﻿using Companion.Data.System.Update;
+using CompanionFramework.Core.Threading.Messaging;
+using System;
 
 public class UpdateManager
 {
@@ -14,13 +16,37 @@ public class UpdateManager
 		}
 	}
 
-	private UpdateState currentState;
+	//private UpdateState currentState;
 	private UpdateStateData stateData = new UpdateStateData();
+
+	/// <summary>
+	/// Fired when game system index is received. Source is UpdateStateData.
+	/// </summary>
+	public event EventHandler OnGameSystemIndexReceived;
+
+	/// <summary>
+	/// Fired when repository index is received. Source is UpdateStateData.
+	/// </summary>
+	public event EventHandler OnRepositoryIndexReceived;
 
 	public void Start()
 	{
-		currentState = UpdateState.RetrieveGameSystemIndex;
-		ExecuteProcess(GetLoadingProcess(currentState));
+		//currentState = UpdateState.RetrieveGameSystemIndex;
+		//ExecuteProcess(GetLoadingProcess(currentState));
+	}
+
+	public CoreUpdateProcess RetrieveRepositoryIndex(string url, bool async = true)
+	{
+		RetrieveGameSystemIndexProcess process = new RetrieveGameSystemIndexProcess(url, async);
+
+		process.LoadingComplete += (object result) =>
+		{
+			MessageQueue.Invoke(OnGameSystemIndexReceived, stateData);
+		};
+
+		process.Execute(stateData);
+
+		return process;
 	}
 
 	/// <summary>
@@ -31,20 +57,20 @@ public class UpdateManager
 
 	}
 
-	public void ExecuteProcess(IUpdateProcess process)
-	{
-		process.Execute(stateData);
-	}
+	//public void ExecuteProcess(IUpdateProcess process)
+	//{
+	//	process.Execute(stateData);
+	//}
 
-	private IUpdateProcess GetLoadingProcess(UpdateState state)
-	{
-		if (state == UpdateState.RetrieveGameSystemIndex)
-		{
-			return new RetrieveGameSystemIndexProcess();
-		}
-		else
-		{
-			return null;
-		}
-	}
+	//private IUpdateProcess GetLoadingProcess(UpdateState state)
+	//{
+	//	if (state == UpdateState.RetrieveGameSystemIndex)
+	//	{
+	//		return new RetrieveGameSystemIndexProcess();
+	//	}
+	//	else
+	//	{
+	//		return null;
+	//	}
+	//}
 }

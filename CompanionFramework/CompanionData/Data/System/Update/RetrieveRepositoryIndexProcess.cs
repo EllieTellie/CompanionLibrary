@@ -1,20 +1,18 @@
 ﻿using CompanionFramework.Core.Log;
 using CompanionFramework.IO.Utils;
-using CompanionFramework.Json.Utils;
 using CompanionFramework.Net.Http.Common;
-using LitJson;
 using System;
 
 namespace Companion.Data.System.Update
 {
-	public class RetrieveGameSystemIndexProcess : CoreUpdateProcess
+	public class RetrieveRepositoryIndexProcess : CoreUpdateProcess
 	{
 		protected UpdateStateData state;
 
 		protected readonly string url;
 		protected readonly bool async;
 
-		public RetrieveGameSystemIndexProcess(string url, bool async = true)
+		public RetrieveRepositoryIndexProcess(string url, bool async = true)
 		{
 			this.url = url;
 			this.async = async;
@@ -45,41 +43,25 @@ namespace Companion.Data.System.Update
 				return;
 			}
 
-			string text = FileUtils.GetString(response.Data);
-
-			JsonData jsonData = JsonUtils.ConvertToJsonData(text);
-			if (jsonData == null || !jsonData.IsObject)
+			DataIndex dataIndex = DataIndex.LoadDataIndexXml(response.Data);
+			if (dataIndex == null)
 			{
-				FrameworkLogger.Error("Index is not valid json most likely");
+				FrameworkLogger.Error("Unable to parse data index");
 				Abort();
 				return;
 			}
 
-			RepositoryIndex repositoryIndex = RepositoryIndex.Parse(jsonData);
-			if (repositoryIndex == null)
-			{
-				FrameworkLogger.Error("Unable to parse repo");
-				Abort();
-				return;
-			}
-
+			// store it
 			if (state != null)
-				state.repositoryIndex = repositoryIndex;
+				state.dataIndex = dataIndex;
 
-			Complete(repositoryIndex);
+			Complete(dataIndex);
 		}
+
 
 		public override UpdateState GetState()
 		{
-			return UpdateState.RetrieveGameSystemIndex;
-		}
-
-		protected override void Cleanup()
-		{
-			base.Cleanup();
-
-			// clear state
-			state = null;
+			return UpdateState.RetrieveRespositoryIndex;
 		}
 	}
 }
