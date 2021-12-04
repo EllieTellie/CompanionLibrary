@@ -58,5 +58,13 @@ namespace Companion.Data.System.Update
 		{
 			return name;
 		}
+
+		public string GetRepositoryUrl()
+		{
+			if (repositoryUrl.EndsWith("/"))
+				return repositoryUrl;
+			else
+				return repositoryUrl + "/";
+		}
 	}
 }

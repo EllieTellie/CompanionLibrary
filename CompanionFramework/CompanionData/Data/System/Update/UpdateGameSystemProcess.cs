@@ -11,20 +11,20 @@ namespace Companion.Data.System.Update
 {
 	public class UpdateGameSystemProcess : CoreUpdateProcess
 	{
-		protected readonly RepositoryIndex repositoryIndex;
+		protected readonly Repository repository;
 		protected readonly DataIndex dataIndex;
 		protected readonly string dataPath;
 
-		public UpdateGameSystemProcess(RepositoryIndex repositoryIndex, DataIndex dataIndex, string dataPath)
+		public UpdateGameSystemProcess(Repository repository, DataIndex dataIndex, string dataPath)
 		{
-			this.repositoryIndex = repositoryIndex;
+			this.repository = repository;
 			this.dataIndex = dataIndex;
 			this.dataPath = dataPath;
 		}
 
 		public override void Execute(UpdateStateData state)
 		{
-			if (repositoryIndex == null)
+			if (repository == null)
 			{
 				FrameworkLogger.Error("Missing repository index");
 				Abort();
@@ -71,7 +71,7 @@ namespace Companion.Data.System.Update
 
 		private HttpDownload CreateDownload(DataIndexEntry update)
 		{
-			string downloadUrl = dataIndex.GetRepositoryDataUrl() + Uri.EscapeUriString(update.filePath);
+			string downloadUrl = repository.GetRepositoryUrl() + Uri.EscapeUriString(update.filePath);
 			string savePath = Path.Combine(dataPath, update.filePath);
 			HttpDownload download = new HttpDownload(null, new HttpRequestData(downloadUrl), savePath);
 			return download;

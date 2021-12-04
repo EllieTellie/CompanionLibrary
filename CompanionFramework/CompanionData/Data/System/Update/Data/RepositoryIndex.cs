@@ -53,6 +53,17 @@ namespace Companion.Data.System.Update
 			}
 		}
 
+		public Repository GetRepositoryByName(string name)
+		{
+			foreach (Repository repository in repositories)
+			{
+				if (repository.name == name)
+					return repository;
+			}
+
+			return null;
+		}
+
 		public static RepositoryIndex Parse(JsonData jsonData)
 		{
 			try
