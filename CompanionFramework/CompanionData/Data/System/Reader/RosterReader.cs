@@ -260,7 +260,15 @@ namespace Companion.Data
 
 			CalculateCosts(gameSystem, roster);
 
-			MessageQueue.Invoke(OnRosterParsed, roster);
+			if (MessageHandler.HasMessageHandler())
+			{
+				MessageQueue.Invoke(OnRosterParsed, roster);
+			}
+			else
+			{
+				if (OnRosterParsed != null)
+					OnRosterParsed(roster, null);
+			}
 
 			return roster;
 		}

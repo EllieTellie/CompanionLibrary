@@ -41,7 +41,15 @@ public class UpdateManager
 
 		process.LoadingComplete += (object result) =>
 		{
-			MessageQueue.Invoke(OnGameSystemIndexReceived, stateData);
+			if (MessageHandler.HasMessageHandler())
+			{
+				MessageQueue.Invoke(OnGameSystemIndexReceived, stateData);
+			}
+			else
+			{
+				if (OnGameSystemIndexReceived != null)
+					OnGameSystemIndexReceived(stateData, null);
+			}
 		};
 
 		process.Execute(stateData);

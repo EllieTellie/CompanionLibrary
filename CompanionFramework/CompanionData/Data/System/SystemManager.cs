@@ -47,7 +47,15 @@ public class SystemManager
 		loading = false; // bit worrying that load game systems could throw exception and leave this as true, handle that
 
 		// fire this to the main thread
-		MessageQueue.Invoke(OnGameSystemsLoaded, this);
+		if (MessageHandler.HasMessageHandler())
+		{
+			MessageQueue.Invoke(OnGameSystemsLoaded, this);
+		}
+		else
+		{
+			if (OnGameSystemsLoaded != null)
+				OnGameSystemsLoaded(this, null);
+		}
 	}
 
 	public void LoadGameSystems(string path)

@@ -188,6 +188,12 @@
             Fires any messages in the message queue. Should be called from a main loop or timer loop.
             </summary>
         </member>
+        <member name="M:CompanionFramework.Core.Threading.Messaging.MessageHandler.HasMessageHandler">
+            <summary>
+            Static way to detect if the message handler is used.
+            </summary>
+            <returns>True if using the message handler</returns>
+        </member>
         <member name="T:CompanionFramework.Core.Threading.Messaging.MessageQueue">
             <summary>
             A simple message queue for throwing events back to the Unity main loop.
@@ -1090,6 +1096,12 @@
             <summary>
             Make this download optional.
             </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpDownload.SetAsync(System.Boolean)">
+            <summary>
+            This is for debugging mostly but it allows the download to run not async.
+            </summary>
+            <param name="async">Async</param>
         </member>
         <member name="T:CompanionFramework.Net.Http.HttpDownloadFailure">
             <summary>

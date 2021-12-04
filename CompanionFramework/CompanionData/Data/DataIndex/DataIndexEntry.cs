@@ -24,5 +24,17 @@ namespace Companion.Data
 			dataBattleScribeVersion = node.GetAttribute("dataBattleScribeVersion");
 			dataRevision = node.GetAttribute("dataRevision");
 		}
+
+		public int GetRevision()
+		{
+			if (int.TryParse(dataRevision, out int parsed))
+			{
+				return parsed;
+			}
+			else
+			{
+				return -1;
+			}
+		}
 	}
 }

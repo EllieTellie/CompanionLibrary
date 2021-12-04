@@ -14,6 +14,8 @@ namespace Companion.Data
 
 		// battle scribe has repositoryUrls in here but they are not used so I don't know how to read them
 
+		protected string cachedRepositoryDataUrl;
+
 		public DataIndex(XmlNode node) : base(node)
 		{
 		}
@@ -43,6 +45,19 @@ namespace Companion.Data
 			xmlDocument.LoadXml(xml);
 
 			return new DataIndex(xmlDocument.GetNode("dataIndex"));
+		}
+
+		public string GetRepositoryDataUrl()
+		{
+			if (cachedRepositoryDataUrl != null)
+				return cachedRepositoryDataUrl;
+
+			cachedRepositoryDataUrl = FileUtils.GetDirectoryFromUri(indexUrl);
+
+			if (!cachedRepositoryDataUrl.EndsWith("/"))
+				cachedRepositoryDataUrl += "/";
+
+			return cachedRepositoryDataUrl;
 		}
 	}
 }

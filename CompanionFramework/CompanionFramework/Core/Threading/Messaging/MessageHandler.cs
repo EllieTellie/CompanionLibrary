@@ -49,5 +49,14 @@ namespace CompanionFramework.Core.Threading.Messaging
 		{
 			messageQueue.Dispatch();
 		}
+
+		/// <summary>
+		/// Static way to detect if the message handler is used.
+		/// </summary>
+		/// <returns>True if using the message handler</returns>
+		public static bool HasMessageHandler()
+		{
+			return instance != null;
+		}
 	}
 }

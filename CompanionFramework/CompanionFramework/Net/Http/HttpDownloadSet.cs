@@ -128,7 +128,8 @@ namespace CompanionFramework.Net.Http
 		private void OnDownloadUpdateDelegate(object sender, EventArgs e)
 		{
 			// fire on main thread
-			MessageQueue.Invoke(OnDownloadUpdate, sender, e);
+			if (MessageHandler.HasMessageHandler())
+				MessageQueue.Invoke(OnDownloadUpdate, sender, e);
 		}
 
 		private void CancelDownloads()
@@ -145,12 +146,28 @@ namespace CompanionFramework.Net.Http
 
 		private void Complete()
 		{
-			MessageQueue.Invoke(DownloadsCompleted, this, null);
+			if (MessageHandler.HasMessageHandler())
+			{
+				MessageQueue.Invoke(DownloadsCompleted, this, null);
+			}
+			else
+			{
+				if (DownloadsCompleted != null)
+					DownloadsCompleted(this, null);
+			}
 		}
 
 		private void Failed(HttpDownloadFailureEventArgs failureEventArgs)
 		{
-			MessageQueue.Invoke(DownloadsFailed, this, failureEventArgs);
+			if (MessageHandler.HasMessageHandler())
+			{
+				MessageQueue.Invoke(DownloadsFailed, this, failureEventArgs);
+			}
+			else
+			{
+				if (DownloadsFailed != null)
+					DownloadsFailed(this, failureEventArgs);
+			}
 		}
 
 		private void OnDownloadComplete(object sender, EventArgs e)

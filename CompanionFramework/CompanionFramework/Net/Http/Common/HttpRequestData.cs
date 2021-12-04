@@ -60,7 +60,15 @@ namespace CompanionFramework.Net.Http.Common
 
 		public void HandleResponse(HttpResponse response)
 		{
-			MessageQueue.Invoke(ResponseEvent, this, new HttpEventArgs(response));
+			if (MessageHandler.HasMessageHandler())
+			{
+				MessageQueue.Invoke(ResponseEvent, this, new HttpEventArgs(response));
+			}
+			else
+			{
+				if (ResponseEvent != null)
+					ResponseEvent(this, new HttpEventArgs(response));
+			}
 		}
 
 		public Uri GetUri()

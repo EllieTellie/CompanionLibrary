@@ -74,6 +74,8 @@ namespace CompanionFramework.Net.Http
 		/// </summary>
 		private bool optional = false;
 
+		private bool async = true;
+
 		public HttpDownload(IHttpHandler httpHandler, HttpRequestData requestData, string storagePath) : this(httpHandler, requestData, storagePath, 2)
 		{
 		}
@@ -119,7 +121,7 @@ namespace CompanionFramework.Net.Http
 				NetLogger.Message("No Http Handler present, falling back to Async Http Request");
 
 				HttpRequest request = new HttpRequest(requestData, progress);
-				request.Run(true);
+				request.Run(async);
 			}
 		}
 
@@ -203,7 +205,15 @@ namespace CompanionFramework.Net.Http
 		/// </summary>
 		public void Complete(HttpEventArgs eventArgs = null)
 		{
-			MessageQueue.Invoke(DownloadCompleted, this, eventArgs);
+			if (MessageHandler.HasMessageHandler())
+			{
+				MessageQueue.Invoke(DownloadCompleted, this, eventArgs);
+			}
+			else
+			{
+				if (DownloadCompleted != null)
+					DownloadCompleted(this, eventArgs);
+			}	
 
 			if (TaskFinished != null)
 				TaskFinished(this);
@@ -214,7 +224,15 @@ namespace CompanionFramework.Net.Http
 		/// </summary>
 		public void Failed(HttpEventArgs eventArgs = null)
 		{
-			MessageQueue.Invoke(DownloadFailed, this, eventArgs);
+			if (MessageHandler.HasMessageHandler())
+			{
+				MessageQueue.Invoke(DownloadFailed, this, eventArgs);
+			}
+			else
+			{
+				if (DownloadFailed != null)
+					DownloadFailed(this, eventArgs);
+			}
 
 			if (TaskFinished != null)
 				TaskFinished(this);
@@ -263,6 +281,15 @@ namespace CompanionFramework.Net.Http
 		{
 			optional = true;
 			retries = 1; // don't allow it to retry the download if it's optional
+		}
+
+		/// <summary>
+		/// This is for debugging mostly but it allows the download to run not async.
+		/// </summary>
+		/// <param name="async">Async</param>
+		public void SetAsync(bool async)
+		{
+			this.async = async;
 		}
 	}
 }

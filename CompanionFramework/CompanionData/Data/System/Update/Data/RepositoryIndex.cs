@@ -1,4 +1,5 @@
 ﻿using CompanionFramework.Core.Log;
+using CompanionFramework.IO.Utils;
 using CompanionFramework.Json.Extensions;
 using LitJson;
 using System;
