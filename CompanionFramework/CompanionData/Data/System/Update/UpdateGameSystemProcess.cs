@@ -14,12 +14,14 @@ namespace Companion.Data.System.Update
 		protected readonly Repository repository;
 		protected readonly DataIndex dataIndex;
 		protected readonly string dataPath;
+		protected readonly bool async;
 
-		public UpdateGameSystemProcess(Repository repository, DataIndex dataIndex, string dataPath)
+		public UpdateGameSystemProcess(Repository repository, DataIndex dataIndex, string dataPath, bool async = true)
 		{
 			this.repository = repository;
 			this.dataIndex = dataIndex;
 			this.dataPath = dataPath;
+			this.async = async;
 		}
 
 		public override void Execute(UpdateStateData state)
@@ -60,9 +62,11 @@ namespace Companion.Data.System.Update
 			foreach (DataIndexEntry update in updates)
 			{
 				HttpDownload download = CreateDownload(update);
-				download.SetAsync(false); // for debugging
 				if (download != null) // should never be null most likely
+				{
+					download.SetAsync(async); // false for debugging
 					downloads.Add(download);
+				}
 			}
 
 			HttpDownloadSet downloadSet = new HttpDownloadSet(downloads.ToArray());
