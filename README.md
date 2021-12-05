@@ -62,12 +62,12 @@ process.LoadingComplete += (object result) =>
 
   Repository repo = repositoryIndex.GetRepositoryByName("<repo_name>");
 
-  RetrieveRepositoryIndexProcess indexProcess = new RetrieveRepositoryIndexProcess(repo.indexUrl, false);
+  RetrieveRepositoryIndexProcess indexProcess = new RetrieveRepositoryIndexProcess(repo, false);
   indexProcess.LoadingComplete += (object r) =>
   {
     DataIndex dataIndex = (DataIndex)r;
 
-    UpdateGameSystemProcess updateProcess = new UpdateGameSystemProcess(repo, dataIndex, @"%USERPROFILE%\BattleScribe\data\<save_data_here>");
+    UpdateGameSystemProcess updateProcess = new UpdateGameSystemProcess(repo, dataIndex, @"%USERPROFILE%\BattleScribe\data\<save_data_here>", false);
     updateProcess.Execute(state);
   };
   indexProcess.Execute(state);
