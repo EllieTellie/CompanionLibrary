@@ -35,24 +35,26 @@ namespace Companion.Data.System.Update
 		}
 
 		/// <inheritdoc/>
-		public override void Execute(UpdateStateData state)
+		public override void Execute(RepositoryData state)
 		{
-			if (repository == null)
+			if (state == null)
 			{
-				FrameworkLogger.Error("Missing repository index");
-				Abort();
+				Abort(UpdateError.MissingState, "Missing repository data");
+				return;
+			}
+			else if (repository == null)
+			{
+				Abort(UpdateError.InvalidParameter, "Missing repository index");
 				return;
 			}
 			else if (dataIndex == null)
 			{
-				FrameworkLogger.Error("Missing data index");
-				Abort();
+				Abort(UpdateError.InvalidParameter, "Missing data index");
 				return;
 			}
 			else if (dataPath == null)
 			{
-				FrameworkLogger.Error("Missing path");
-				Abort();
+				Abort(UpdateError.InvalidParameter, "Missing path");
 				return;
 			}
 
@@ -81,6 +83,14 @@ namespace Companion.Data.System.Update
 			}
 
 			HttpDownloadSet downloadSet = new HttpDownloadSet(downloads.ToArray());
+			downloadSet.DownloadsCompleted += (object source, EventArgs e) =>
+			{
+				Complete();
+			};
+			downloadSet.DownloadsFailed += (object source, EventArgs e) =>
+			{
+				Abort(UpdateError.FailedNetworkResponse);
+			};
 			downloadSet.Run();
 		}
 

@@ -65,9 +65,9 @@
             Fired when the process is aborted.
             </summary>
         </member>
-        <member name="M:Companion.Data.System.Update.CoreUpdateProcess.Execute(Companion.Data.System.Update.UpdateStateData)">
+        <member name="M:Companion.Data.System.Update.CoreUpdateProcess.Execute(Companion.Data.System.Update.RepositoryData)">
             <summary>
-            Execute the loading process and passes any state through.
+            Execute the update process and passes any state through.
             </summary>
             <param name="state">current state</param>
         </member>
@@ -78,6 +78,11 @@
             <returns>update state</returns>
         </member>
         <member name="M:Companion.Data.System.Update.CoreUpdateProcess.Abort">
+            <summary>
+            Aborts the process. Fires the abort event.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.System.Update.CoreUpdateProcess.Abort(Companion.Data.System.Update.UpdateError,System.String)">
             <summary>
             Aborts the process. Fires the abort event.
             </summary>
@@ -103,11 +108,56 @@
             </summary>
             <returns>Maximum retries</returns>
         </member>
-        <member name="M:Companion.Data.System.Update.CoreUpdateProcess.Retry(Companion.Data.System.Update.UpdateStateData)">
+        <member name="M:Companion.Data.System.Update.CoreUpdateProcess.Retry(Companion.Data.System.Update.RepositoryData)">
             <summary>
             Retry the operation.
             </summary>
             <param name="state">State</param>
+        </member>
+        <member name="T:Companion.Data.System.Update.GameSystemData">
+            <summary>
+            Storing the linked data as a data index always needs a repository.
+            </summary>
+        </member>
+        <member name="T:Companion.Data.System.Update.RepositoryData">
+            <summary>
+            Class to hold repository data as it gets loaded.
+            </summary>
+        </member>
+        <member name="F:Companion.Data.System.Update.RepositoryData.url">
+            <summary>
+            The url to read the repository index from.
+            </summary>
+        </member>
+        <member name="F:Companion.Data.System.Update.RepositoryData.repositoryIndex">
+            <summary>
+            Repository index if loaded, can be null if not loaded.
+            </summary>
+        </member>
+        <member name="F:Companion.Data.System.Update.RepositoryData.dataIndices">
+            <summary>
+            Data index if loaded, can be null if not loaded. Repository Index must be loaded before this can be loaded.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.System.Update.RepositoryData.AddGameSystem(Companion.Data.System.Update.Repository,Companion.Data.DataIndex)">
+            <summary>
+            Add Game System with <see cref="T:Companion.Data.DataIndex"/>.
+            </summary>
+            <param name="repository">Repository</param>
+            <param name="dataIndex">Data index</param>
+            <returns>Game System Data</returns>
+        </member>
+        <member name="M:Companion.Data.System.Update.RepositoryData.GetGameSystem(Companion.Data.System.Update.Repository)">
+            <summary>
+            Get the game system data for this repository if it's present. If it's not loaded returns null.
+            </summary>
+            <param name="repository">Repository to get the data from</param>
+            <returns>Game system data</returns>
+        </member>
+        <member name="T:Companion.Data.System.Update.ProcessEventArgs">
+            <summary>
+            Base class for arguments by all process events
+            </summary>
         </member>
         <member name="T:Companion.Data.System.Update.IUpdateProcess">
             <summary>
@@ -124,7 +174,7 @@
             Fired when the process is aborted.
             </summary>
         </member>
-        <member name="M:Companion.Data.System.Update.IUpdateProcess.Execute(Companion.Data.System.Update.UpdateStateData)">
+        <member name="M:Companion.Data.System.Update.IUpdateProcess.Execute(Companion.Data.System.Update.RepositoryData)">
             <summary>
             Execute the update process and passes any state through.
             </summary>
@@ -141,48 +191,73 @@
             </summary>
             <returns>update state</returns>
         </member>
-        <member name="T:Companion.Data.System.Update.RetrieveGameSystemIndexProcess">
-            <summary>
-            Retrieves the index of game systems from the repository url. This reads the json from the repository and creates a <see cref="T:Companion.Data.System.Update.RepositoryIndex"/> from it.
-            </summary>
-        </member>
-        <member name="M:Companion.Data.System.Update.RetrieveGameSystemIndexProcess.#ctor(System.String,System.Boolean)">
-            <summary>
-            Creates a process to retrieve the index of game systems.
-            </summary>
-            <param name="url">Repository url</param>
-            <param name="async">If true the networking will be asynchronous</param>
-        </member>
-        <member name="M:Companion.Data.System.Update.RetrieveGameSystemIndexProcess.Execute(Companion.Data.System.Update.UpdateStateData)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Companion.Data.System.Update.RetrieveGameSystemIndexProcess.GetState">
-            <inheritdoc/>
-        </member>
-        <member name="T:Companion.Data.System.Update.RetrieveRepositoryIndexProcess">
+        <member name="T:Companion.Data.System.Update.RetrieveDataIndexProcess">
             <summary>
             Retrieve the data index from the repository index. This reads the .bsi file (battle scribe index/zipped xml) from the repository index url and create a <see cref="T:Companion.Data.DataIndex"/> from it.
             </summary>
         </member>
-        <member name="M:Companion.Data.System.Update.RetrieveRepositoryIndexProcess.#ctor(Companion.Data.System.Update.Repository,System.Boolean)">
+        <member name="M:Companion.Data.System.Update.RetrieveDataIndexProcess.#ctor(Companion.Data.System.Update.Repository,System.Boolean)">
             <summary>
             Creates a process to retrieve the data index from the repository index.
             </summary>
             <param name="repository">Repository to get index url from</param>
             <param name="async">If true the networking will be asynchronous</param>
         </member>
-        <member name="M:Companion.Data.System.Update.RetrieveRepositoryIndexProcess.#ctor(System.String,System.Boolean)">
+        <member name="M:Companion.Data.System.Update.RetrieveDataIndexProcess.#ctor(System.String,System.Boolean)">
             <summary>
             Creates a process to retrieve the data index from the repository index.
             </summary>
             <param name="url">Repository index url</param>
             <param name="async">If true the networking will be asynchronous</param>
         </member>
-        <member name="M:Companion.Data.System.Update.RetrieveRepositoryIndexProcess.Execute(Companion.Data.System.Update.UpdateStateData)">
+        <member name="M:Companion.Data.System.Update.RetrieveDataIndexProcess.Execute(Companion.Data.System.Update.RepositoryData)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Companion.Data.System.Update.RetrieveDataIndexProcess.GetState">
+            <inheritdoc/>
+        </member>
+        <member name="T:Companion.Data.System.Update.RetrieveRepositoryIndexProcess">
+            <summary>
+            Retrieves the index of game systems from the repository url. This reads the json from the repository and creates a <see cref="T:Companion.Data.System.Update.RepositoryIndex"/> from it.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.System.Update.RetrieveRepositoryIndexProcess.#ctor(System.String,System.Boolean)">
+            <summary>
+            Creates a process to retrieve the index of game systems.
+            </summary>
+            <param name="url">Repository url</param>
+            <param name="async">If true the networking will be asynchronous</param>
+        </member>
+        <member name="M:Companion.Data.System.Update.RetrieveRepositoryIndexProcess.Execute(Companion.Data.System.Update.RepositoryData)">
             <inheritdoc/>
         </member>
         <member name="M:Companion.Data.System.Update.RetrieveRepositoryIndexProcess.GetState">
             <inheritdoc/>
+        </member>
+        <member name="F:Companion.Data.System.Update.UpdateError.Error">
+            <summary>
+            Default generic error
+            </summary>
+        </member>
+        <member name="F:Companion.Data.System.Update.UpdateError.MissingState">
+            <summary>
+            No state was not provided to the process (null).
+            </summary>
+        </member>
+        <member name="F:Companion.Data.System.Update.UpdateError.InvalidParameter">
+            <summary>
+            Invalid parameter passed to the process.
+            </summary>
+        </member>
+        <member name="F:Companion.Data.System.Update.UpdateError.FailedNetworkResponse">
+            <summary>
+            We failed to get a valid network response
+            </summary>
+        </member>
+        <member name="F:Companion.Data.System.Update.UpdateError.InvalidRepositoryIndex">
+            <summary>
+            Repository index data from the network was invalid
+            </summary>
         </member>
         <member name="T:Companion.Data.System.Update.UpdateGameSystemProcess">
             <summary>
@@ -198,7 +273,7 @@
             <param name="dataPath">File path where the data should reside</param>
             <param name="async">Whether to update async</param>
         </member>
-        <member name="M:Companion.Data.System.Update.UpdateGameSystemProcess.Execute(Companion.Data.System.Update.UpdateStateData)">
+        <member name="M:Companion.Data.System.Update.UpdateGameSystemProcess.Execute(Companion.Data.System.Update.RepositoryData)">
             <inheritdoc/>
         </member>
         <member name="M:Companion.Data.System.Update.UpdateGameSystemProcess.GetUpdateDataIndices">
@@ -226,11 +301,6 @@
         <member name="M:Companion.Data.System.Update.UpdateGameSystemProcess.GetState">
             <inheritdoc/>
         </member>
-        <member name="T:Companion.Data.System.Update.UpdateStateData">
-            <summary>
-            Store state during loading
-            </summary>
-        </member>
         <member name="E:RosterManager.OnRostersLoaded">
             <summary>
             Fired when all rosters are loaded.
@@ -252,20 +322,87 @@
             Dispatched on the main thread. Source is this. EventArgs is null.
             </summary>
         </member>
-        <member name="E:UpdateManager.OnGameSystemIndexReceived">
+        <member name="T:UpdateManager">
             <summary>
-            Fired when game system index is received. Source is UpdateStateData.
+            Holds data retrieved from the repositories for updates
             </summary>
         </member>
-        <member name="E:UpdateManager.OnRepositoryIndexReceived">
+        <member name="E:UpdateManager.OnDataIndexAdded">
             <summary>
-            Fired when repository index is received. Source is UpdateStateData.
+            Fired when data index is received from a repository. Source is <see cref="T:UpdateManager"/>. EventArgs is <see cref="T:Companion.Data.System.Update.DataIndexSuccessEventArgs"/>.
             </summary>
         </member>
-        <member name="M:UpdateManager.AddRepository">
+        <member name="E:UpdateManager.OnDataIndexFailed">
             <summary>
-            Add repository to the update manager
+            Fired when it failed to receive the data index from a repository. Source is <see cref="T:UpdateManager"/>. EventArgs is <see cref="T:Companion.Data.System.Update.ProcessFailedEventArgs"/>.
             </summary>
+        </member>
+        <member name="E:UpdateManager.OnRepositoryIndexAdded">
+            <summary>
+            Fired when repository index is received. Source is <see cref="T:UpdateManager"/>. EventArgs is <see cref="T:Companion.Data.System.Update.RepositoryIndexSuccessEventArgs"/>.
+            </summary>
+        </member>
+        <member name="E:UpdateManager.OnRepositoryIndexFailed">
+            <summary>
+            Fired when it failed to receive the repository index. Source is <see cref="T:UpdateManager"/>. EventArgs is <see cref="T:Companion.Data.System.Update.ProcessFailedEventArgs"/>.
+            </summary>
+        </member>
+        <member name="E:UpdateManager.OnUpdateSucceeded">
+            <summary>
+            Fired when repository update was successful. Source is <see cref="T:UpdateManager"/>. EventArgs is <see cref="T:Companion.Data.System.Update.UpdateSuccessEventArgs"/>.
+            </summary>
+        </member>
+        <member name="E:UpdateManager.OnUpdateFailed">
+            <summary>
+            Fired when it failed to update the repository. Source is <see cref="T:UpdateManager"/>. EventArgs is <see cref="T:Companion.Data.System.Update.ProcessFailedEventArgs"/>.
+            </summary>
+        </member>
+        <member name="F:UpdateManager.loadedRepositories">
+            <summary>
+            List of loaded repositories.
+            </summary>
+        </member>
+        <member name="M:UpdateManager.RetrieveRepositoryIndex(System.String,System.Boolean)">
+            <summary>
+            Retrieve the repository index from the source.
+            </summary>
+            <param name="url">Source url</param>
+            <param name="async">Whether request should be done asynchronous</param>
+            <returns>Returns true if it was executed</returns>
+        </member>
+        <member name="M:UpdateManager.RetrieveRepositoryDataIndex(Companion.Data.System.Update.RepositoryData,System.String,System.Boolean)">
+            <summary>
+            Retrieve the data index for the specified repository.
+            </summary>
+            <param name="repositoryData">Repository data</param>
+            <param name="repositoryName">Repository name</param>
+            <param name="async">Whether request should be done asynchronous</param>
+            <returns>Returns true if it was executed</returns>
+        </member>
+        <member name="M:UpdateManager.RetrieveRepositoryDataIndex(Companion.Data.System.Update.RepositoryIndex,Companion.Data.System.Update.Repository,System.Boolean)">
+            <summary>
+            Retrieve the data index for the specified repository.
+            </summary>
+            <param name="repositoryIndex">Repository index</param>
+            <param name="repository">Repository</param>
+            <param name="async">Whether request should be done asynchronous</param>
+            <returns>Returns true if it was executed</returns>
+        </member>
+        <member name="M:UpdateManager.RetrieveRepositoryDataIndex(Companion.Data.System.Update.RepositoryData,Companion.Data.System.Update.Repository,System.Boolean)">
+            <summary>
+            Retrieve the data index for the specified repository.
+            </summary>
+            <param name="repositoryData">Repository data</param>
+            <param name="repository">Repository</param>
+            <param name="async">Whether request should be done asynchronous</param>
+            <returns>Returns true if it was executed</returns>
+        </member>
+        <member name="M:UpdateManager.AddRepositoryData(System.String)">
+            <summary>
+            Adds the repository url to the update manager or returns the existing repository data.
+            </summary>
+            <param name="repositoryUrl">Repository url</param>
+            <returns>Repository data</returns>
         </member>
     </members>
 </doc>

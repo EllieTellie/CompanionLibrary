@@ -1,4 +1,6 @@
-﻿namespace Companion.Data.System.Update
+﻿using CompanionFramework.Core.Log;
+
+namespace Companion.Data.System.Update
 {
 	public abstract class CoreUpdateProcess : IUpdateProcess
 	{
@@ -13,10 +15,10 @@
 		public event UpdateEventAborted LoadingAborted;
 
 		/// <summary>
-		/// Execute the loading process and passes any state through.
+		/// Execute the update process and passes any state through.
 		/// </summary>
 		/// <param name="state">current state</param>
-		public abstract void Execute(UpdateStateData state);
+		public abstract void Execute(RepositoryData state);
 
 		/// <summary>
 		/// The update state this process handles.
@@ -29,10 +31,22 @@
 		/// </summary>
 		public virtual void Abort()
 		{
+			Abort(UpdateError.Error, null); // abort with default error and no message
+		}
+
+		/// <summary>
+		/// Aborts the process. Fires the abort event.
+		/// </summary>
+		public virtual void Abort(UpdateError error, string message = null)
+		{
 			Cleanup();
 
+			// automatically log error message
+			if (message != null)
+				FrameworkLogger.Error(message);
+
 			if (LoadingAborted != null)
-				LoadingAborted(false);
+				LoadingAborted(error, message);
 		}
 
 		/// <summary>
@@ -77,7 +91,7 @@
 		/// Retry the operation.
 		/// </summary>
 		/// <param name="state">State</param>
-		public void Retry(UpdateStateData state)
+		public void Retry(RepositoryData state)
 		{
 			Execute(state);
 		}

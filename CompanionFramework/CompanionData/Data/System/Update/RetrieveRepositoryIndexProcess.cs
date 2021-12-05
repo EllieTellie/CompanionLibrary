@@ -1,35 +1,26 @@
 ﻿using CompanionFramework.Core.Log;
 using CompanionFramework.IO.Utils;
+using CompanionFramework.Json.Utils;
 using CompanionFramework.Net.Http.Common;
+using LitJson;
 using System;
 
 namespace Companion.Data.System.Update
 {
 	/// <summary>
-	/// Retrieve the data index from the repository index. This reads the .bsi file (battle scribe index/zipped xml) from the repository index url and create a <see cref="DataIndex"/> from it.
+	/// Retrieves the index of game systems from the repository url. This reads the json from the repository and creates a <see cref="RepositoryIndex"/> from it.
 	/// </summary>
 	public class RetrieveRepositoryIndexProcess : CoreUpdateProcess
 	{
-		protected UpdateStateData state;
+		protected RepositoryData state;
 
 		protected readonly string url;
 		protected readonly bool async;
 
 		/// <summary>
-		/// Creates a process to retrieve the data index from the repository index.
+		/// Creates a process to retrieve the index of game systems.
 		/// </summary>
-		/// <param name="repository">Repository to get index url from</param>
-		/// <param name="async">If true the networking will be asynchronous</param>
-		public RetrieveRepositoryIndexProcess(Repository repository, bool async = true)
-		{
-			this.url = repository.indexUrl;
-			this.async = async;
-		}
-
-		/// <summary>
-		/// Creates a process to retrieve the data index from the repository index.
-		/// </summary>
-		/// <param name="url">Repository index url</param>
+		/// <param name="url">Repository url</param>
 		/// <param name="async">If true the networking will be asynchronous</param>
 		public RetrieveRepositoryIndexProcess(string url, bool async = true)
 		{
@@ -38,9 +29,15 @@ namespace Companion.Data.System.Update
 		}
 
 		/// <inheritdoc/>
-		public override void Execute(UpdateStateData state)
+		public override void Execute(RepositoryData state)
 		{
 			this.state = state;
+
+			if (state == null)
+			{
+				Abort(UpdateError.MissingState, "Missing repository data");
+				return;
+			}
 
 			RequestIndex(url);
 		}
@@ -58,30 +55,43 @@ namespace Companion.Data.System.Update
 		{
 			if (response.Result != NetworkResult.Success || response.Data == null)
 			{
-				FrameworkLogger.Error("Unable to receive index");
-				Abort();
+				Abort(UpdateError.FailedNetworkResponse, "Unable to receive index");
 				return;
 			}
 
-			DataIndex dataIndex = DataIndex.LoadDataIndexXml(response.Data);
-			if (dataIndex == null)
+			string text = FileUtils.GetString(response.Data);
+
+			JsonData jsonData = JsonUtils.ConvertToJsonData(text);
+			if (jsonData == null || !jsonData.IsObject)
 			{
-				FrameworkLogger.Error("Unable to parse data index");
-				Abort();
+				Abort(UpdateError.InvalidRepositoryIndex, "Index is not valid json");
 				return;
 			}
 
-			// store it
-			if (state != null)
-				state.dataIndex = dataIndex;
+			RepositoryIndex repositoryIndex = RepositoryIndex.Parse(jsonData);
+			if (repositoryIndex == null)
+			{
+				Abort(UpdateError.InvalidRepositoryIndex, "Unable to parse repo");
+				return;
+			}
 
-			Complete(dataIndex);
+			state.repositoryIndex = repositoryIndex;
+
+			Complete(repositoryIndex);
 		}
 
 		/// <inheritdoc/>
 		public override UpdateState GetState()
 		{
-			return UpdateState.RetrieveRespositoryIndex;
+			return UpdateState.RetrieveGameSystemIndex;
+		}
+
+		protected override void Cleanup()
+		{
+			base.Cleanup();
+
+			// clear state
+			state = null;
 		}
 	}
 }

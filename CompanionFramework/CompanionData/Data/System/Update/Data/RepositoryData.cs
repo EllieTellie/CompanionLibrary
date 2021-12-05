@@ -1,0 +1,88 @@
+﻿using CompanionFramework.Core.Log;
+using System;
+using System.Collections.Generic;
+
+namespace Companion.Data.System.Update
+{
+	/// <summary>
+	/// Storing the linked data as a data index always needs a repository.
+	/// </summary>
+	public class GameSystemData
+	{
+		public readonly Repository repository;
+		public readonly DataIndex dataIndex;
+
+		public GameSystemData(Repository repository, DataIndex dataIndex)
+		{
+			this.repository = repository;
+			this.dataIndex = dataIndex;
+		}
+	}
+
+	/// <summary>
+	/// Class to hold repository data as it gets loaded.
+	/// </summary>
+	public class RepositoryData
+	{
+		/// <summary>
+		/// The url to read the repository index from.
+		/// </summary>
+		public readonly string url;
+
+		/// <summary>
+		/// Repository index if loaded, can be null if not loaded.
+		/// </summary>
+		public RepositoryIndex repositoryIndex;
+
+		/// <summary>
+		/// Data index if loaded, can be null if not loaded. Repository Index must be loaded before this can be loaded.
+		/// </summary>
+		public readonly Dictionary<string, GameSystemData> dataIndices = new Dictionary<string, GameSystemData>();
+
+		public RepositoryData(string url)
+		{
+			this.url = url;
+		}
+
+		/// <summary>
+		/// Add Game System with <see cref="DataIndex"/>.
+		/// </summary>
+		/// <param name="repository">Repository</param>
+		/// <param name="dataIndex">Data index</param>
+		/// <returns>Game System Data</returns>
+		public GameSystemData AddGameSystem(Repository repository, DataIndex dataIndex)
+		{
+			// fallback to data index name
+			if (repository == null)
+				repository = repositoryIndex.GetRepositoryByName(dataIndex.name);
+
+			if (repository != null)
+			{
+				GameSystemData gameSystemData = new GameSystemData(repository, dataIndex);
+				dataIndices[repository.name] = gameSystemData;
+				return gameSystemData;
+			}
+			else
+			{
+				FrameworkLogger.Error("Unable to add game system");
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Get the game system data for this repository if it's present. If it's not loaded returns null.
+		/// </summary>
+		/// <param name="repository">Repository to get the data from</param>
+		/// <returns>Game system data</returns>
+		public GameSystemData GetGameSystem(Repository repository)
+		{
+			dataIndices.TryGetValue(repository.name, out GameSystemData gameSystemData);
+			return gameSystemData;
+		}
+
+		public Repository GetRepositoryByName(string repositoryName)
+		{
+			return repositoryIndex.GetRepositoryByName(repositoryName);
+		}
+	}
+}

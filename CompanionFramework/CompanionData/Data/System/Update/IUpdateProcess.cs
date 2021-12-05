@@ -1,8 +1,8 @@
-﻿public delegate void UpdateEventComplete(object result);
-public delegate void UpdateEventAborted(bool critical);
-
-namespace Companion.Data.System.Update
+﻿namespace Companion.Data.System.Update
 {
+	public delegate void UpdateEventComplete(object result);
+	public delegate void UpdateEventAborted(UpdateError error, string message);
+
 	/// <summary>
 	/// Handles updating the data files.
 	/// </summary>
@@ -22,7 +22,7 @@ namespace Companion.Data.System.Update
 		/// Execute the update process and passes any state through.
 		/// </summary>
 		/// <param name="state">current state</param>
-		void Execute(UpdateStateData state);
+		void Execute(RepositoryData state);
 
 		/// <summary>
 		/// Aborts the process.
