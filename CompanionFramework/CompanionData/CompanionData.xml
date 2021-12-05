@@ -141,6 +141,91 @@
             </summary>
             <returns>update state</returns>
         </member>
+        <member name="T:Companion.Data.System.Update.RetrieveGameSystemIndexProcess">
+            <summary>
+            Retrieves the index of game systems from the repository url. This reads the json from the repository and creates a <see cref="T:Companion.Data.System.Update.RepositoryIndex"/> from it.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.System.Update.RetrieveGameSystemIndexProcess.#ctor(System.String,System.Boolean)">
+            <summary>
+            Creates a process to retrieve the index of game systems.
+            </summary>
+            <param name="url">Repository url</param>
+            <param name="async">If true the networking will be asynchronous</param>
+        </member>
+        <member name="M:Companion.Data.System.Update.RetrieveGameSystemIndexProcess.Execute(Companion.Data.System.Update.UpdateStateData)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Companion.Data.System.Update.RetrieveGameSystemIndexProcess.GetState">
+            <inheritdoc/>
+        </member>
+        <member name="T:Companion.Data.System.Update.RetrieveRepositoryIndexProcess">
+            <summary>
+            Retrieve the data index from the repository index. This reads the .bsi file (battle scribe index/zipped xml) from the repository index url and create a <see cref="T:Companion.Data.DataIndex"/> from it.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.System.Update.RetrieveRepositoryIndexProcess.#ctor(Companion.Data.System.Update.Repository,System.Boolean)">
+            <summary>
+            Creates a process to retrieve the data index from the repository index.
+            </summary>
+            <param name="repository">Repository to get index url from</param>
+            <param name="async">If true the networking will be asynchronous</param>
+        </member>
+        <member name="M:Companion.Data.System.Update.RetrieveRepositoryIndexProcess.#ctor(System.String,System.Boolean)">
+            <summary>
+            Creates a process to retrieve the data index from the repository index.
+            </summary>
+            <param name="url">Repository index url</param>
+            <param name="async">If true the networking will be asynchronous</param>
+        </member>
+        <member name="M:Companion.Data.System.Update.RetrieveRepositoryIndexProcess.Execute(Companion.Data.System.Update.UpdateStateData)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Companion.Data.System.Update.RetrieveRepositoryIndexProcess.GetState">
+            <inheritdoc/>
+        </member>
+        <member name="T:Companion.Data.System.Update.UpdateGameSystemProcess">
+            <summary>
+            Updates a game system from a repository. It will check which files need updating in the data index and download those files only.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.System.Update.UpdateGameSystemProcess.#ctor(Companion.Data.System.Update.Repository,Companion.Data.DataIndex,System.String,System.Boolean)">
+            <summary>
+            Create a new update system process.
+            </summary>
+            <param name="repository">Repository to update from</param>
+            <param name="dataIndex">Data index retrieved from repository</param>
+            <param name="dataPath">File path where the data should reside</param>
+            <param name="async">Whether to update async</param>
+        </member>
+        <member name="M:Companion.Data.System.Update.UpdateGameSystemProcess.Execute(Companion.Data.System.Update.UpdateStateData)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Companion.Data.System.Update.UpdateGameSystemProcess.GetUpdateDataIndices">
+            <summary>
+            Get a list of the catalogues and game systems from the data index that need updating.
+            </summary>
+            <returns>List of data index entries that require updating</returns>
+        </member>
+        <member name="M:Companion.Data.System.Update.UpdateGameSystemProcess.RequiresUpdate(Companion.Data.DataIndexEntry)">
+            <summary>
+            Checks whether the file exists and if it does whether it has an up to date version. If the file is not readable it will also return true.
+            </summary>
+            <param name="entry">Entry</param>
+            <returns>Returns true if it requires updating</returns>
+        </member>
+        <member name="M:Companion.Data.System.Update.UpdateGameSystemProcess.GetVersionInfo(System.Byte[],System.String,System.String)">
+            <summary>
+            Get the version information from the compressed data file on disk.
+            </summary>
+            <param name="data">Byte data</param>
+            <param name="fileExtension">The extension of the compressed file starting with a period</param>
+            <param name="elementName">The name of the first element in the xml file that needs to match</param>
+            <returns></returns>
+        </member>
+        <member name="M:Companion.Data.System.Update.UpdateGameSystemProcess.GetState">
+            <inheritdoc/>
+        </member>
         <member name="T:Companion.Data.System.Update.UpdateStateData">
             <summary>
             Store state during loading

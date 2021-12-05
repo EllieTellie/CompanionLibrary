@@ -7,6 +7,9 @@ using System;
 
 namespace Companion.Data.System.Update
 {
+	/// <summary>
+	/// Retrieves the index of game systems from the repository url. This reads the json from the repository and creates a <see cref="RepositoryIndex"/> from it.
+	/// </summary>
 	public class RetrieveGameSystemIndexProcess : CoreUpdateProcess
 	{
 		protected UpdateStateData state;
@@ -14,12 +17,18 @@ namespace Companion.Data.System.Update
 		protected readonly string url;
 		protected readonly bool async;
 
+		/// <summary>
+		/// Creates a process to retrieve the index of game systems.
+		/// </summary>
+		/// <param name="url">Repository url</param>
+		/// <param name="async">If true the networking will be asynchronous</param>
 		public RetrieveGameSystemIndexProcess(string url, bool async = true)
 		{
 			this.url = url;
 			this.async = async;
 		}
 
+		/// <inheritdoc/>
 		public override void Execute(UpdateStateData state)
 		{
 			this.state = state;
@@ -69,6 +78,7 @@ namespace Companion.Data.System.Update
 			Complete(repositoryIndex);
 		}
 
+		/// <inheritdoc/>
 		public override UpdateState GetState()
 		{
 			return UpdateState.RetrieveGameSystemIndex;

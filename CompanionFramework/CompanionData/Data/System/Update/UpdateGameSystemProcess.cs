@@ -9,6 +9,9 @@ using System.Xml;
 
 namespace Companion.Data.System.Update
 {
+	/// <summary>
+	/// Updates a game system from a repository. It will check which files need updating in the data index and download those files only.
+	/// </summary>
 	public class UpdateGameSystemProcess : CoreUpdateProcess
 	{
 		protected readonly Repository repository;
@@ -16,6 +19,13 @@ namespace Companion.Data.System.Update
 		protected readonly string dataPath;
 		protected readonly bool async;
 
+		/// <summary>
+		/// Create a new update system process.
+		/// </summary>
+		/// <param name="repository">Repository to update from</param>
+		/// <param name="dataIndex">Data index retrieved from repository</param>
+		/// <param name="dataPath">File path where the data should reside</param>
+		/// <param name="async">Whether to update async</param>
 		public UpdateGameSystemProcess(Repository repository, DataIndex dataIndex, string dataPath, bool async = true)
 		{
 			this.repository = repository;
@@ -24,6 +34,7 @@ namespace Companion.Data.System.Update
 			this.async = async;
 		}
 
+		/// <inheritdoc/>
 		public override void Execute(UpdateStateData state)
 		{
 			if (repository == null)
@@ -81,6 +92,10 @@ namespace Companion.Data.System.Update
 			return download;
 		}
 
+		/// <summary>
+		/// Get a list of the catalogues and game systems from the data index that need updating.
+		/// </summary>
+		/// <returns>List of data index entries that require updating</returns>
 		public List<DataIndexEntry> GetUpdateDataIndices()
 		{
 			List<DataIndexEntry> indices = new List<DataIndexEntry>();
@@ -96,6 +111,11 @@ namespace Companion.Data.System.Update
 			return indices;
 		}
 
+		/// <summary>
+		/// Checks whether the file exists and if it does whether it has an up to date version. If the file is not readable it will also return true.
+		/// </summary>
+		/// <param name="entry">Entry</param>
+		/// <returns>Returns true if it requires updating</returns>
 		private bool RequiresUpdate(DataIndexEntry entry)
 		{
 			string entryPath = Path.Combine(dataPath, entry.filePath);
@@ -123,23 +143,32 @@ namespace Companion.Data.System.Update
 				return false;
 			}
 
-			// if it's out of date
-			if (!versionInfo.MatchesRevision(entry))
+			// if it's out of date or not readable
+			if (versionInfo == null || !versionInfo.MatchesRevision(entry))
 				return true;
 
 			return false;
 		}
 
+		/// <summary>
+		/// Get the version information from the compressed data file on disk.
+		/// </summary>
+		/// <param name="data">Byte data</param>
+		/// <param name="fileExtension">The extension of the compressed file starting with a period</param>
+		/// <param name="elementName">The name of the first element in the xml file that needs to match</param>
+		/// <returns></returns>
 		private DataIndexVersionInfo GetVersionInfo(byte[] data, string fileExtension, string elementName)
 		{
 			byte[] uncompressedData = CompressionUtils.DecompressFileFromZip(data, fileExtension);
-			string text = FileUtils.GetString(uncompressedData); // could read partial, but for now just reading full
+			string text = FileUtils.GetString(uncompressedData); // could read partial, but for now just reading the full file
 			using (StringReader textReader = new StringReader(text))
 			{
 				using (XmlReader reader = XmlReader.Create(textReader))
 				{
+					// read the element with the version information
 					if (reader.ReadToFollowing(elementName))
 					{
+						// this should be the start element always
 						if (reader.IsStartElement())
 						{
 							// these should match between catalogue and gamesystem so just read these only
@@ -161,6 +190,7 @@ namespace Companion.Data.System.Update
 			return null;
 		}
 
+		/// <inheritdoc/>
 		public override UpdateState GetState()
 		{
 			return UpdateState.UpdateGameSystem;
