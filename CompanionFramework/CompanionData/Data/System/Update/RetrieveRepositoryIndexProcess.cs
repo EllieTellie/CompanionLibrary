@@ -39,6 +39,9 @@ namespace Companion.Data.System.Update
 				return;
 			}
 
+			// update url
+			state.url = url;
+
 			RequestIndex(url);
 		}
 

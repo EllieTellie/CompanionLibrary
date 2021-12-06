@@ -223,12 +223,12 @@ public class UpdateManager
 
 			if (MessageHandler.HasMessageHandler())
 			{
-				MessageQueue.Invoke(OnDataIndexAdded, this, eventArgs);
+				MessageQueue.Invoke(OnUpdateSucceeded, this, eventArgs);
 			}
 			else
 			{
-				if (OnDataIndexAdded != null)
-					OnDataIndexAdded(this, eventArgs);
+				if (OnUpdateSucceeded != null)
+					OnUpdateSucceeded(this, eventArgs);
 			}
 		};
 

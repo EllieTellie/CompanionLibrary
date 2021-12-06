@@ -27,7 +27,7 @@ namespace Companion.Data.System.Update
 		/// <summary>
 		/// The url to read the repository index from.
 		/// </summary>
-		public readonly string url;
+		public string url;
 
 		/// <summary>
 		/// Repository index if loaded, can be null if not loaded.
@@ -38,6 +38,10 @@ namespace Companion.Data.System.Update
 		/// Data index if loaded, can be null if not loaded. Repository Index must be loaded before this can be loaded.
 		/// </summary>
 		public readonly Dictionary<string, GameSystemData> dataIndices = new Dictionary<string, GameSystemData>();
+
+		public RepositoryData()
+		{
+		}
 
 		public RepositoryData(string url)
 		{

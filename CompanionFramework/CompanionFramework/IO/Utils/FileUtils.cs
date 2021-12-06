@@ -541,12 +541,8 @@ namespace CompanionFramework.IO.Utils
 			if (e == null)
 				return false;
 
-#if NET46 || NET_STANDARD_2_0
 			int errorCode = e.HResult;
 			return errorCode == HR_ERROR_HANDLE_DISK_FULL || errorCode == HR_ERROR_DISK_FULL;
-#else
-			return false;
-#endif
 		}
 		#endregion
 	}
