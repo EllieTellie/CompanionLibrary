@@ -118,8 +118,6 @@ namespace CompanionFramework.Net.Http
 			}
 			else
 			{
-				NetLogger.Message("No Http Handler present, falling back to Async Http Request");
-
 				HttpRequest request = new HttpRequest(requestData, progress);
 				request.Run(async);
 			}

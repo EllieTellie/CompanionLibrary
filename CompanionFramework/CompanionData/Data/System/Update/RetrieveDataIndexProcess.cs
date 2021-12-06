@@ -84,6 +84,10 @@ namespace Companion.Data.System.Update
 			// store it
 			GameSystemData gameSystemData = state.AddGameSystem(repository, dataIndex);
 
+			// fallback for if this is called with a url only
+			if (gameSystemData == null)
+				gameSystemData = new GameSystemData(null, dataIndex);
+
 			Complete(gameSystemData);
 		}
 

@@ -259,6 +259,11 @@
             Repository index data from the network was invalid
             </summary>
         </member>
+        <member name="F:Companion.Data.System.Update.UpdateError.FailedFileAccess">
+            <summary>
+            Unable to access files.
+            </summary>
+        </member>
         <member name="T:Companion.Data.System.Update.UpdateGameSystemProcess">
             <summary>
             Updates a game system from a repository. It will check which files need updating in the data index and download those files only.

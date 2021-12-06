@@ -58,7 +58,11 @@ namespace Companion.Data.System.Update
 		{
 			// fallback to data index name
 			if (repository == null)
-				repository = repositoryIndex.GetRepositoryByName(dataIndex.name);
+			{
+				// attempt to get it from repository
+				if (repositoryIndex != null)
+					repository = repositoryIndex.GetRepositoryByName(dataIndex.name);
+			}
 
 			if (repository != null)
 			{

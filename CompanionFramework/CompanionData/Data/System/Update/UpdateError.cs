@@ -22,5 +22,9 @@
 		/// Repository index data from the network was invalid
 		/// </summary>
 		InvalidRepositoryIndex,
+		/// <summary>
+		/// Unable to access files.
+		/// </summary>
+		FailedFileAccess
 	}
 }

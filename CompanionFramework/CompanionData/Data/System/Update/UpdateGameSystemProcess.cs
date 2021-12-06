@@ -59,8 +59,17 @@ namespace Companion.Data.System.Update
 			}
 
 			// create directory if it does not exist
-			if (!Directory.Exists(dataPath))
-				Directory.CreateDirectory(dataPath);
+
+			try
+			{
+				if (!Directory.Exists(dataPath))
+					Directory.CreateDirectory(dataPath);
+			}
+			catch (Exception e)
+			{
+				Abort(UpdateError.FailedFileAccess, e.Message);
+				return;
+			}
 
 			List<DataIndexEntry> updates = GetUpdateDataIndices();
 
