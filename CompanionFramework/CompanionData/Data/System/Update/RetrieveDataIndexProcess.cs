@@ -47,8 +47,7 @@ namespace Companion.Data.System.Update
 
 			if (state == null)
 			{
-				FrameworkLogger.Error("Missing repository data");
-				Abort();
+				Abort(UpdateError.MissingState, "Missing repository data");
 				return;
 			}
 
@@ -68,16 +67,14 @@ namespace Companion.Data.System.Update
 		{
 			if (response.Result != NetworkResult.Success || response.Data == null)
 			{
-				FrameworkLogger.Error("Unable to receive index");
-				Abort();
+				Abort(UpdateError.FailedNetworkResponse, "Unable to receive index");
 				return;
 			}
 
 			DataIndex dataIndex = DataIndex.LoadDataIndexXml(response.Data);
 			if (dataIndex == null)
 			{
-				FrameworkLogger.Error("Unable to parse data index");
-				Abort();
+				Abort(UpdateError.InvalidDataIndex, "Unable to parse data index");
 				return;
 			}
 
@@ -89,6 +86,34 @@ namespace Companion.Data.System.Update
 				gameSystemData = new GameSystemData(null, dataIndex);
 
 			Complete(gameSystemData);
+		}
+
+		public override void Abort(UpdateError error, string message = null)
+		{
+			// fire event on the RepositoryData as a passthrough
+			FireFailedState(error, message);
+
+			base.Abort(error, message);
+		}
+
+		protected override void Complete(object result)
+		{
+			// fire event on the RepositoryData as a passthrough
+			FireCompleteState((GameSystemData)result);
+
+			base.Complete(result);
+		}
+
+		private void FireFailedState(UpdateError error, string message)
+		{
+			ProcessFailedEventArgs eventArgs = new ProcessFailedEventArgs(state, error, message);
+			state.FireDataIndexFailed(eventArgs);
+		}
+
+		private void FireCompleteState(GameSystemData gameSystemData)
+		{
+			DataIndexSuccessEventArgs eventArgs = new DataIndexSuccessEventArgs(state, gameSystemData.repository, gameSystemData.dataIndex);
+			state.FireDataIndexAdded(eventArgs);
 		}
 
 		/// <inheritdoc/>

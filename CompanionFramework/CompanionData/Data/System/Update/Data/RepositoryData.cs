@@ -1,4 +1,5 @@
 ﻿using CompanionFramework.Core.Log;
+using CompanionFramework.Core.Threading.Messaging;
 using System;
 using System.Collections.Generic;
 
@@ -38,6 +39,28 @@ namespace Companion.Data.System.Update
 		/// Data index if loaded, can be null if not loaded. Repository Index must be loaded before this can be loaded.
 		/// </summary>
 		public readonly Dictionary<string, GameSystemData> dataIndices = new Dictionary<string, GameSystemData>();
+
+		#region Events
+		/// <summary>
+		/// Fired when data index is received from a repository. Source is <see cref="RepositoryData"/>. EventArgs is <see cref="DataIndexSuccessEventArgs"/>.
+		/// </summary>
+		public event EventHandler OnDataIndexAdded;
+
+		/// <summary>
+		/// Fired when it failed to receive the data index from a repository. Source is <see cref="RepositoryData"/>. EventArgs is <see cref="ProcessFailedEventArgs"/>.
+		/// </summary>
+		public event EventHandler OnDataIndexFailed;
+
+		/// <summary>
+		/// Fired when repository index is received. Source is <see cref="RepositoryData"/>. EventArgs is <see cref="RepositoryIndexSuccessEventArgs"/>.
+		/// </summary>
+		public event EventHandler OnRepositoryIndexAdded;
+
+		/// <summary>
+		/// Fired when it failed to receive the repository index. Source is <see cref="RepositoryData"/>. EventArgs is <see cref="ProcessFailedEventArgs"/>.
+		/// </summary>
+		public event EventHandler OnRepositoryIndexFailed;
+		#endregion
 
 		public RepositoryData()
 		{
@@ -91,6 +114,58 @@ namespace Companion.Data.System.Update
 		public Repository GetRepositoryByName(string repositoryName)
 		{
 			return repositoryIndex.GetRepositoryByName(repositoryName);
+		}
+
+		public void FireDataIndexAdded(EventArgs eventArgs)
+		{
+			if (MessageHandler.HasMessageHandler())
+			{
+				MessageQueue.Invoke(OnDataIndexAdded, this, eventArgs);
+			}
+			else
+			{
+				if (OnDataIndexAdded != null)
+					OnDataIndexAdded(this, eventArgs);
+			}
+		}
+
+		public void FireDataIndexFailed(EventArgs eventArgs)
+		{
+			if (MessageHandler.HasMessageHandler())
+			{
+				MessageQueue.Invoke(OnDataIndexFailed, this, eventArgs);
+			}
+			else
+			{
+				if (OnDataIndexFailed != null)
+					OnDataIndexFailed(this, eventArgs);
+			}
+		}
+
+		public void FireRepositoryIndexAdded(EventArgs eventArgs)
+		{
+			if (MessageHandler.HasMessageHandler())
+			{
+				MessageQueue.Invoke(OnRepositoryIndexAdded, this, eventArgs);
+			}
+			else
+			{
+				if (OnRepositoryIndexAdded != null)
+					OnRepositoryIndexAdded(this, eventArgs);
+			}
+		}
+
+		public void FireRepositoryIndexFailed(EventArgs eventArgs)
+		{
+			if (MessageHandler.HasMessageHandler())
+			{
+				MessageQueue.Invoke(OnRepositoryIndexFailed, this, eventArgs);
+			}
+			else
+			{
+				if (OnRepositoryIndexFailed != null)
+					OnRepositoryIndexFailed(this, eventArgs);
+			}
 		}
 	}
 }

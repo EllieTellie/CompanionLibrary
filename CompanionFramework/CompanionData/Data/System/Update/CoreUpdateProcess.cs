@@ -29,7 +29,7 @@ namespace Companion.Data.System.Update
 		/// <summary>
 		/// Aborts the process. Fires the abort event.
 		/// </summary>
-		public virtual void Abort()
+		public void Abort()
 		{
 			Abort(UpdateError.Error, null); // abort with default error and no message
 		}

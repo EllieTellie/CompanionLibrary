@@ -21,6 +21,7 @@ public class UpdateManager
 		}
 	}
 
+	#region Events
 	/// <summary>
 	/// Fired when data index is received from a repository. Source is <see cref="UpdateManager"/>. EventArgs is <see cref="DataIndexSuccessEventArgs"/>.
 	/// </summary>
@@ -50,6 +51,7 @@ public class UpdateManager
 	/// Fired when it failed to update the repository. Source is <see cref="UpdateManager"/>. EventArgs is <see cref="ProcessFailedEventArgs"/>.
 	/// </summary>
 	public event EventHandler OnUpdateFailed;
+	#endregion
 
 	/// <summary>
 	/// List of loaded repositories.

@@ -83,6 +83,34 @@ namespace Companion.Data.System.Update
 			Complete(repositoryIndex);
 		}
 
+		public override void Abort(UpdateError error, string message = null)
+		{
+			// fire event on the RepositoryData as a passthrough
+			FireFailedState(error, message);
+
+			base.Abort(error, message);
+		}
+
+		protected override void Complete(object result)
+		{
+			// fire event on the RepositoryData as a passthrough
+			FireCompleteState(state);
+
+			base.Complete(result);
+		}
+
+		private void FireFailedState(UpdateError error, string message)
+		{
+			ProcessFailedEventArgs eventArgs = new ProcessFailedEventArgs(state, error, message);
+			state.FireDataIndexFailed(eventArgs);
+		}
+
+		private void FireCompleteState(RepositoryData repositoryData)
+		{
+			RepositoryIndexSuccessEventArgs eventArgs = new RepositoryIndexSuccessEventArgs(repositoryData);
+			state.FireDataIndexAdded(eventArgs);
+		}
+
 		/// <inheritdoc/>
 		public override UpdateState GetState()
 		{

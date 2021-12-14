@@ -3,7 +3,7 @@
 	public enum UpdateError
 	{
 		/// <summary>
-		/// Default generic error
+		/// Default generic error.
 		/// </summary>
 		Error,
 		/// <summary>
@@ -15,13 +15,17 @@
 		/// </summary>
 		InvalidParameter,
 		/// <summary>
-		/// We failed to get a valid network response
+		/// We failed to get a valid network response.
 		/// </summary>
 		FailedNetworkResponse,
 		/// <summary>
-		/// Repository index data from the network was invalid
+		/// Repository index data from the network was invalid.
 		/// </summary>
 		InvalidRepositoryIndex,
+		/// <summary>
+		/// Data index from the network was invalid.
+		/// </summary>
+		InvalidDataIndex,
 		/// <summary>
 		/// Unable to access files.
 		/// </summary>
