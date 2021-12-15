@@ -12,7 +12,7 @@ namespace Companion.Data.Utils
 			return (T)Activator.CreateInstance(typeof(T), new object[] { node });
 		}
 
-		public static List<T> ParseXmlList<T>(List<XmlNode> nodes) where T : XmlData
+		public static List<T> ParseXmlList<T>(List<XmlNode> nodes, IRootContainer rootContainer = null) where T : XmlData
 		{
 			if (nodes == null)
 				return new List<T>();
@@ -21,6 +21,10 @@ namespace Companion.Data.Utils
 			foreach (XmlNode node in nodes)
 			{
 				T instance = (T)Activator.CreateInstance(typeof(T), new object[] { node });
+
+				if (rootContainer != null)
+					instance.SetRootContainer(rootContainer);
+
 				results.Add(instance);
 			}
 

@@ -1,10 +1,11 @@
-﻿using CompanionFramework.IO.Utils;
+﻿using CompanionFramework.Core.Log;
+using CompanionFramework.IO.Utils;
 using System.Collections.Generic;
 using System.Xml;
 
 namespace Companion.Data
 {
-	public class Catalogue : XmlData, INameable, IIdentifiable
+	public class Catalogue : XmlData, INameable, IIdentifiable, IRootContainer
 	{
 		public string id;
 		public string name;
@@ -33,8 +34,39 @@ namespace Companion.Data
 		public List<CostType> costTypes;
 		public List<ForceEntry> forceEntries;
 
+		private Dictionary<string, IIdentifiable> idLookup = new Dictionary<string, IIdentifiable>();
+
 		public Catalogue(XmlNode node) : base(node)
 		{
+		}
+
+		public IIdentifiable GetIdentifiable(string id)
+		{
+			if (idLookup.TryGetValue(id, out IIdentifiable identifiable))
+				return identifiable;
+			else
+				return null;
+		}
+
+		public void HasId(string uniqueId)
+		{
+			idLookup.ContainsKey(uniqueId);
+		}
+
+		public void AddIdLookup(IIdentifiable identifiable)
+		{
+			string id = identifiable.GetId();
+
+			if (idLookup.ContainsKey(id))
+			{
+				IIdentifiable other = idLookup[id];
+
+				FrameworkLogger.Error("Id " + id + " already present");
+			}
+			else
+			{
+				idLookup[id] = identifiable;
+			}
 		}
 
 		protected override void OnParseNode()
@@ -50,21 +82,21 @@ namespace Companion.Data
 			gameSystemId = node.GetAttribute("gameSystemId");
 			gameSystemRevision = node.GetAttribute("gameSystemRevision");
 
-			publications = ParseXmlList<Publication>(node.GetNodesFromPath("publications", "publication"));
-			profileTypes = ParseXmlList<ProfileType>(node.GetNodesFromPath("profileTypes", "profileType"));
-			categoryEntries = ParseXmlList<CategoryEntry>(node.GetNodesFromPath("categoryEntries", "categoryEntry"));
-			selectionEntries = ParseXmlList<SelectionEntry>(node.GetNodesFromPath("selectionEntries", "selectionEntry"));
-			entryLinks = ParseXmlList<EntryLink>(node.GetNodesFromPath("entryLinks", "entryLink"));
-			sharedSelectionEntries = ParseXmlList<SelectionEntry>(node.GetNodesFromPath("sharedSelectionEntries", "selectionEntry"));
-			sharedSelectionEntryGroups = ParseXmlList<SelectionEntryGroup>(node.GetNodesFromPath("sharedSelectionEntryGroups", "selectionEntryGroup"));
-			sharedRules = ParseXmlList<Rule>(node.GetNodesFromPath("sharedRules", "rule"));
-			rules = ParseXmlList<Rule>(node.GetNodesFromPath("rules", "rule"));
-			sharedProfiles = ParseXmlList<Profile>(node.GetNodesFromPath("sharedProfiles", "profile"));
-			catalogueLinks = ParseXmlList<CatalogueLink>(node.GetNodesFromPath("catalogueLinks", "catalogueLink"));
-			sharedInfoGroups = ParseXmlList<InfoGroup>(node.GetNodesFromPath("sharedInfoGroups", "infoGroup"));
-			infoLinks = ParseXmlList<InfoLink>(node.GetNodesFromPath("infoLinks", "infoLink"));
-			costTypes = ParseXmlList<CostType>(node.GetNodesFromPath("costTypes", "costType"));
-			forceEntries = ParseXmlList<ForceEntry>(node.GetNodesFromPath("forceEntries", "forceEntry"));
+			publications = ParseXmlList<Publication>(node.GetNodesFromPath("publications", "publication"), rootContainer);
+			profileTypes = ParseXmlList<ProfileType>(node.GetNodesFromPath("profileTypes", "profileType"), rootContainer);
+			categoryEntries = ParseXmlList<CategoryEntry>(node.GetNodesFromPath("categoryEntries", "categoryEntry"), rootContainer);
+			selectionEntries = ParseXmlList<SelectionEntry>(node.GetNodesFromPath("selectionEntries", "selectionEntry"), rootContainer);
+			entryLinks = ParseXmlList<EntryLink>(node.GetNodesFromPath("entryLinks", "entryLink"), rootContainer);
+			sharedSelectionEntries = ParseXmlList<SelectionEntry>(node.GetNodesFromPath("sharedSelectionEntries", "selectionEntry"), rootContainer);
+			sharedSelectionEntryGroups = ParseXmlList<SelectionEntryGroup>(node.GetNodesFromPath("sharedSelectionEntryGroups", "selectionEntryGroup"), rootContainer);
+			sharedRules = ParseXmlList<Rule>(node.GetNodesFromPath("sharedRules", "rule"), rootContainer);
+			rules = ParseXmlList<Rule>(node.GetNodesFromPath("rules", "rule"), rootContainer);
+			sharedProfiles = ParseXmlList<Profile>(node.GetNodesFromPath("sharedProfiles", "profile"), rootContainer);
+			catalogueLinks = ParseXmlList<CatalogueLink>(node.GetNodesFromPath("catalogueLinks", "catalogueLink"), rootContainer);
+			sharedInfoGroups = ParseXmlList<InfoGroup>(node.GetNodesFromPath("sharedInfoGroups", "infoGroup"), rootContainer);
+			infoLinks = ParseXmlList<InfoLink>(node.GetNodesFromPath("infoLinks", "infoLink"), rootContainer);
+			costTypes = ParseXmlList<CostType>(node.GetNodesFromPath("costTypes", "costType"), rootContainer);
+			forceEntries = ParseXmlList<ForceEntry>(node.GetNodesFromPath("forceEntries", "forceEntry"), rootContainer);
 		}
 
 		public static Catalogue LoadCatalogue(string path)

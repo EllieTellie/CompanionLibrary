@@ -20,6 +20,11 @@ namespace Companion.Data
 		protected readonly XmlNode node;
 
 		/// <summary>
+		/// Optional root container.
+		/// </summary>
+		protected IRootContainer rootContainer;
+
+		/// <summary>
 		/// List of xml lists containing all the nodes after parsing.
 		/// </summary>
 		protected List<IList> fields = new List<IList>();
@@ -27,6 +32,12 @@ namespace Companion.Data
 		public XmlData(XmlNode node)
 		{
 			this.node = node;
+
+			// helper to just instantly set root container
+			if (this is IRootContainer container)
+			{
+				this.rootContainer = container;
+			}
 
 			if (node != null)
 			{
@@ -38,6 +49,10 @@ namespace Companion.Data
 			{
 				InitFields();
 			}
+
+			// automatically add ourselves
+			if (this == rootContainer && this is IIdentifiable identifiable)
+				rootContainer.AddIdLookup(identifiable);
 		}
 
 		/// <summary>
@@ -72,11 +87,23 @@ namespace Companion.Data
 			return XmlUtils.ParseXml<T>(node);
 		}
 
-		public List<T> ParseXmlList<T>(List<XmlNode> nodes) where T : XmlData
+		public List<T> ParseXmlList<T>(List<XmlNode> nodes, IRootContainer rootContainer = null) where T : XmlData
 		{
-			List<T> results = XmlUtils.ParseXmlList<T>(nodes);
+			List<T> results = XmlUtils.ParseXmlList<T>(nodes, rootContainer);
 			AddField(results); // automatically add
 			return results;
+		}
+
+		/// <summary>
+		/// Set the root container.
+		/// </summary>
+		/// <param name="rootContainer">Root container</param>
+		public void SetRootContainer(IRootContainer rootContainer)
+		{
+			this.rootContainer = rootContainer;
+
+			if (rootContainer != null && this is IIdentifiable identifiable)
+				rootContainer.AddIdLookup(identifiable);
 		}
 
 		public XmlNode GetNode()

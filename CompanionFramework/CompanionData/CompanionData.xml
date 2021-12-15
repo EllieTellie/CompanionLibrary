@@ -30,6 +30,11 @@
             Optional xml schema.
             </summary>
         </member>
+        <member name="F:Companion.Data.XmlData.rootContainer">
+            <summary>
+            Optional root container.
+            </summary>
+        </member>
         <member name="F:Companion.Data.XmlData.fields">
             <summary>
             List of xml lists containing all the nodes after parsing.
@@ -39,6 +44,12 @@
             <summary>
             Init the fields usually lists to a new empty list. By default does nothing.
             </summary>
+        </member>
+        <member name="M:Companion.Data.XmlData.SetRootContainer(Companion.Data.IRootContainer)">
+            <summary>
+            Set the root container.
+            </summary>
+            <param name="rootContainer">Root container</param>
         </member>
         <member name="T:Companion.Data.GameSystemGroup">
             <summary>
@@ -114,6 +125,15 @@
             </summary>
             <param name="state">State</param>
         </member>
+        <member name="M:Companion.Data.System.Update.DataIndexVersionInfo.GetVersionInfo(System.Byte[],System.String,System.String)">
+            <summary>
+            Get the version information from the compressed data file on disk.
+            </summary>
+            <param name="data">Byte data</param>
+            <param name="fileExtension">The extension of the compressed file starting with a period</param>
+            <param name="elementName">The name of the first element in the xml file that needs to match</param>
+            <returns>Version information</returns>
+        </member>
         <member name="T:Companion.Data.System.Update.GameSystemData">
             <summary>
             Storing the linked data as a data index always needs a repository.
@@ -137,6 +157,26 @@
         <member name="F:Companion.Data.System.Update.RepositoryData.dataIndices">
             <summary>
             Data index if loaded, can be null if not loaded. Repository Index must be loaded before this can be loaded.
+            </summary>
+        </member>
+        <member name="E:Companion.Data.System.Update.RepositoryData.OnDataIndexAdded">
+            <summary>
+            Fired when data index is received from a repository. Source is <see cref="T:Companion.Data.System.Update.RepositoryData"/>. EventArgs is <see cref="T:Companion.Data.System.Update.DataIndexSuccessEventArgs"/>.
+            </summary>
+        </member>
+        <member name="E:Companion.Data.System.Update.RepositoryData.OnDataIndexFailed">
+            <summary>
+            Fired when it failed to receive the data index from a repository. Source is <see cref="T:Companion.Data.System.Update.RepositoryData"/>. EventArgs is <see cref="T:Companion.Data.System.Update.ProcessFailedEventArgs"/>.
+            </summary>
+        </member>
+        <member name="E:Companion.Data.System.Update.RepositoryData.OnRepositoryIndexAdded">
+            <summary>
+            Fired when repository index is received. Source is <see cref="T:Companion.Data.System.Update.RepositoryData"/>. EventArgs is <see cref="T:Companion.Data.System.Update.RepositoryIndexSuccessEventArgs"/>.
+            </summary>
+        </member>
+        <member name="E:Companion.Data.System.Update.RepositoryData.OnRepositoryIndexFailed">
+            <summary>
+            Fired when it failed to receive the repository index. Source is <see cref="T:Companion.Data.System.Update.RepositoryData"/>. EventArgs is <see cref="T:Companion.Data.System.Update.ProcessFailedEventArgs"/>.
             </summary>
         </member>
         <member name="M:Companion.Data.System.Update.RepositoryData.AddGameSystem(Companion.Data.System.Update.Repository,Companion.Data.DataIndex)">
@@ -236,7 +276,7 @@
         </member>
         <member name="F:Companion.Data.System.Update.UpdateError.Error">
             <summary>
-            Default generic error
+            Default generic error.
             </summary>
         </member>
         <member name="F:Companion.Data.System.Update.UpdateError.MissingState">
@@ -251,12 +291,17 @@
         </member>
         <member name="F:Companion.Data.System.Update.UpdateError.FailedNetworkResponse">
             <summary>
-            We failed to get a valid network response
+            We failed to get a valid network response.
             </summary>
         </member>
         <member name="F:Companion.Data.System.Update.UpdateError.InvalidRepositoryIndex">
             <summary>
-            Repository index data from the network was invalid
+            Repository index data from the network was invalid.
+            </summary>
+        </member>
+        <member name="F:Companion.Data.System.Update.UpdateError.InvalidDataIndex">
+            <summary>
+            Data index from the network was invalid.
             </summary>
         </member>
         <member name="F:Companion.Data.System.Update.UpdateError.FailedFileAccess">
@@ -294,15 +339,6 @@
             <param name="entry">Entry</param>
             <returns>Returns true if it requires updating</returns>
         </member>
-        <member name="M:Companion.Data.System.Update.UpdateGameSystemProcess.GetVersionInfo(System.Byte[],System.String,System.String)">
-            <summary>
-            Get the version information from the compressed data file on disk.
-            </summary>
-            <param name="data">Byte data</param>
-            <param name="fileExtension">The extension of the compressed file starting with a period</param>
-            <param name="elementName">The name of the first element in the xml file that needs to match</param>
-            <returns></returns>
-        </member>
         <member name="M:Companion.Data.System.Update.UpdateGameSystemProcess.GetState">
             <inheritdoc/>
         </member>
@@ -326,6 +362,19 @@
             <summary>
             Dispatched on the main thread. Source is this. EventArgs is null.
             </summary>
+        </member>
+        <member name="M:SystemManager.DetectGameSystems(System.String)">
+            <summary>
+            Detect any game systems in the immediate path and any subfolders.
+            </summary>
+            <param name="path">Path</param>
+            <returns>List of game system file paths</returns>
+        </member>
+        <member name="M:SystemManager.LoadGameSystems(System.String)">
+            <summary>
+            Load all game systems at the specified path. This loads any required catalogues too.
+            </summary>
+            <param name="path">Path</param>
         </member>
         <member name="T:UpdateManager">
             <summary>

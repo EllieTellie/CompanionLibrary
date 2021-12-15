@@ -53,15 +53,24 @@ namespace Companion.Data
 		{
 			foreach (Catalogue cat in catalogues)
 			{
-				XmlData catalogueResult = cat.SearchById(id, recursive);
-				if (catalogueResult != null)
-					return catalogueResult;
+				IIdentifiable identifiable = cat.GetIdentifiable(id);
+				if (identifiable != null)
+					return (XmlData)identifiable;
+
+				//XmlData catalogueResult = cat.SearchById(id, recursive);
+				//if (catalogueResult != null)
+				//	return catalogueResult;
 			}
 
 			// search game system last
-			XmlData result = gameSystem.SearchById(id, recursive);
+			IIdentifiable result = gameSystem.GetIdentifiable(id);
 			if (result != null)
-				return result;
+				return (XmlData)result;
+
+			// search game system last
+			//XmlData result = gameSystem.SearchById(id, recursive);
+			//if (result != null)
+			//	return result;
 
 			return null;
 		}

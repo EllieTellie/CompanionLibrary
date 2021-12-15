@@ -58,6 +58,23 @@ public class SystemManager
 		}
 	}
 
+	/// <summary>
+	/// Detect any game systems in the immediate path and any subfolders.
+	/// </summary>
+	/// <param name="path">Path</param>
+	/// <returns>List of game system file paths</returns>
+	public List<string> DetectGameSystems(string path)
+	{
+		if (!Directory.Exists(path))
+			return new List<string>();
+
+		return FileSearchUtils.FindFileNamesByExtension(path, ".gstz", 2);
+	}
+
+	/// <summary>
+	/// Load all game systems at the specified path. This loads any required catalogues too.
+	/// </summary>
+	/// <param name="path">Path</param>
 	public void LoadGameSystems(string path)
 	{
 		if (!Directory.Exists(path))
