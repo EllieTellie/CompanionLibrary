@@ -13,13 +13,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="DeployHelper.exe" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="LitJson">
       <HintPath>..\..\Libs\LitJson.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="&quot;$(SolutionDir)DeployHelper.exe&quot; -path=&quot;C:\\Projects\\&quot; -lib=&quot;$(TargetDir)$(ProjectName).dll&quot; -deploy=&quot;true&quot; -debug=&quot;true&quot; -tools=&quot;false&quot;" />
+    <Exec Command="&quot;$(ProjectDir)DeployHelper.exe&quot; -path=&quot;C:\\Projects\\&quot; -lib=&quot;$(TargetDir)$(ProjectName).dll&quot; -deploy=&quot;true&quot; -debug=&quot;true&quot; -tools=&quot;false&quot;" />
   </Target>
 
 </Project>
