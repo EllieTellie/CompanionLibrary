@@ -59,5 +59,18 @@ namespace Companion.Data
 
 			return cachedRepositoryDataUrl;
 		}
+
+		public DataIndexEntry GetGameSystemEntry()
+		{
+			foreach (DataIndexEntry entry in dataIndexEntries)
+			{
+				if (entry.dataType == "gamesystem")
+				{
+					return entry;
+				}
+			}
+
+			return null;
+		}
 	}
 }
