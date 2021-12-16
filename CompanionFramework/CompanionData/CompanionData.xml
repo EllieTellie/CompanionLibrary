@@ -394,10 +394,32 @@
             Dispatched on the main thread. Source is this. EventArgs is null.
             </summary>
         </member>
+        <member name="E:SystemManager.OnActiveGameSystemChanged">
+            <summary>
+            Dispatched on the main thread. Source is this. EventArgs is null.
+            </summary>
+        </member>
         <member name="P:SystemManager.Instance">
             <summary>
             Get the global system manager. If no system manager is available this call creates a new one.
             </summary>
+        </member>
+        <member name="M:SystemManager.SetActiveGameSystem(Companion.Data.GameSystem)">
+            <summary>
+            Store the active game system if the system only supports one active one.
+            </summary>
+        </member>
+        <member name="M:SystemManager.GetActiveGameSystem">
+            <summary>
+            Get the active game system.
+            </summary>
+            <returns>Return active game system</returns>
+        </member>
+        <member name="M:SystemManager.LoadActiveGameSystemAsync(System.String)">
+            <summary>
+            Load the game system using the ThreadPool and make it active async.
+            </summary>
+            <param name="path">Path of game system to load</param>
         </member>
         <member name="M:SystemManager.LoadGameSystemsAsync(System.String)">
             <summary>

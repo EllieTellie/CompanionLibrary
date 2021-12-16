@@ -20,7 +20,14 @@ public class SystemManager
 	/// </summary>
 	public event EventHandler OnGameSystemsLoaded;
 
+	/// <summary>
+	/// Dispatched on the main thread. Source is this. EventArgs is null.
+	/// </summary>
+	public event EventHandler OnActiveGameSystemChanged;
+
 	private bool loading = false;
+
+	private GameSystem activeGameSystem;
 
 	/// <summary>
 	/// Get the global system manager. If no system manager is available this call creates a new one.
@@ -34,6 +41,57 @@ public class SystemManager
 
 			return instance;
 		}
+	}
+
+	/// <summary>
+	/// Store the active game system if the system only supports one active one.
+	/// </summary>
+	public void SetActiveGameSystem(GameSystem gameSystem)
+	{
+		this.activeGameSystem = gameSystem;
+
+		// fire this to the main thread
+		if (MessageHandler.HasMessageHandler())
+		{
+			MessageQueue.Invoke(OnActiveGameSystemChanged, this); // called delayed on main thread
+		}
+		else
+		{
+			if (OnActiveGameSystemChanged != null) // called on thread pool thread
+				OnActiveGameSystemChanged(this, null);
+		}
+	}
+
+	/// <summary>
+	/// Get the active game system.
+	/// </summary>
+	/// <returns>Return active game system</returns>
+	public GameSystem GetActiveGameSystem()
+	{
+		return activeGameSystem;
+	}
+
+	/// <summary>
+	/// Load the game system using the ThreadPool and make it active async.
+	/// </summary>
+	/// <param name="path">Path of game system to load</param>
+	public void LoadActiveGameSystemAsync(string path)
+	{
+		if (loading)
+			return;
+
+		loading = true;
+		ThreadPool.QueueUserWorkItem(LoadGameSystemAsync, path);
+	}
+
+	private void LoadGameSystemAsync(object state)
+	{
+		GameSystem gameSystem = LoadGameSystem((string)state);
+
+		// set active game system
+		SetActiveGameSystem(gameSystem);
+
+		loading = false; // bit worrying that load game systems could throw exception and leave this as true, handle that
 	}
 
 	/// <summary>
@@ -91,29 +149,36 @@ public class SystemManager
 
 		foreach (string gameSystem in gameSystemFiles)
 		{
-			GameSystem game = GameSystem.LoadGameSystem(gameSystem);
+			LoadGameSystem(gameSystem);
+		}
+	}
 
-			if (game != null)
+	private GameSystem LoadGameSystem(string path)
+	{
+		GameSystem game = GameSystem.LoadGameSystem(path);
+
+		if (game != null)
+		{
+			List<Catalogue> catalogues = new List<Catalogue>();
+			gameSystemGroups.Add(new GameSystemGroup(game, catalogues));
+
+			string directory = FileUtils.GetDirectoryFromPath(path);
+
+			// load catalogues
+			List<string> catalogueFiles = FileSearchUtils.FindFileNamesByExtension(directory, ".catz", 1);
+
+			foreach (string file in catalogueFiles)
 			{
-				List<Catalogue> catalogues = new List<Catalogue>();
-				gameSystemGroups.Add(new GameSystemGroup(game, catalogues));
+				Catalogue catalogue = Catalogue.LoadCatalogue(file);
 
-				string directory = FileUtils.GetDirectoryFromPath(gameSystem);
-
-				// load catalogues
-				List<string> catalogueFiles = FileSearchUtils.FindFileNamesByExtension(directory, ".catz", 1);
-
-				foreach (string file in catalogueFiles)
+				if (catalogue != null)
 				{
-					Catalogue catalogue = Catalogue.LoadCatalogue(file);
-
-					if (catalogue != null)
-					{
-						catalogues.Add(catalogue);
-					}
+					catalogues.Add(catalogue);
 				}
 			}
 		}
+
+		return game;
 	}
 
 	/// <summary>
