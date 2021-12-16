@@ -6,9 +6,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
+/// <summary>
+/// System Manager is used to store game systems and catalogues.
+/// </summary>
 public class SystemManager
 {
-	private Dictionary<GameSystem, List<Catalogue>> gameSystems = new Dictionary<GameSystem, List<Catalogue>>();
+	private List<GameSystemGroup> gameSystemGroups = new List<GameSystemGroup>();
 
 	private static SystemManager instance;
 
@@ -19,6 +22,9 @@ public class SystemManager
 
 	private bool loading = false;
 
+	/// <summary>
+	/// Get the global system manager. If no system manager is available this call creates a new one.
+	/// </summary>
 	public static SystemManager Instance
 	{
 		get
@@ -30,6 +36,10 @@ public class SystemManager
 		}
 	}
 
+	/// <summary>
+	/// Load all game systems at this path using the ThreadPool. Use <see cref="OnGameSystemsLoaded"/> for the callback. The callback is on the main thread if the <see cref="MessageQueue"/> is used otherwise it is not.
+	/// </summary>
+	/// <param name="path">Path to load game systems from</param>
 	public void LoadGameSystemsAsync(string path)
 	{
 		if (loading)
@@ -49,17 +59,17 @@ public class SystemManager
 		// fire this to the main thread
 		if (MessageHandler.HasMessageHandler())
 		{
-			MessageQueue.Invoke(OnGameSystemsLoaded, this);
+			MessageQueue.Invoke(OnGameSystemsLoaded, this); // called delayed on main thread
 		}
 		else
 		{
-			if (OnGameSystemsLoaded != null)
+			if (OnGameSystemsLoaded != null) // called on thread pool thread
 				OnGameSystemsLoaded(this, null);
 		}
 	}
 
 	/// <summary>
-	/// Detect any game systems in the immediate path and any subfolders.
+	/// Detect any game systems in the immediate path and any subfolders. This uses I/O to find files.
 	/// </summary>
 	/// <param name="path">Path</param>
 	/// <returns>List of game system file paths</returns>
@@ -77,10 +87,7 @@ public class SystemManager
 	/// <param name="path">Path</param>
 	public void LoadGameSystems(string path)
 	{
-		if (!Directory.Exists(path))
-			return;
-
-		List<string> gameSystemFiles = FileSearchUtils.FindFileNamesByExtension(path, ".gstz", 2);
+		List<string> gameSystemFiles = DetectGameSystems(path);
 
 		foreach (string gameSystem in gameSystemFiles)
 		{
@@ -89,7 +96,7 @@ public class SystemManager
 			if (game != null)
 			{
 				List<Catalogue> catalogues = new List<Catalogue>();
-				gameSystems.Add(game, catalogues);
+				gameSystemGroups.Add(new GameSystemGroup(game, catalogues));
 
 				string directory = FileUtils.GetDirectoryFromPath(gameSystem);
 
@@ -109,9 +116,13 @@ public class SystemManager
 		}
 	}
 
+	/// <summary>
+	/// Returns true if any game systems are loaded.
+	/// </summary>
+	/// <returns>True if game systems are loaded</returns>
 	public bool HasGameSystems()
 	{
-		return gameSystems.Count > 0;
+		return gameSystemGroups.Count > 0;
 	}
 
 	public Catalogue GetCatalogueById(GameSystem gameSystem, string id)
@@ -129,47 +140,117 @@ public class SystemManager
 		return null;
 	}
 
+	/// <summary>
+	/// Get game system group by the game system id. Can return null if not found.
+	/// </summary>
+	/// <param name="id">Game system id</param>
+	/// <returns>Game system group or null</returns>
+	public GameSystemGroup GetGameSystemGroupById(string id)
+	{
+		foreach (GameSystemGroup gameSystemGroup in gameSystemGroups)
+		{
+			if (gameSystemGroup.gameSystem.id == id)
+				return gameSystemGroup;
+		}
+
+		return null;
+	}
+
+	/// <summary>
+	/// Get game system group by the game system name. Can return null if not found.
+	/// </summary>
+	/// <param name="name">Game system name</param>
+	/// <returns>Game system group or null</returns>
+	public GameSystemGroup GetGameSystemGroupByName(string name)
+	{
+		foreach (GameSystemGroup gameSystemGroup in gameSystemGroups)
+		{
+			if (gameSystemGroup.gameSystem.name == name)
+				return gameSystemGroup;
+		}
+
+		return null;
+	}
+
+	/// <summary>
+	/// Get game system by the game system id. Can return null if not found.
+	/// </summary>
+	/// <param name="id">Game system id</param>
+	/// <returns>Game system or null</returns>
 	public GameSystem GetGameSystemById(string id)
 	{
-		foreach (GameSystem gameSystem in gameSystems.Keys)
+		foreach (GameSystemGroup gameSystemGroup in gameSystemGroups)
 		{
-			if (gameSystem.id == id)
-				return gameSystem;
+			if (gameSystemGroup.gameSystem.id == id)
+				return gameSystemGroup.gameSystem;
 		}
 
 		return null;
 	}
 
+	/// <summary>
+	/// Get game system by the game system name. Can return null if not found.
+	/// </summary>
+	/// <param name="name">Game system name</param>
+	/// <returns>Game system or null</returns>
 	public GameSystem GetGameSystemByName(string name)
 	{
-		foreach (GameSystem gameSystem in gameSystems.Keys)
+		foreach (GameSystemGroup gameSystemGroup in gameSystemGroups)
 		{
-			if (gameSystem.name == name)
-				return gameSystem;
+			if (gameSystemGroup.gameSystem.name == name)
+				return gameSystemGroup.gameSystem;
 		}
 
 		return null;
 	}
 
+	/// <summary>
+	/// Get all the game system groups. This list is passed by reference.
+	/// </summary>
+	/// <returns>Game system groups</returns>
+	public List<GameSystemGroup> GetGameSystemGroups()
+	{
+		return gameSystemGroups;
+	}
+
+	/// <summary>
+	/// Get all the game systems. This creates a new list every time.
+	/// </summary>
+	/// <returns>List of game systems</returns>
 	public List<GameSystem> GetGameSystems()
 	{
 		List<GameSystem> systems = new List<GameSystem>();
-		foreach (GameSystem gameSystem in gameSystems.Keys)
+		foreach (GameSystemGroup gameSystemGroup in gameSystemGroups)
 		{
-			systems.Add(gameSystem);
+			systems.Add(gameSystemGroup.gameSystem);
 		}
 
 		return systems;
 	}
 
+	protected GameSystemGroup GetGameSystemGroup(GameSystem gameSystem)
+	{
+		foreach (GameSystemGroup gameSystemGroup in gameSystemGroups)
+		{
+			if (gameSystemGroup.gameSystem == gameSystem)
+				return gameSystemGroup;
+		}
+
+		return null;
+	}
+
+	/// <summary>
+	/// Get a list of catalogues that are loaded for this game system. Returns an empty list if no catalogues are loaded.
+	/// </summary>
+	/// <param name="gameSystem">Game system</param>
+	/// <returns>List of catalogues</returns>
 	public List<Catalogue> GetCatalogues(GameSystem gameSystem)
 	{
-		List<Catalogue> catalogues;
-
-		if (!gameSystems.TryGetValue(gameSystem, out catalogues))
-			catalogues = new List<Catalogue>();
-
-		return catalogues;
+		GameSystemGroup gameSystemGroup = GetGameSystemGroup(gameSystem);
+		if (gameSystemGroup == null)
+			return new List<Catalogue>();
+		else
+			return gameSystemGroup.GetCatalogues();
 	}
 
 	public T SearchByName<T>(GameSystem gameSystem, string name, bool recursive = false) where T : XmlData, INameable
@@ -201,7 +282,7 @@ public class SystemManager
 		if (result != null)
 			return result;
 
-		List<Catalogue> catalogues = gameSystems[gameSystem];
+		List<Catalogue> catalogues = GetCatalogues(gameSystem);
 		foreach (Catalogue cat in catalogues)
 		{
 			result = cat.SearchByName(name, recursive);
@@ -218,7 +299,7 @@ public class SystemManager
 		if (result != null)
 			return result;
 
-		List<Catalogue> catalogues = gameSystems[gameSystem];
+		List<Catalogue> catalogues = GetCatalogues(gameSystem);
 		foreach (Catalogue cat in catalogues)
 		{
 			result = cat.SearchById(id, recursive);
@@ -252,7 +333,7 @@ public class SystemManager
 
 		gameSystem.SearchAllByName(results, name, recursive);
 
-		List<Catalogue> catalogues = gameSystems[gameSystem];
+		List<Catalogue> catalogues = GetCatalogues(gameSystem);
 		foreach (Catalogue cat in catalogues)
 		{
 			cat.SearchAllByName(results, name, recursive);
@@ -267,7 +348,7 @@ public class SystemManager
 
 		gameSystem.SearchAllById(results, id, recursive);
 
-		List<Catalogue> catalogues = gameSystems[gameSystem];
+		List<Catalogue> catalogues = GetCatalogues(gameSystem);
 		foreach (Catalogue cat in catalogues)
 		{
 			cat.SearchAllById(results, id, recursive);
@@ -282,7 +363,7 @@ public class SystemManager
 
 		gameSystem.SearchAllByName<T>(results, name, recursive);
 
-		List<Catalogue> catalogues = gameSystems[gameSystem];
+		List<Catalogue> catalogues = GetCatalogues(gameSystem);
 		foreach (Catalogue cat in catalogues)
 		{
 			cat.SearchAllByName<T>(results, name, recursive);
@@ -297,7 +378,7 @@ public class SystemManager
 
 		gameSystem.SearchAllById<T>(results, id, recursive);
 
-		List<Catalogue> catalogues = gameSystems[gameSystem];
+		List<Catalogue> catalogues = GetCatalogues(gameSystem);
 		foreach (Catalogue cat in catalogues)
 		{
 			cat.SearchAllById<T>(results, id, recursive);
@@ -312,7 +393,7 @@ public class SystemManager
 
 		gameSystem.SearchAllById(results, id, type, recursive);
 
-		List<Catalogue> catalogues = gameSystems[gameSystem];
+		List<Catalogue> catalogues = GetCatalogues(gameSystem);
 		foreach (Catalogue cat in catalogues)
 		{
 			cat.SearchAllById(results, id, type, recursive);

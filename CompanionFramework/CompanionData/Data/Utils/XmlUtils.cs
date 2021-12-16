@@ -9,7 +9,7 @@ namespace Companion.Data.Utils
 	{
 		public static T ParseXml<T>(XmlNode node) where T : XmlData
 		{
-			return (T)Activator.CreateInstance(typeof(T), new object[] { node });
+			return XmlDataFactory.Instance.Create<T>(node);
 		}
 
 		public static List<T> ParseXmlList<T>(List<XmlNode> nodes, IRootContainer rootContainer = null) where T : XmlData
@@ -20,7 +20,7 @@ namespace Companion.Data.Utils
 			List<T> results = new List<T>(nodes.Count);
 			foreach (XmlNode node in nodes)
 			{
-				T instance = (T)Activator.CreateInstance(typeof(T), new object[] { node });
+				T instance = XmlDataFactory.Instance.Create<T>(node);
 
 				if (rootContainer != null)
 					instance.SetRootContainer(rootContainer);

@@ -56,10 +56,23 @@
             Group of catalogues and systems used in a roster. Mostly for roster detection speed.
             </summary>
         </member>
+        <member name="M:Companion.Data.GameSystemGroup.CreateGuid">
+            <summary>
+            Creates a new guid that is unique for this game system and catalogues.
+            </summary>
+            <returns>New guid</returns>
+        </member>
         <member name="E:Companion.Data.RosterReader.OnRosterParsed">
             <summary>
             Dispatched on the main unity thread. Source is roster. EventArgs is null.
             </summary>
+        </member>
+        <member name="M:Companion.Data.RosterReader.Parse(Companion.Data.GameSystem)">
+            <summary>
+            Attempt to parse the roster and detect the selections. If no <see cref="T:Companion.Data.GameSystem"/> is provided we attempt to detect the game system.
+            </summary>
+            <param name="gameSystem">Game system, optional</param>
+            <returns>Roster or null if unable to parse</returns>
         </member>
         <member name="T:Companion.Data.WordReader">
             <summary>
@@ -342,6 +355,19 @@
         <member name="M:Companion.Data.System.Update.UpdateGameSystemProcess.GetState">
             <inheritdoc/>
         </member>
+        <member name="T:Companion.Data.Utils.XmlDataFactory">
+            <summary>
+            Speed up xml serialization by creating the constructors manually.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.Utils.XmlDataFactory.Create``1(System.Xml.XmlNode)">
+            <summary>
+            Create a new xml data class of the type specified. This will attempt to use an existing constructor if defined or use reflection last.
+            </summary>
+            <typeparam name="T">Type to create</typeparam>
+            <param name="node">Node to pass into constructor</param>
+            <returns>New XmlData class</returns>
+        </member>
         <member name="E:RosterManager.OnRostersLoaded">
             <summary>
             Fired when all rosters are loaded.
@@ -358,14 +384,30 @@
             </summary>
             <param name="data">Roster data</param>
         </member>
+        <member name="T:SystemManager">
+            <summary>
+            System Manager is used to store game systems and catalogues.
+            </summary>
+        </member>
         <member name="E:SystemManager.OnGameSystemsLoaded">
             <summary>
             Dispatched on the main thread. Source is this. EventArgs is null.
             </summary>
         </member>
+        <member name="P:SystemManager.Instance">
+            <summary>
+            Get the global system manager. If no system manager is available this call creates a new one.
+            </summary>
+        </member>
+        <member name="M:SystemManager.LoadGameSystemsAsync(System.String)">
+            <summary>
+            Load all game systems at this path using the ThreadPool. Use <see cref="E:SystemManager.OnGameSystemsLoaded"/> for the callback. The callback is on the main thread if the <see cref="T:CompanionFramework.Core.Threading.Messaging.MessageQueue"/> is used otherwise it is not.
+            </summary>
+            <param name="path">Path to load game systems from</param>
+        </member>
         <member name="M:SystemManager.DetectGameSystems(System.String)">
             <summary>
-            Detect any game systems in the immediate path and any subfolders.
+            Detect any game systems in the immediate path and any subfolders. This uses I/O to find files.
             </summary>
             <param name="path">Path</param>
             <returns>List of game system file paths</returns>
@@ -375,6 +417,59 @@
             Load all game systems at the specified path. This loads any required catalogues too.
             </summary>
             <param name="path">Path</param>
+        </member>
+        <member name="M:SystemManager.HasGameSystems">
+            <summary>
+            Returns true if any game systems are loaded.
+            </summary>
+            <returns>True if game systems are loaded</returns>
+        </member>
+        <member name="M:SystemManager.GetGameSystemGroupById(System.String)">
+            <summary>
+            Get game system group by the game system id. Can return null if not found.
+            </summary>
+            <param name="id">Game system id</param>
+            <returns>Game system group or null</returns>
+        </member>
+        <member name="M:SystemManager.GetGameSystemGroupByName(System.String)">
+            <summary>
+            Get game system group by the game system name. Can return null if not found.
+            </summary>
+            <param name="name">Game system name</param>
+            <returns>Game system group or null</returns>
+        </member>
+        <member name="M:SystemManager.GetGameSystemById(System.String)">
+            <summary>
+            Get game system by the game system id. Can return null if not found.
+            </summary>
+            <param name="id">Game system id</param>
+            <returns>Game system or null</returns>
+        </member>
+        <member name="M:SystemManager.GetGameSystemByName(System.String)">
+            <summary>
+            Get game system by the game system name. Can return null if not found.
+            </summary>
+            <param name="name">Game system name</param>
+            <returns>Game system or null</returns>
+        </member>
+        <member name="M:SystemManager.GetGameSystemGroups">
+            <summary>
+            Get all the game system groups. This list is passed by reference.
+            </summary>
+            <returns>Game system groups</returns>
+        </member>
+        <member name="M:SystemManager.GetGameSystems">
+            <summary>
+            Get all the game systems. This creates a new list every time.
+            </summary>
+            <returns>List of game systems</returns>
+        </member>
+        <member name="M:SystemManager.GetCatalogues(Companion.Data.GameSystem)">
+            <summary>
+            Get a list of catalogues that are loaded for this game system. Returns an empty list if no catalogues are loaded.
+            </summary>
+            <param name="gameSystem">Game system</param>
+            <returns>List of catalogues</returns>
         </member>
         <member name="T:UpdateManager">
             <summary>

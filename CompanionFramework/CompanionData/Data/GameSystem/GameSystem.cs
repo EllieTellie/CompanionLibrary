@@ -43,9 +43,9 @@ namespace Companion.Data
 				return null;
 		}
 
-		public void HasId(string uniqueId)
+		public bool HasId(string uniqueId)
 		{
-			idLookup.ContainsKey(uniqueId);
+			return idLookup.ContainsKey(uniqueId);
 		}
 
 		public void AddIdLookup(IIdentifiable identifiable)

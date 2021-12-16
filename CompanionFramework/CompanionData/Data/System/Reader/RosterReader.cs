@@ -66,13 +66,16 @@ namespace Companion.Data
 			FrameworkLogger.Message("Roster Parsed: " + stopwatch.ElapsedMilliseconds);
 		}
 
-		public Roster Parse()
+		/// <summary>
+		/// Attempt to parse the roster and detect the selections. If no <see cref="GameSystem"/> is provided we attempt to detect the game system.
+		/// </summary>
+		/// <param name="gameSystem">Game system, optional</param>
+		/// <returns>Roster or null if unable to parse</returns>
+		public Roster Parse(GameSystem gameSystem = null)
 		{
-			RosterToken rosterToken;
-
-			// could detect game system here
-			//GameSystem gameSystem = SystemManager.Instance.GetGameSystemByName("Warhammer 40,000 9th Edition");
-			GameSystem gameSystem = DetectGameSystem();
+			// detect game system here if not provided
+			if (gameSystem == null)
+				gameSystem = DetectGameSystem();
 
 			if (gameSystem == null) // if no game systems are loaded etc
 				return null;
@@ -93,6 +96,7 @@ namespace Companion.Data
 
 			GameSystemGroup gameSystemGroup = new GameSystemGroup(gameSystem);
 
+			RosterToken rosterToken;
 			while ((rosterToken = tokenReader.ReadRosterToken()) != null)
 			{
 				FrameworkLogger.Message("Type: " + rosterToken.tokenType + " Content: " + rosterToken.content);

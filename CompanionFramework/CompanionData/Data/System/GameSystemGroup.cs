@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Companion.Data
 {
@@ -8,11 +9,57 @@ namespace Companion.Data
 	public class GameSystemGroup
 	{
 		public readonly GameSystem gameSystem;
-		protected List<Catalogue> catalogues = new List<Catalogue>();
+		protected readonly List<Catalogue> catalogues;
+
+		protected List<string> generatedGuids = new List<string>();
 
 		public GameSystemGroup(GameSystem gameSystem)
 		{
 			this.gameSystem = gameSystem;
+			this.catalogues = new List<Catalogue>();
+		}
+
+		public GameSystemGroup(GameSystem gameSystem, List<Catalogue> catalogues)
+		{
+			this.gameSystem = gameSystem;
+			this.catalogues = catalogues;
+		}
+
+		/// <summary>
+		/// Creates a new guid that is unique for this game system and catalogues.
+		/// </summary>
+		/// <returns>New guid</returns>
+		public string CreateGuid()
+		{
+			string guid = Guid.NewGuid().ToString();
+
+			// roll until we have a unique id
+			while (ContainsGuid(guid))
+			{
+				guid = Guid.NewGuid().ToString();
+			}
+
+			// store these in here
+			generatedGuids.Add(guid);
+
+			return guid;
+		}
+
+		public bool ContainsGuid(string guid)
+		{
+			if (gameSystem.HasId(guid))
+				return true;
+
+			foreach (Catalogue catalogue in catalogues)
+			{
+				if (catalogue.HasId(guid))
+					return true;
+			}
+
+			if (generatedGuids.Contains(guid))
+				return true;
+
+			return false;
 		}
 
 		public void AddCatalogue(Catalogue catalogue)
