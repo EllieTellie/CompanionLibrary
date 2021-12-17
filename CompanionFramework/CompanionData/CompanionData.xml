@@ -72,6 +72,11 @@
             Lock for event firing
             </summary>
         </member>
+        <member name="E:Companion.Data.GameSystemLoading.OnProgressUpdate">
+            <summary>
+            Fired when progress update is due. This is on the main thread if <see cref="T:CompanionFramework.Core.Threading.Messaging.MessageQueue"/> is supported.
+            </summary>
+        </member>
         <member name="E:Companion.Data.GameSystemLoading.OnLoadingCompleted">
             <summary>
             Fired when completed. Source is this.
@@ -443,9 +448,10 @@
         </member>
         <member name="M:SystemManager.LoadActiveGameSystemAsync(System.String)">
             <summary>
-            Load the game system using the ThreadPool and make it active async.
+            Load the game system using the ThreadPool and make it active async. This returns the loading class or null if already loading.
             </summary>
             <param name="path">Path of game system to load</param>
+            <returns>Returns GameSystemLoading if this call started loading</returns>
         </member>
         <member name="M:SystemManager.LoadGameSystemsAsync(System.String)">
             <summary>

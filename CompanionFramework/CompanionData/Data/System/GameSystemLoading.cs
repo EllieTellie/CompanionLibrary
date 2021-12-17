@@ -27,6 +27,11 @@ namespace Companion.Data
 		protected object eventLock = new object();
 
 		/// <summary>
+		/// Fired when progress update is due. This is on the main thread if <see cref="MessageQueue"/> is supported.
+		/// </summary>
+		public event Action<float, float> OnProgressUpdate;
+
+		/// <summary>
 		/// Fired when completed. Source is this.
 		/// </summary>
 		public event EventHandler OnLoadingCompleted;
@@ -115,6 +120,8 @@ namespace Companion.Data
 
 		private void CompleteCheck()
 		{
+			UpdateProgress();
+
 			// lock to make sure nothing modifies this while we are doing this
 			lock (eventLock)
 			{
@@ -124,6 +131,33 @@ namespace Companion.Data
 					Completed();
 				}
 			}
+		}
+
+		private void UpdateProgress()
+		{
+			if (MessageHandler.HasMessageHandler())
+			{
+				MessageQueue.Invoke(OnUpdateProgressMainThread);
+			}
+			else
+			{
+				OnUpdateProgressMainThread(null, null);
+			}
+		}
+
+		private void OnUpdateProgressMainThread(object sender, EventArgs e)
+		{
+			int maximum = catalogueFilePaths.Count + 1; // + 1 for the game system
+
+			int value = 0;
+
+			if (gameSystem != null)
+				value++;
+
+			value += catalogues.Count;
+
+			if (OnProgressUpdate != null)
+				OnProgressUpdate(value, maximum);
 		}
 
 		private void Failed()
@@ -137,9 +171,14 @@ namespace Companion.Data
 				failed = true;
 
 				if (MessageHandler.HasMessageHandler())
+				{
 					MessageQueue.Invoke(OnLoadingFailed, this);
+				}
 				else
-					OnLoadingFailed(this, null);
+				{
+					if (OnLoadingFailed != null)
+						OnLoadingFailed(this, null);
+				}
 			}
 		}
 
@@ -154,9 +193,14 @@ namespace Companion.Data
 				completed = true;
 
 				if (MessageHandler.HasMessageHandler())
+				{
 					MessageQueue.Invoke(OnLoadingCompleted, this);
+				}
 				else
-					OnLoadingCompleted(this, null);
+				{
+					if (OnLoadingCompleted != null)
+						OnLoadingCompleted(this, null);
+				}
 			}
 		}
 	}

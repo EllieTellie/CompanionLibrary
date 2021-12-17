@@ -72,22 +72,25 @@ public class SystemManager
 	}
 
 	/// <summary>
-	/// Load the game system using the ThreadPool and make it active async.
+	/// Load the game system using the ThreadPool and make it active async. This returns the loading class or null if already loading.
 	/// </summary>
 	/// <param name="path">Path of game system to load</param>
-	public void LoadActiveGameSystemAsync(string path)
+	/// <returns>Returns GameSystemLoading if this call started loading</returns>
+	public GameSystemLoading LoadActiveGameSystemAsync(string path)
 	{
 		if (loading)
-			return;
+			return null;
 
 		loading = true;
-		ThreadPool.QueueUserWorkItem(LoadGameSystemAsync, path);
+
+		GameSystemLoading loadingState = new GameSystemLoading(path);
+		ThreadPool.QueueUserWorkItem(LoadGameSystemAsync, loadingState);
+		return loadingState;
 	}
 
 	private void LoadGameSystemAsync(object state)
 	{
-		string gameSystemPath = (string)state;
-		GameSystemLoading loadingState = new GameSystemLoading(gameSystemPath);
+		GameSystemLoading loadingState = (GameSystemLoading)state;
 
 		// attach events before running
 		loadingState.OnLoadingCompleted += (object source, EventArgs e) =>
