@@ -13,7 +13,7 @@ namespace CompanionFramework.Net.Http
 	public class HttpDownloadSet : IBaseThreadedTask
 	{
 		/// <summary>
-		/// Fired when any or all downloads have failed/cancelled. Source is <see cref="HttpDownloadSet"/>. EventArgs is <see cref="HttpDownloadFailureEventArgs"/>.
+		/// Fired once when any of the downloads have failed/cancelled. Source is <see cref="HttpDownloadSet"/>. EventArgs is <see cref="HttpDownloadFailureEventArgs"/>.
 		/// </summary>
 		public event EventHandler DownloadsFailed;
 
@@ -32,6 +32,7 @@ namespace CompanionFramework.Net.Http
 
 		private readonly bool progressTracking;
 		private bool init;
+		private bool failed;
 
 		/// <summary>
 		/// Returns a list of files that have been downloaded.
@@ -88,6 +89,7 @@ namespace CompanionFramework.Net.Http
 				throw new InvalidOperationException();
 			}
 
+			failed = false; // reset in case this is called multiple times
 			init = true;
 			StartDownloads();	
 		}
@@ -159,6 +161,12 @@ namespace CompanionFramework.Net.Http
 
 		private void Failed(HttpDownloadFailureEventArgs failureEventArgs)
 		{
+			// if already failed, don't fail again
+			if (failed)
+				return;
+
+			failed = true;
+
 			if (MessageHandler.HasMessageHandler())
 			{
 				MessageQueue.Invoke(DownloadsFailed, this, failureEventArgs);
