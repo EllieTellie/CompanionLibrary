@@ -62,6 +62,32 @@
             </summary>
             <returns>New guid</returns>
         </member>
+        <member name="T:Companion.Data.GameSystemLoading">
+            <summary>
+            Track loading the game system.
+            </summary>
+        </member>
+        <member name="F:Companion.Data.GameSystemLoading.eventLock">
+            <summary>
+            Lock for event firing
+            </summary>
+        </member>
+        <member name="E:Companion.Data.GameSystemLoading.OnLoadingCompleted">
+            <summary>
+            Fired when completed. Source is this.
+            </summary>
+        </member>
+        <member name="E:Companion.Data.GameSystemLoading.OnLoadingFailed">
+            <summary>
+            Fired when failed. Source is this.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.GameSystemLoading.GetGameSystemGroup">
+            <summary>
+            Get the game system group. This never returns null. If this has failed game system or catalogues may not be populated.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="E:Companion.Data.RosterReader.OnRosterParsed">
             <summary>
             Dispatched on the main unity thread. Source is roster. EventArgs is null.
@@ -436,9 +462,16 @@
         </member>
         <member name="M:SystemManager.LoadGameSystems(System.String)">
             <summary>
-            Load all game systems at the specified path. This loads any required catalogues too.
+            Load all game systems at the specified path. This loads any required catalogues too. It automatically gets added to the system manager.
             </summary>
             <param name="path">Path</param>
+        </member>
+        <member name="M:SystemManager.LoadGameSystem(System.String)">
+            <summary>
+            Load a single game system at the specified path. This loads any required catalogues too. It automatically gets added to the system manager.
+            </summary>
+            <param name="path">Path</param>
+            <returns>Game system</returns>
         </member>
         <member name="M:SystemManager.HasGameSystems">
             <summary>
@@ -492,6 +525,11 @@
             </summary>
             <param name="gameSystem">Game system</param>
             <returns>List of catalogues</returns>
+        </member>
+        <member name="M:SystemManager.Clear">
+            <summary>
+            Clear any loaded systems, if async loading is in progress you may want to avoid calling this.
+            </summary>
         </member>
         <member name="T:UpdateManager">
             <summary>

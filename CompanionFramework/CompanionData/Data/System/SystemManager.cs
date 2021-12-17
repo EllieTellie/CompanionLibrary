@@ -86,12 +86,33 @@ public class SystemManager
 
 	private void LoadGameSystemAsync(object state)
 	{
-		GameSystem gameSystem = LoadGameSystem((string)state);
+		string gameSystemPath = (string)state;
+		GameSystemLoading loadingState = new GameSystemLoading(gameSystemPath);
 
-		// set active game system
-		SetActiveGameSystem(gameSystem);
+		// attach events before running
+		loadingState.OnLoadingCompleted += (object source, EventArgs e) =>
+		{
+			GameSystemGroup gameSystemGroup = loadingState.GetGameSystemGroup();
 
-		loading = false; // bit worrying that load game systems could throw exception and leave this as true, handle that
+			if (gameSystemGroup.gameSystem != null)
+			{
+				// set active game system
+				SetActiveGameSystem(gameSystemGroup.gameSystem);
+
+				gameSystemGroups.Add(gameSystemGroup);
+			}
+			
+			loading = false;
+		};
+
+		// attach events before running
+		loadingState.OnLoadingFailed += (object source, EventArgs e) =>
+		{
+			loading = false;
+		};
+
+		// start loading
+		loadingState.Run(); // this uses I/O
 	}
 
 	/// <summary>
@@ -140,7 +161,7 @@ public class SystemManager
 	}
 
 	/// <summary>
-	/// Load all game systems at the specified path. This loads any required catalogues too.
+	/// Load all game systems at the specified path. This loads any required catalogues too. It automatically gets added to the system manager.
 	/// </summary>
 	/// <param name="path">Path</param>
 	public void LoadGameSystems(string path)
@@ -153,7 +174,12 @@ public class SystemManager
 		}
 	}
 
-	private GameSystem LoadGameSystem(string path)
+	/// <summary>
+	/// Load a single game system at the specified path. This loads any required catalogues too. It automatically gets added to the system manager.
+	/// </summary>
+	/// <param name="path">Path</param>
+	/// <returns>Game system</returns>
+	public GameSystem LoadGameSystem(string path)
 	{
 		GameSystem game = GameSystem.LoadGameSystem(path);
 
@@ -500,5 +526,14 @@ public class SystemManager
 	private bool ContainsTargetId(List<EntryLink> entryLinks, string id)
 	{
 		return entryLinks.GetById(id) != null;
+	}
+
+	/// <summary>
+	/// Clear any loaded systems, if async loading is in progress you may want to avoid calling this.
+	/// </summary>
+	public void Clear()
+	{
+		gameSystemGroups.Clear();
+		activeGameSystem = null;
 	}
 }

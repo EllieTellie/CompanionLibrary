@@ -1153,7 +1153,7 @@
         </member>
         <member name="E:CompanionFramework.Net.Http.HttpDownloadSet.DownloadsFailed">
             <summary>
-            Fired when any or all downloads have failed/cancelled. Source is <see cref="T:CompanionFramework.Net.Http.HttpDownloadSet"/>. EventArgs is <see cref="T:CompanionFramework.Net.Http.HttpDownloadFailureEventArgs"/>.
+            Fired once when any of the downloads have failed/cancelled. Source is <see cref="T:CompanionFramework.Net.Http.HttpDownloadSet"/>. EventArgs is <see cref="T:CompanionFramework.Net.Http.HttpDownloadFailureEventArgs"/>.
             </summary>
         </member>
         <member name="E:CompanionFramework.Net.Http.HttpDownloadSet.DownloadsCompleted">
