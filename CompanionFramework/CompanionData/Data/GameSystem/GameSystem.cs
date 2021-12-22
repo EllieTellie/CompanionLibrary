@@ -29,6 +29,11 @@ namespace Companion.Data
 		public List<Rule> sharedRules;
 		public List<Profile> sharedProfiles;
 
+		/// <summary>
+		/// Path this was read from (if available).
+		/// </summary>
+		private string path;
+
 		private Dictionary<string, IIdentifiable> idLookup = new Dictionary<string, IIdentifiable>();
 
 		public GameSystem(XmlNode node) : base(node)
@@ -99,7 +104,9 @@ namespace Companion.Data
 			XmlDocument xmlDocument = new XmlDocument();
 			xmlDocument.LoadXml(text);
 
-			return new GameSystem(xmlDocument.GetNode("gameSystem"));
+			GameSystem gameSystem = new GameSystem(xmlDocument.GetNode("gameSystem"));
+			gameSystem.path = path;
+			return gameSystem;
 		}
 
 		public static byte[] Decompress(byte[] data)
@@ -115,6 +122,11 @@ namespace Companion.Data
 		public string GetName()
 		{
 			return name;
+		}
+
+		public string GetPath()
+		{
+			return path;
 		}
 	}
 }

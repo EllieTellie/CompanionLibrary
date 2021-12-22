@@ -34,6 +34,11 @@ namespace Companion.Data
 		public List<CostType> costTypes;
 		public List<ForceEntry> forceEntries;
 
+		/// <summary>
+		/// Path this was read from (if available).
+		/// </summary>
+		private string path;
+
 		private Dictionary<string, IIdentifiable> idLookup = new Dictionary<string, IIdentifiable>();
 
 		public Catalogue(XmlNode node) : base(node)
@@ -111,7 +116,9 @@ namespace Companion.Data
 			XmlDocument xmlDocument = new XmlDocument();
 			xmlDocument.LoadXml(text);
 
-			return new Catalogue(xmlDocument.GetNode("catalogue"));
+			Catalogue catalogue = new Catalogue(xmlDocument.GetNode("catalogue"));
+			catalogue.path = path; // store path in case we need it
+			return catalogue;
 		}
 
 		public static byte[] Decompress(byte[] data)
@@ -127,6 +134,11 @@ namespace Companion.Data
 		public string GetName()
 		{
 			return name;
+		}
+
+		public string GetPath()
+		{
+			return path;
 		}
 	}
 }
