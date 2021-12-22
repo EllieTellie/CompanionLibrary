@@ -4,11 +4,21 @@
         <name>CompanionData</name>
     </assembly>
     <members>
+        <member name="F:Companion.Data.Catalogue.path">
+            <summary>
+            Path this was read from (if available).
+            </summary>
+        </member>
         <member name="M:Companion.Data.StringExtensions.Trim(System.String[])">
             <summary>
             Trim all the whitespace from the strings in this array.
             </summary>
             <param name="arr">Array</param>
+        </member>
+        <member name="F:Companion.Data.GameSystem.path">
+            <summary>
+            Path this was read from (if available).
+            </summary>
         </member>
         <member name="F:Companion.Data.SelectionEntry.parent">
             <summary>
@@ -176,6 +186,13 @@
             <param name="data">Byte data</param>
             <param name="fileExtension">The extension of the compressed file starting with a period</param>
             <param name="elementName">The name of the first element in the xml file that needs to match</param>
+            <returns>Version information</returns>
+        </member>
+        <member name="M:Companion.Data.System.Update.DataIndexVersionInfo.GetGameSystemVersionInfo(System.String)">
+            <summary>
+            Helper method to get version information from the compressed file. Get the version information from the compressed data file on disk.
+            </summary>
+            <param name="path">Path of the compressed game system</param>
             <returns>Version information</returns>
         </member>
         <member name="T:Companion.Data.System.Update.GameSystemData">

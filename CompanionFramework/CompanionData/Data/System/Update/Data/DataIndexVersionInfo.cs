@@ -87,5 +87,48 @@ namespace Companion.Data.System.Update
 
 			return null;
 		}
+
+		/// <summary>
+		/// Helper method to get version information from the compressed file. Get the version information from the compressed data file on disk.
+		/// </summary>
+		/// <param name="path">Path of the compressed game system</param>
+		/// <returns>Version information</returns>
+		public static DataIndexVersionInfo GetGameSystemVersionInfo(string path)
+		{
+			// setup defaults and read the file
+			string fileExtension = ".gst";
+			string elementName = "gameSystem";
+			byte[] data = FileUtils.ReadFile(path);
+
+			byte[] uncompressedData = CompressionUtils.DecompressFileFromZip(data, fileExtension);
+			string text = FileUtils.GetString(uncompressedData); // could read partial, but for now just reading the full file
+			using (StringReader textReader = new StringReader(text))
+			{
+				using (XmlReader reader = XmlReader.Create(textReader))
+				{
+					// read the element with the version information
+					if (reader.ReadToFollowing(elementName))
+					{
+						// this should be the start element always
+						if (reader.IsStartElement())
+						{
+							// these should match between catalogue and gamesystem so just read these only
+							string id = reader.GetAttribute("id");
+							string name = reader.GetAttribute("name");
+							string revision = reader.GetAttribute("revision");
+							string battleScribeVersion = reader.GetAttribute("battleScribeVersion");
+
+							return new DataIndexVersionInfo(id, name, revision, battleScribeVersion);
+						}
+					}
+					else
+					{
+						return null;
+					}
+				}
+			}
+
+			return null;
+		}
 	}
 }
