@@ -25,6 +25,12 @@
             Parent selection if available.
             </summary>
         </member>
+        <member name="M:Companion.Data.Roster.HasValidCosts">
+            <summary>
+            Checks if any costs have a value larger than zero.
+            </summary>
+            <returns>True if it has valid costs</returns>
+        </member>
         <member name="F:Companion.Data.Selection.parent">
             <summary>
             Parent selection if available.

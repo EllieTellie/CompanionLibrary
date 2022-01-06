@@ -105,6 +105,24 @@ namespace Companion.Data
 			forces.Add(force);
 		}
 
+		/// <summary>
+		/// Checks if any costs have a value larger than zero.
+		/// </summary>
+		/// <returns>True if it has valid costs</returns>
+		public bool HasValidCosts()
+		{
+			if (costs == null)
+				return false;
+
+			foreach (Cost cost in costs)
+			{
+				if (cost.value > 0)
+					return true;
+			}
+
+			return false;
+		}
+
 		protected override void InitFields()
 		{
 			base.InitFields();
