@@ -201,6 +201,23 @@
             <param name="path">Path of the compressed game system</param>
             <returns>Version information</returns>
         </member>
+        <member name="T:Companion.Data.System.Update.Repository">
+            <summary>
+            Holds the repository information retrieved 
+            </summary>
+        </member>
+        <member name="M:Companion.Data.System.Update.Repository.#ctor(LitJson.JsonData)">
+            <summary>
+            Create a repository from the json provided.
+            </summary>
+            <param name="jsonData">Json data</param>
+        </member>
+        <member name="M:Companion.Data.System.Update.Repository.Write(LitJson.JsonWriter)">
+            <summary>
+            Write this object out as a json object.
+            </summary>
+            <param name="writer">Json Writer to use</param>
+        </member>
         <member name="T:Companion.Data.System.Update.GameSystemData">
             <summary>
             Storing the linked data as a data index always needs a repository.
