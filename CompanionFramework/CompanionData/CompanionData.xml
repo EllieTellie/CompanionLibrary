@@ -278,6 +278,13 @@
             <param name="repository">Repository to get the data from</param>
             <returns>Game system data</returns>
         </member>
+        <member name="M:Companion.Data.System.Update.RepositoryData.GetDataIndex(Companion.Data.System.Update.Repository)">
+            <summary>
+            Get the data index by the repository. This is short for GetGameSystem(repository).dataIndex.
+            </summary>
+            <param name="repository">Repository</param>
+            <returns>Data index</returns>
+        </member>
         <member name="T:Companion.Data.System.Update.ProcessEventArgs">
             <summary>
             Base class for arguments by all process events

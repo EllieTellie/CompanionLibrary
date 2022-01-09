@@ -111,6 +111,20 @@ namespace Companion.Data.System.Update
 			return gameSystemData;
 		}
 
+		/// <summary>
+		/// Get the data index by the repository. This is short for GetGameSystem(repository).dataIndex.
+		/// </summary>
+		/// <param name="repository">Repository</param>
+		/// <returns>Data index</returns>
+		public DataIndex GetDataIndex(Repository repository)
+		{
+			GameSystemData gameSystemData = GetGameSystem(repository);
+			if (gameSystemData == null)
+				return null;
+
+			return gameSystemData.dataIndex;
+		}
+
 		public Repository GetRepositoryByName(string repositoryName)
 		{
 			return repositoryIndex.GetRepositoryByName(repositoryName);
