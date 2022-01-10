@@ -305,6 +305,7 @@ namespace CompanionFramework.Net.Http.Common
 					}
 				}
 
+				NetLogger.Error("Request: " + requestData.uri + " Exception: " + e.Message + " Cancelled: " + cancelled );
 				NetLogger.Exception(e);
 				Complete(new HttpResponse(NetworkResult.Error, e, e.Message));
 			}
@@ -325,13 +326,12 @@ namespace CompanionFramework.Net.Http.Common
 
 		private HttpWebRequest SetupRequest()
 		{
-			HttpWebRequest request = null;
+			HttpWebRequest request;
 			try
 			{
 				request = (HttpWebRequest)WebRequest.Create(requestData.GetUri());
 				request.Timeout = requestData.timeout;
 				request.ReadWriteTimeout = requestData.timeout;
-				request.KeepAlive = false; // apache server does not support it and sends "Connection: Close" after every request
 			}
 			catch (Exception e)
 			{
