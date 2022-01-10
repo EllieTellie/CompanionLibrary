@@ -19,6 +19,8 @@ namespace Companion.Data.System.Update
 		protected readonly string dataPath;
 		protected readonly bool async;
 
+		protected RepositoryUpdate repositoryUpdate;
+
 		/// <summary>
 		/// Create a new update system process.
 		/// </summary>
@@ -91,7 +93,7 @@ namespace Companion.Data.System.Update
 				}
 			}
 
-			HttpDownloadSet downloadSet = new HttpDownloadSet(downloads.ToArray());
+			HttpDownloadSet downloadSet = new HttpDownloadSet(true, downloads.ToArray());
 			downloadSet.DownloadsCompleted += (object source, EventArgs e) =>
 			{
 				Complete();
@@ -99,6 +101,14 @@ namespace Companion.Data.System.Update
 			downloadSet.DownloadsFailed += (object source, EventArgs e) =>
 			{
 				Abort(UpdateError.FailedNetworkResponse);
+			};
+			downloadSet.OnDownloadUpdate += (object source, EventArgs e) =>
+			{
+				HttpDownloadProgress downloadProgress = (HttpDownloadProgress)source;
+				if (repositoryUpdate != null)
+				{
+					repositoryUpdate.FireDownloadUpdateEvent(downloadSet, downloadProgress);
+				}
 			};
 			downloadSet.Run();
 		}
@@ -173,6 +183,15 @@ namespace Companion.Data.System.Update
 		public override UpdateState GetState()
 		{
 			return UpdateState.UpdateGameSystem;
+		}
+
+		/// <summary>
+		/// Optionally store the repository update for keeping track of progress during the update process.
+		/// </summary>
+		/// <param name="repositoryUpdate">Repository update</param>
+		public void SetRepositoryUpdate(RepositoryUpdate repositoryUpdate)
+		{
+			this.repositoryUpdate = repositoryUpdate;
 		}
 	}
 }

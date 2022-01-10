@@ -246,6 +246,15 @@ namespace CompanionFramework.Net.Http
 		}
 
 		/// <summary>
+		/// Get the download progress tracker if available.
+		/// </summary>
+		/// <returns>Stream progress</returns>
+		public IStreamProgress GetProgressTracker()
+		{
+			return progress;
+		}
+
+		/// <summary>
 		/// Set the download progress tracker.
 		/// </summary>
 		/// <param name="progress">Stream progress</param>

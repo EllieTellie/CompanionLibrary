@@ -259,5 +259,37 @@ namespace CompanionFramework.Net.Http
 
 			return downloadsLeft == 0;
 		}
+
+		/// <summary>
+		/// Get the amount of downloads in this download set. This may include completed downloads.
+		/// </summary>
+		/// <returns>Count</returns>
+		public int Count()
+		{
+			if (downloads == null)
+				return 0;
+
+			return downloads.Length;
+		}
+
+		/// <summary>
+		/// Get the amount of downloads in progress.
+		/// </summary>
+		/// <returns>Downloads in progress</returns>
+		public int GetDownloadsInProgress()
+		{
+			int downloadsLeft = 0;
+			for (int i = 0; i < downloads.Length; i++)
+			{
+				HttpDownload download = downloads[i];
+				if (download == null)
+					continue;
+
+				// keep track of how many downloads are still progressing
+				downloadsLeft++;
+			}
+
+			return downloadsLeft;
+		}
 	}
 }

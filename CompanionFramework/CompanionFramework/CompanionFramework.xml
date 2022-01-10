@@ -1074,6 +1074,12 @@
             </summary>
             <returns>Storage path</returns>
         </member>
+        <member name="M:CompanionFramework.Net.Http.HttpDownload.GetProgressTracker">
+            <summary>
+            Get the download progress tracker if available.
+            </summary>
+            <returns>Stream progress</returns>
+        </member>
         <member name="M:CompanionFramework.Net.Http.HttpDownload.SetProgressTracker(CompanionFramework.Net.Http.Common.IStreamProgress)">
             <summary>
             Set the download progress tracker.
@@ -1180,6 +1186,18 @@
             <summary>
             Start the downloads.
             </summary>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpDownloadSet.Count">
+            <summary>
+            Get the amount of downloads in this download set. This may include completed downloads.
+            </summary>
+            <returns>Count</returns>
+        </member>
+        <member name="M:CompanionFramework.Net.Http.HttpDownloadSet.GetDownloadsInProgress">
+            <summary>
+            Get the amount of downloads in progress.
+            </summary>
+            <returns>Downloads in progress</returns>
         </member>
         <member name="T:CompanionFramework.Net.Http.HttpHandler">
             <summary>

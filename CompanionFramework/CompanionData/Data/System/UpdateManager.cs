@@ -190,18 +190,29 @@ public class UpdateManager
 		return true;
 	}
 
-	public bool UpdateFromRepository(RepositoryData repositoryData, Repository repository, string dataPath, bool async = true)
+	/// <summary>
+	/// Update from a repository.
+	/// </summary>
+	/// <param name="repositoryData">Repository state data</param>
+	/// <param name="repository">Repository to update</param>
+	/// <param name="dataPath">Where to save the repository on disk</param>
+	/// <param name="async">If true this completes async</param>
+	/// <returns>RepositoryUpdate object or null if unable to update</returns>
+	public RepositoryUpdate UpdateFromRepository(RepositoryData repositoryData, Repository repository, string dataPath, bool async = true)
 	{
 		GameSystemData gameSystemData = repositoryData.GetGameSystem(repository);
 		return UpdateFromRepository(repositoryData, gameSystemData, dataPath, async);
 	}
 
-	protected bool UpdateFromRepository(RepositoryData repositoryData, GameSystemData gameSystemData, string dataPath, bool async)
+	protected RepositoryUpdate UpdateFromRepository(RepositoryData repositoryData, GameSystemData gameSystemData, string dataPath, bool async)
 	{
-		if (repositoryData == null || gameSystemData == null)
-			return false;
+		if (repositoryData == null || gameSystemData == null || dataPath == null)
+			return null;
 
 		UpdateGameSystemProcess process = new UpdateGameSystemProcess(gameSystemData.repository, gameSystemData.dataIndex, dataPath, async);
+
+		RepositoryUpdate repositoryUpdate = new RepositoryUpdate();
+		process.SetRepositoryUpdate(repositoryUpdate);
 
 		// handle abort event
 		process.LoadingAborted += (UpdateError error, string message) =>
@@ -236,7 +247,7 @@ public class UpdateManager
 
 		process.Execute(repositoryData);
 
-		return true;
+		return repositoryUpdate;
 	}
 
 	protected RepositoryData GetRepositoryDataByUrl(string url)

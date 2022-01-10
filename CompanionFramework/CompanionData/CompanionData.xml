@@ -126,6 +126,16 @@
             Simple reader that reads words. 
             </summary>
         </member>
+        <member name="T:Companion.Data.RepositoryUpdate">
+            <summary>
+            Track updating the repository.
+            </summary>
+        </member>
+        <member name="E:Companion.Data.RepositoryUpdate.OnDownloadUpdate">
+            <summary>
+            Fired when a download reports progress. This is most likely fired on whatever thread this is called from
+            </summary>
+        </member>
         <member name="E:Companion.Data.System.Update.CoreUpdateProcess.LoadingComplete">
             <summary>
             Fired when the process completed.
@@ -433,6 +443,12 @@
         <member name="M:Companion.Data.System.Update.UpdateGameSystemProcess.GetState">
             <inheritdoc/>
         </member>
+        <member name="M:Companion.Data.System.Update.UpdateGameSystemProcess.SetRepositoryUpdate(Companion.Data.RepositoryUpdate)">
+            <summary>
+            Optionally store the repository update for keeping track of progress during the update process.
+            </summary>
+            <param name="repositoryUpdate">Repository update</param>
+        </member>
         <member name="T:Companion.Data.Utils.XmlDataFactory">
             <summary>
             Speed up xml serialization by creating the constructors manually.
@@ -658,6 +674,16 @@
             <param name="repository">Repository</param>
             <param name="async">Whether request should be done asynchronous</param>
             <returns>Returns true if it was executed</returns>
+        </member>
+        <member name="M:UpdateManager.UpdateFromRepository(Companion.Data.System.Update.RepositoryData,Companion.Data.System.Update.Repository,System.String,System.Boolean)">
+            <summary>
+            Update from a repository.
+            </summary>
+            <param name="repositoryData">Repository state data</param>
+            <param name="repository">Repository to update</param>
+            <param name="dataPath">Where to save the repository on disk</param>
+            <param name="async">If true this completes async</param>
+            <returns>RepositoryUpdate object or null if unable to update</returns>
         </member>
         <member name="M:UpdateManager.AddRepositoryData(System.String)">
             <summary>
