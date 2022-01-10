@@ -74,6 +74,9 @@ namespace CompanionFramework.Net.Http
 		/// </summary>
 		private bool optional = false;
 
+		/// <summary>
+		/// Whether this download should run async or not. By default it's always true and usually only false for debugging.
+		/// </summary>
 		private bool async = true;
 
 		public HttpDownload(IHttpHandler httpHandler, HttpRequestData requestData, string storagePath) : this(httpHandler, requestData, storagePath, 2)

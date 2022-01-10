@@ -1048,6 +1048,11 @@
             Whether this download is optional and the game can continue without. By default it's never optional. See: <see cref="T:CompanionFramework.Net.Http.HttpDownloadSet"/>.
             </summary>
         </member>
+        <member name="F:CompanionFramework.Net.Http.HttpDownload.async">
+            <summary>
+            Whether this download should run async or not. By default it's always true and usually only false for debugging.
+            </summary>
+        </member>
         <member name="M:CompanionFramework.Net.Http.HttpDownload.Run">
             <summary>
             Start the download.

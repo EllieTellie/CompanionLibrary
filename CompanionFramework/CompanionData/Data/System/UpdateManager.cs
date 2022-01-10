@@ -68,6 +68,24 @@ public class UpdateManager
 	{
 		RepositoryData repositoryData = AddRepositoryData(url);
 
+		return RetrieveRepositoryIndexTask(repositoryData, async);
+	}
+
+	/// <summary>
+	/// Retrieve the repository index from the source.
+	/// </summary>
+	/// <param name="repositoryData">Repository data which will replace any currently cached data</param>
+	/// <param name="async">Whether request should be done asynchronous</param>
+	/// <returns>Returns true if it was executed</returns>
+	public bool RetrieveRepositoryIndex(RepositoryData repositoryData, bool async = true)
+	{
+		AddRepositoryData(repositoryData);
+
+		return RetrieveRepositoryIndexTask(repositoryData, async);
+	}
+
+	protected bool RetrieveRepositoryIndexTask(RepositoryData repositoryData, bool async)
+	{
 		RetrieveRepositoryIndexProcess process = new RetrieveRepositoryIndexProcess(repositoryData.url, async);
 
 		// handle abort event
@@ -250,7 +268,12 @@ public class UpdateManager
 		return repositoryUpdate;
 	}
 
-	protected RepositoryData GetRepositoryDataByUrl(string url)
+	/// <summary>
+	/// Get the existing repository data by the url if it exists.
+	/// </summary>
+	/// <param name="url">Repository url</param>
+	/// <returns>Repository data or null if not found</returns>
+	public RepositoryData GetRepositoryDataByUrl(string url)
 	{
 		foreach (RepositoryData repositoryData in loadedRepositories)
 		{
@@ -259,6 +282,29 @@ public class UpdateManager
 		}
 
 		return null;
+	}
+
+	protected void RemoveRepositoryData(string repositoryUrl)
+	{
+		for (int i=loadedRepositories.Count-1; i>=0; i--)
+		{
+			RepositoryData repositoryData = loadedRepositories[i];
+			if (repositoryData.url == repositoryUrl)
+				loadedRepositories.RemoveAt(i); // remove any matching ones
+		}
+	}
+
+	/// <summary>
+	/// Replaces any existing repository data with the new data or just adds it if no existing data is loaded.
+	/// </summary>
+	/// <param name="repositoryData">Repository data</param>
+	protected void AddRepositoryData(RepositoryData repositoryData)
+	{
+		// remove existing ones
+		RemoveRepositoryData(repositoryData.url);
+
+		// add new one
+		loadedRepositories.Add(repositoryData);
 	}
 
 	/// <summary>

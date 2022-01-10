@@ -648,6 +648,14 @@
             <param name="async">Whether request should be done asynchronous</param>
             <returns>Returns true if it was executed</returns>
         </member>
+        <member name="M:UpdateManager.RetrieveRepositoryIndex(Companion.Data.System.Update.RepositoryData,System.Boolean)">
+            <summary>
+            Retrieve the repository index from the source.
+            </summary>
+            <param name="repositoryData">Repository data which will replace any currently cached data</param>
+            <param name="async">Whether request should be done asynchronous</param>
+            <returns>Returns true if it was executed</returns>
+        </member>
         <member name="M:UpdateManager.RetrieveRepositoryDataIndex(Companion.Data.System.Update.RepositoryData,System.String,System.Boolean)">
             <summary>
             Retrieve the data index for the specified repository.
@@ -684,6 +692,19 @@
             <param name="dataPath">Where to save the repository on disk</param>
             <param name="async">If true this completes async</param>
             <returns>RepositoryUpdate object or null if unable to update</returns>
+        </member>
+        <member name="M:UpdateManager.GetRepositoryDataByUrl(System.String)">
+            <summary>
+            Get the existing repository data by the url if it exists.
+            </summary>
+            <param name="url">Repository url</param>
+            <returns>Repository data or null if not found</returns>
+        </member>
+        <member name="M:UpdateManager.AddRepositoryData(Companion.Data.System.Update.RepositoryData)">
+            <summary>
+            Replaces any existing repository data with the new data or just adds it if no existing data is loaded.
+            </summary>
+            <param name="repositoryData">Repository data</param>
         </member>
         <member name="M:UpdateManager.AddRepositoryData(System.String)">
             <summary>
