@@ -449,6 +449,12 @@
             </summary>
             <param name="repositoryUpdate">Repository update</param>
         </member>
+        <member name="M:Companion.Data.DataIndexEntry.GetDataNameSafe">
+            <summary>
+            Return the data name minus any characters that are not valid.
+            </summary>
+            <returns>Safe data name</returns>
+        </member>
         <member name="T:Companion.Data.Utils.XmlDataFactory">
             <summary>
             Speed up xml serialization by creating the constructors manually.

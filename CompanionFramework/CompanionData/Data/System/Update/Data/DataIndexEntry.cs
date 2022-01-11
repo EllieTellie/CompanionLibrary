@@ -1,4 +1,6 @@
-﻿using System.Xml;
+﻿using System.IO;
+using System.Text;
+using System.Xml;
 
 namespace Companion.Data
 {
@@ -35,6 +37,37 @@ namespace Companion.Data
 			{
 				return -1;
 			}
+		}
+
+		/// <summary>
+		/// Return the data name minus any characters that are not valid.
+		/// </summary>
+		/// <returns>Safe data name</returns>
+		public string GetDataNameSafe()
+		{
+			char[] invalidPathChars = Path.GetInvalidFileNameChars();
+
+			StringBuilder builder = new StringBuilder();
+
+			for (int i = 0; i < dataName.Length; i++)
+			{
+				char c = dataName[i];
+
+				bool validChar = true;
+				foreach (char invalidChar in invalidPathChars)
+				{
+					if (dataName[i] == invalidChar)
+					{
+						validChar = false;
+						break;
+					}
+				}
+
+				if (validChar)
+					builder.Append(c);
+			}
+
+			return builder.ToString();
 		}
 	}
 }
