@@ -24,7 +24,7 @@ namespace Companion.Data
 		/// <summary>
 		/// Lock for event firing
 		/// </summary>
-		protected object eventLock = new object();
+		protected object eventAndDataLock = new object();
 
 		/// <summary>
 		/// Fired when progress update is due. This is on the main thread if <see cref="MessageQueue"/> is supported.
@@ -62,6 +62,7 @@ namespace Companion.Data
 
 		private void LoadGameSystemAsync(object state)
 		{
+			GameSystem gameSystem;
 			try
 			{
 				gameSystem = GameSystem.LoadGameSystem(gameSystemPath);
@@ -72,6 +73,12 @@ namespace Companion.Data
 				gameSystem = null; // force fail
 			}
 
+			// lock while we are modifying the loaded system
+			lock (eventAndDataLock)
+			{
+				this.gameSystem = gameSystem;
+			}
+			
 			if (gameSystem == null)
 			{
 				Failed();
@@ -102,8 +109,12 @@ namespace Companion.Data
 			}
 			else
 			{
-				// add to list of catalogues
-				catalogues.Add(catalogue);
+				// lock while we are modifying the loaded system
+				lock (eventAndDataLock)
+				{
+					// add to list of catalogues
+					catalogues.Add(catalogue);
+				}
 
 				CompleteCheck();
 			}
@@ -123,7 +134,7 @@ namespace Companion.Data
 			UpdateProgress();
 
 			// lock to make sure nothing modifies this while we are doing this
-			lock (eventLock)
+			lock (eventAndDataLock)
 			{
 				// check if completed
 				if (gameSystem != null && catalogues.Count == catalogueFilePaths.Count)
@@ -163,7 +174,7 @@ namespace Companion.Data
 		private void Failed()
 		{
 			// lock to prevent it being called multiple times potentially
-			lock (eventLock)
+			lock (eventAndDataLock)
 			{
 				if (failed)
 					return;
@@ -185,7 +196,7 @@ namespace Companion.Data
 		private void Completed()
 		{
 			// lock to prevent it being called multiple times potentially
-			lock (eventLock)
+			lock (eventAndDataLock)
 			{
 				if (completed)
 					return;
