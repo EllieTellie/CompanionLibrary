@@ -83,11 +83,6 @@
             Track loading the game system.
             </summary>
         </member>
-        <member name="F:Companion.Data.GameSystemLoading.eventLock">
-            <summary>
-            Lock for event firing
-            </summary>
-        </member>
         <member name="E:Companion.Data.GameSystemLoading.OnProgressUpdate">
             <summary>
             Fired when progress update is due. This is on the main thread if <see cref="T:CompanionFramework.Core.Threading.Messaging.MessageQueue"/> is supported.

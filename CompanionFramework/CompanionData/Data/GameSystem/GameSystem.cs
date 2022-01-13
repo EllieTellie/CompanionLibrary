@@ -94,19 +94,27 @@ namespace Companion.Data
 
 		public static GameSystem LoadGameSystem(string path)
 		{
-			byte[] data = FileUtils.ReadFileSimple(path);
+			try
+			{
+				byte[] data = FileUtils.ReadFileSimple(path);
 
-			// unzip data
-			byte[] uncompressedData = Decompress(data);
+				// unzip data
+				byte[] uncompressedData = Decompress(data);
 
-			string text = FileUtils.GetString(uncompressedData);
+				string text = FileUtils.GetString(uncompressedData);
 
-			XmlDocument xmlDocument = new XmlDocument();
-			xmlDocument.LoadXml(text);
+				XmlDocument xmlDocument = new XmlDocument();
+				xmlDocument.LoadXml(text);
 
-			GameSystem gameSystem = new GameSystem(xmlDocument.GetNode("gameSystem"));
-			gameSystem.path = path;
-			return gameSystem;
+				GameSystem gameSystem = new GameSystem(xmlDocument.GetNode("gameSystem"));
+				gameSystem.path = path;
+				return gameSystem;
+			}
+			catch (Exception e)
+			{
+				FrameworkLogger.Exception(e);
+				return null;
+			}
 		}
 
 		public static byte[] Decompress(byte[] data)

@@ -1,5 +1,6 @@
 ﻿using CompanionFramework.Core.Log;
 using CompanionFramework.Core.Threading.Messaging;
+using CompanionFramework.Core.Threading.ThreadPool;
 using CompanionFramework.IO.Utils;
 using System;
 using System.Collections.Generic;
@@ -16,15 +17,11 @@ namespace Companion.Data
 		protected List<string> catalogueFilePaths;
 
 		protected GameSystem gameSystem;
+
 		protected List<Catalogue> catalogues = new List<Catalogue>();
 
 		protected bool completed;
 		protected bool failed;
-
-		/// <summary>
-		/// Lock for event firing
-		/// </summary>
-		protected object eventAndDataLock = new object();
 
 		/// <summary>
 		/// Fired when progress update is due. This is on the main thread if <see cref="MessageQueue"/> is supported.
@@ -48,75 +45,57 @@ namespace Companion.Data
 
 		public void Run()
 		{
-			// find catalogue files
-			string directory = FileUtils.GetDirectoryFromPath(gameSystemPath);
-			catalogueFilePaths = FileSearchUtils.FindFileNamesByExtension(directory, ".catz", 1);
-
-			ThreadPool.QueueUserWorkItem(LoadGameSystemAsync);
-
-			foreach (string cataloguePath in catalogueFilePaths)
+			try
 			{
-				ThreadPool.QueueUserWorkItem(LoadCatalogueAsync, cataloguePath);
+				// find catalogue files
+				string directory = FileUtils.GetDirectoryFromPath(gameSystemPath);
+				catalogueFilePaths = FileSearchUtils.FindFileNamesByExtension(directory, ".catz", 1);
+
+				FrameworkLogger.Message("Found catalogues: " + catalogueFilePaths.Count);
+
+				ThreadPool.QueueUserWorkItem(LoadFullGameSystem);
+			}
+			catch (Exception e)
+			{
+				FrameworkLogger.Exception(e);
 			}
 		}
 
-		private void LoadGameSystemAsync(object state)
+		private void LoadFullGameSystem(object state)
 		{
-			GameSystem gameSystem;
-			try
-			{
-				gameSystem = GameSystem.LoadGameSystem(gameSystemPath);
-			}
-			catch (Exception e) // catch any exception as there is a fair amount of I/O above
-			{
-				FrameworkLogger.Exception(e);
-				gameSystem = null; // force fail
-			}
+			gameSystem = GameSystem.LoadGameSystem(gameSystemPath);
 
-			// lock while we are modifying the loaded system
-			lock (eventAndDataLock)
+			foreach (string path in catalogueFilePaths)
 			{
-				this.gameSystem = gameSystem;
-			}
-			
-			if (gameSystem == null)
-			{
-				Failed();
-			}
-			else
-			{
-				CompleteCheck();
-			}
-		}
-
-		private void LoadCatalogueAsync(object state)
-		{
-			Catalogue catalogue;
-			try
-			{
-				string path = (string)state;
-				catalogue = Catalogue.LoadCatalogue(path);
-			}
-			catch (Exception e) // catch any exception as there is a fair amount of I/O above
-			{
-				FrameworkLogger.Exception(e);
-				catalogue = null; // force fail
-			}
-
-			if (catalogue == null)
-			{
-				Failed();
-			}
-			else
-			{
-				// lock while we are modifying the loaded system
-				lock (eventAndDataLock)
+				Catalogue catalogue;
+				try
 				{
-					// add to list of catalogues
-					catalogues.Add(catalogue);
+					catalogue = Catalogue.LoadCatalogue(path);
+				}
+				catch (Exception e) // catch any exception as there is a fair amount of I/O above
+				{
+					FrameworkLogger.Exception(e);
+					catalogue = null; // force fail
 				}
 
-				CompleteCheck();
+				UpdateProgress();
+
+				if (catalogue == null)
+				{
+					Failed();
+					return;
+				}
+
+				catalogues.Add(catalogue);
+			}
+
+			if (gameSystem != null && catalogues.Count == catalogueFilePaths.Count)
+			{
+				Completed();
+			}
+			else
+			{
+				Failed();
 			}
 		}
 
@@ -127,21 +106,6 @@ namespace Companion.Data
 		public GameSystemGroup GetGameSystemGroup()
 		{
 			return new GameSystemGroup(gameSystem, catalogues);
-		}
-
-		private void CompleteCheck()
-		{
-			UpdateProgress();
-
-			// lock to make sure nothing modifies this while we are doing this
-			lock (eventAndDataLock)
-			{
-				// check if completed
-				if (gameSystem != null && catalogues.Count == catalogueFilePaths.Count)
-				{
-					Completed();
-				}
-			}
 		}
 
 		private void UpdateProgress()
@@ -173,45 +137,38 @@ namespace Companion.Data
 
 		private void Failed()
 		{
-			// lock to prevent it being called multiple times potentially
-			lock (eventAndDataLock)
+			FrameworkLogger.Message("Failed");
+
+			if (failed)
+				return;
+
+			failed = true;
+
+			if (MessageHandler.HasMessageHandler())
 			{
-				if (failed)
-					return;
-
-				failed = true;
-
-				if (MessageHandler.HasMessageHandler())
-				{
-					MessageQueue.Invoke(OnLoadingFailed, this);
-				}
-				else
-				{
-					if (OnLoadingFailed != null)
-						OnLoadingFailed(this, null);
-				}
+				MessageQueue.Invoke(OnLoadingFailed, this);
+			}
+			else
+			{
+				if (OnLoadingFailed != null)
+					OnLoadingFailed(this, null);
 			}
 		}
 
 		private void Completed()
 		{
-			// lock to prevent it being called multiple times potentially
-			lock (eventAndDataLock)
+			FrameworkLogger.Message("Completed");
+
+			completed = true;
+
+			if (MessageHandler.HasMessageHandler())
 			{
-				if (completed)
-					return;
-
-				completed = true;
-
-				if (MessageHandler.HasMessageHandler())
-				{
-					MessageQueue.Invoke(OnLoadingCompleted, this);
-				}
-				else
-				{
-					if (OnLoadingCompleted != null)
-						OnLoadingCompleted(this, null);
-				}
+				MessageQueue.Invoke(OnLoadingCompleted, this);
+			}
+			else
+			{
+				if (OnLoadingCompleted != null)
+					OnLoadingCompleted(this, null);
 			}
 		}
 	}

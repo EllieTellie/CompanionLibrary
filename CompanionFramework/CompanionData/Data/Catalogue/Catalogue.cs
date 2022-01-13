@@ -1,5 +1,6 @@
 ﻿using CompanionFramework.Core.Log;
 using CompanionFramework.IO.Utils;
+using System;
 using System.Collections.Generic;
 using System.Xml;
 
@@ -106,19 +107,29 @@ namespace Companion.Data
 
 		public static Catalogue LoadCatalogue(string path)
 		{
-			byte[] data = FileUtils.ReadFileSimple(path);
+			try
+			{
+				byte[] data = FileUtils.ReadFileSimple(path);
 
-			// unzip data
-			byte[] uncompressedData = Decompress(data);
+				// unzip data
+				byte[] uncompressedData = Decompress(data);
 
-			string text = FileUtils.GetString(uncompressedData);
+				string text = FileUtils.GetString(uncompressedData);
 
-			XmlDocument xmlDocument = new XmlDocument();
-			xmlDocument.LoadXml(text);
+				XmlDocument xmlDocument = new XmlDocument();
+				xmlDocument.LoadXml(text);
 
-			Catalogue catalogue = new Catalogue(xmlDocument.GetNode("catalogue"));
-			catalogue.path = path; // store path in case we need it
-			return catalogue;
+				Catalogue catalogue = new Catalogue(xmlDocument.GetNode("catalogue"));
+				catalogue.path = path; // store path in case we need it
+
+				return catalogue;
+			}
+			catch (Exception e)
+			{
+				FrameworkLogger.Exception(e);
+				return null;
+			}
+
 		}
 
 		public static byte[] Decompress(byte[] data)

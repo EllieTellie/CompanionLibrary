@@ -1,4 +1,5 @@
 ﻿using Companion.Data;
+using CompanionFramework.Core.Log;
 using CompanionFramework.Core.Threading.Messaging;
 using CompanionFramework.IO.Utils;
 using System;
@@ -84,7 +85,8 @@ public class SystemManager
 		loading = true;
 
 		GameSystemLoading loadingState = new GameSystemLoading(path);
-		ThreadPool.QueueUserWorkItem(LoadGameSystemAsync, loadingState);
+		//ThreadPool.QueueUserWorkItem(LoadGameSystemAsync, loadingState);
+		LoadGameSystemAsync(loadingState); // running this on the threadpool itself may sometimes cause it to deadlock or maybe get gc-ed
 		return loadingState;
 	}
 
@@ -95,6 +97,8 @@ public class SystemManager
 		// attach events before running
 		loadingState.OnLoadingCompleted += (object source, EventArgs e) =>
 		{
+			FrameworkLogger.Message("Loading Completed");
+
 			GameSystemGroup gameSystemGroup = loadingState.GetGameSystemGroup();
 
 			if (gameSystemGroup.gameSystem != null)
@@ -111,6 +115,8 @@ public class SystemManager
 		// attach events before running
 		loadingState.OnLoadingFailed += (object source, EventArgs e) =>
 		{
+			FrameworkLogger.Message("Loading Failed");
+
 			loading = false;
 		};
 

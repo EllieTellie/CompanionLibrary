@@ -81,13 +81,14 @@ namespace CompanionFramework.IO.Utils
 					{
 						if (entry.FullName.EndsWith(extension, StringComparison.OrdinalIgnoreCase))
 						{
-							Stream stream = entry.Open();
-
-							if (stream != null)
+							using (Stream stream = entry.Open())
 							{
-								uncompressedData = FileUtils.GetByteArrayFromStream(stream, null);
-								if (uncompressedData != null)
-									break;
+								if (stream != null)
+								{
+									uncompressedData = FileUtils.GetByteArrayFromStream(stream, null);
+									if (uncompressedData != null)
+										break;
+								}
 							}
 						}
 					}
