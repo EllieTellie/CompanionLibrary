@@ -96,15 +96,15 @@ namespace Companion.Data
 		{
 			try
 			{
-				byte[] data = FileUtils.ReadFileSimple(path);
+				//byte[] data = FileUtils.ReadFileSimple(path);
 
 				// unzip data
-				byte[] uncompressedData = Decompress(data);
+				//byte[] uncompressedData = Decompress(data);
 
-				string text = FileUtils.GetString(uncompressedData);
+				//string text = DecompressText(data); //FileUtils.GetString(uncompressedData);
+				//xmlDocument.LoadXml(text);
 
-				XmlDocument xmlDocument = new XmlDocument();
-				xmlDocument.LoadXml(text);
+				XmlDocument xmlDocument = DecompressXml(path);
 
 				GameSystem gameSystem = new GameSystem(xmlDocument.GetNode("gameSystem"));
 				gameSystem.path = path;
@@ -120,6 +120,21 @@ namespace Companion.Data
 		public static byte[] Decompress(byte[] data)
 		{
 			return CompressionUtils.DecompressFileFromZip(data, ".gst");
+		}
+
+		public static string DecompressText(byte[] data)
+		{
+			return CompressionUtils.DecompressTextFileFromZip(data, ".gst");
+		}
+
+		public static XmlDocument DecompressXml(byte[] data)
+		{
+			return CompressionUtils.DecompressXmlDocumentFromZip(data, ".gst");
+		}
+
+		public static XmlDocument DecompressXml(string path)
+		{
+			return CompressionUtils.DecompressXmlDocumentFromZipFile(path, ".gst");
 		}
 
 		public string GetId()

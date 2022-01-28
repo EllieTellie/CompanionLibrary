@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.IO.Compression;
 using System.Security;
+using System.Xml;
 
 namespace CompanionFramework.IO.Utils
 {
@@ -96,6 +97,106 @@ namespace CompanionFramework.IO.Utils
 			}
 
 			return uncompressedData;
+		}
+
+		/// <summary>
+		/// Decompress a .zip file into string data. The file inside the zip must have the extension provided.
+		/// </summary>
+		/// <param name="data">Data</param>
+		/// <param name="extension">extension of the filename in the zip</param>
+		/// <returns>Decompressed text data</returns>
+		public static string DecompressTextFileFromZip(byte[] data, string extension)
+		{
+			using (MemoryStream zipStream = new MemoryStream(data))
+			{
+				using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Read))
+				{
+					foreach (ZipArchiveEntry entry in archive.Entries)
+					{
+						if (entry.FullName.EndsWith(extension, StringComparison.OrdinalIgnoreCase))
+						{
+							using (Stream stream = entry.Open())
+							{
+								if (stream != null)
+								{
+									return FileUtils.GetStringFromStream(stream, null);
+								}
+							}
+						}
+					}
+				}
+
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Decompress a .zip file into string data. The file inside the zip must have the extension provided.
+		/// </summary>
+		/// <param name="data">Data</param>
+		/// <param name="extension">extension of the filename in the zip</param>
+		/// <returns>Decompressed text data</returns>
+		public static XmlDocument DecompressXmlDocumentFromZip(byte[] data, string extension)
+		{
+			using (MemoryStream zipStream = new MemoryStream(data))
+			{
+				using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Read))
+				{
+					foreach (ZipArchiveEntry entry in archive.Entries)
+					{
+						if (entry.FullName.EndsWith(extension, StringComparison.OrdinalIgnoreCase))
+						{
+							using (Stream stream = entry.Open())
+							{
+								if (stream != null)
+								{
+									XmlDocument xmlDocument = new XmlDocument();
+									xmlDocument.Load(stream);
+									return xmlDocument;
+								}
+							}
+						}
+					}
+				}
+
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Decompress a .zip file into string data. The file inside the zip must have the extension provided.
+		/// </summary>
+		/// <param name="filePath">File path</param>
+		/// <param name="extension">extension of the filename in the zip</param>
+		/// <returns>Decompressed text data</returns>
+		public static XmlDocument DecompressXmlDocumentFromZipFile(string filePath, string extension)
+		{
+			if (!File.Exists(filePath))
+				return null;
+			
+			using (FileStream fileStream = File.OpenRead(filePath))
+			{
+				using (ZipArchive archive = new ZipArchive(fileStream, ZipArchiveMode.Read))
+				{
+					foreach (ZipArchiveEntry entry in archive.Entries)
+					{
+						if (entry.FullName.EndsWith(extension, StringComparison.OrdinalIgnoreCase))
+						{
+							using (Stream stream = entry.Open())
+							{
+								if (stream != null)
+								{
+									XmlDocument xmlDocument = new XmlDocument();
+									xmlDocument.Load(stream);
+									return xmlDocument;
+								}
+							}
+						}
+					}
+				}
+
+				return null;
+			}
 		}
 	}
 }

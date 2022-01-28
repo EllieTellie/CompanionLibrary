@@ -109,15 +109,17 @@ namespace Companion.Data
 		{
 			try
 			{
-				byte[] data = FileUtils.ReadFileSimple(path);
+				//byte[] data = FileUtils.ReadFileSimple(path);
 
 				// unzip data
-				byte[] uncompressedData = Decompress(data);
+				//byte[] uncompressedData = Decompress(data);
 
-				string text = FileUtils.GetString(uncompressedData);
+				//string text = DecompressText(data); // FileUtils.GetString(uncompressedData);
 
-				XmlDocument xmlDocument = new XmlDocument();
-				xmlDocument.LoadXml(text);
+				//XmlDocument xmlDocument = DecompressXml(data); //new XmlDocument();
+				//xmlDocument.LoadXml(text);
+
+				XmlDocument xmlDocument = DecompressXml(path);
 
 				Catalogue catalogue = new Catalogue(xmlDocument.GetNode("catalogue"));
 				catalogue.path = path; // store path in case we need it
@@ -135,6 +137,21 @@ namespace Companion.Data
 		public static byte[] Decompress(byte[] data)
 		{
 			return CompressionUtils.DecompressFileFromZip(data, ".cat");
+		}
+
+		public static string DecompressText(byte[] data)
+		{
+			return CompressionUtils.DecompressTextFileFromZip(data, ".cat");
+		}
+
+		public static XmlDocument DecompressXml(byte[] data)
+		{
+			return CompressionUtils.DecompressXmlDocumentFromZip(data, ".cat");
+		}
+
+		public static XmlDocument DecompressXml(string path)
+		{
+			return CompressionUtils.DecompressXmlDocumentFromZipFile(path, ".cat");
 		}
 
 		public string GetId()

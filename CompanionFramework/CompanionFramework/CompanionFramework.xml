@@ -344,6 +344,30 @@
             <param name="extension">extension of the filename in the zip</param>
             <returns>Decompressed data</returns>
         </member>
+        <member name="M:CompanionFramework.IO.Utils.CompressionUtils.DecompressTextFileFromZip(System.Byte[],System.String)">
+            <summary>
+            Decompress a .zip file into string data. The file inside the zip must have the extension provided.
+            </summary>
+            <param name="data">Data</param>
+            <param name="extension">extension of the filename in the zip</param>
+            <returns>Decompressed text data</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.CompressionUtils.DecompressXmlDocumentFromZip(System.Byte[],System.String)">
+            <summary>
+            Decompress a .zip file into string data. The file inside the zip must have the extension provided.
+            </summary>
+            <param name="data">Data</param>
+            <param name="extension">extension of the filename in the zip</param>
+            <returns>Decompressed text data</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.CompressionUtils.DecompressXmlDocumentFromZipFile(System.String,System.String)">
+            <summary>
+            Decompress a .zip file into string data. The file inside the zip must have the extension provided.
+            </summary>
+            <param name="filePath">File path</param>
+            <param name="extension">extension of the filename in the zip</param>
+            <returns>Decompressed text data</returns>
+        </member>
         <member name="T:CompanionFramework.IO.Utils.FileSearchUtils">
             <summary>
             Used for file searching. Added so tools can benefit from it without having to copy the class.
@@ -569,6 +593,15 @@
             <returns>Byte array or null if it does not exist</returns>
         </member>
         <member name="M:CompanionFramework.IO.Utils.FileUtils.GetByteArrayFromStream(System.IO.Stream,CompanionFramework.Net.Http.Common.IStreamProgress,System.Int64)">
+            <summary>
+            Read the whole stream of bytes and return the array.
+            </summary>
+            <param name="stream">Stream to read from</param>
+            <param name="progress">Optional progress tracker</param>
+            <param name="contentLength">Content length or zero if not provided</param>
+            <returns>Byte array or null if the stream is null</returns>
+        </member>
+        <member name="M:CompanionFramework.IO.Utils.FileUtils.GetStringFromStream(System.IO.Stream,CompanionFramework.Net.Http.Common.IStreamProgress,System.Int64)">
             <summary>
             Read the whole stream of bytes and return the array.
             </summary>
