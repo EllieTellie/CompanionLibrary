@@ -56,15 +56,17 @@ namespace Companion.Data
 
 		public static Roster LoadRoster(string rosterPath)
 		{
-			byte[] data = FileUtils.ReadFileSimple(rosterPath);
+			//byte[] data = FileUtils.ReadFileSimple(rosterPath);
 
-			// unzip data
-			byte[] uncompressedData = DecompressRoster(data);
+			//// unzip data
+			//byte[] uncompressedData = DecompressRoster(data);
 
-			string text = FileUtils.GetString(uncompressedData);
+			//string text = FileUtils.GetString(uncompressedData);
 
-			XmlDocument xmlDocument = new XmlDocument();
-			xmlDocument.LoadXml(text);
+			//XmlDocument xmlDocument = new XmlDocument();
+			//xmlDocument.LoadXml(text);
+
+			XmlDocument xmlDocument = DecompressRosterXml(rosterPath);
 
 			return new Roster(xmlDocument.GetNode("roster"));
 		}
@@ -74,15 +76,27 @@ namespace Companion.Data
 			return CompressionUtils.DecompressFileFromZip(data, ".ros");
 		}
 
+		public static XmlDocument DecompressRosterXml(byte[] data)
+		{
+			return CompressionUtils.DecompressXmlDocumentFromZip(data, ".ros");
+		}
+
+		public static XmlDocument DecompressRosterXml(string path)
+		{
+			return CompressionUtils.DecompressXmlDocumentFromZipFile(path, ".ros");
+		}
+
 		public static Roster LoadRosterXml(byte[] data)
 		{
 			// unzip data
-			byte[] uncompressedData = DecompressRoster(data);
+			//byte[] uncompressedData = DecompressRoster(data);
 
-			string xml = FileUtils.GetString(uncompressedData);
+			//string xml = FileUtils.GetString(uncompressedData);
 
-			XmlDocument xmlDocument = new XmlDocument();
-			xmlDocument.LoadXml(xml);
+			//XmlDocument xmlDocument = new XmlDocument();
+			//xmlDocument.LoadXml(xml);
+
+			XmlDocument xmlDocument = DecompressRosterXml(data);
 
 			return new Roster(xmlDocument.GetNode("roster"));
 		}
