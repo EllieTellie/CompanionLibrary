@@ -122,11 +122,6 @@ namespace Companion.Data
 			return CompressionUtils.DecompressFileFromZip(data, ".gst");
 		}
 
-		public static string DecompressText(byte[] data)
-		{
-			return CompressionUtils.DecompressTextFileFromZip(data, ".gst");
-		}
-
 		public static XmlDocument DecompressXml(byte[] data)
 		{
 			return CompressionUtils.DecompressXmlDocumentFromZip(data, ".gst");

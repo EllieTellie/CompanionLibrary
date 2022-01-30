@@ -139,11 +139,6 @@ namespace Companion.Data
 			return CompressionUtils.DecompressFileFromZip(data, ".cat");
 		}
 
-		public static string DecompressText(byte[] data)
-		{
-			return CompressionUtils.DecompressTextFileFromZip(data, ".cat");
-		}
-
 		public static XmlDocument DecompressXml(byte[] data)
 		{
 			return CompressionUtils.DecompressXmlDocumentFromZip(data, ".cat");

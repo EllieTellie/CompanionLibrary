@@ -105,37 +105,6 @@ namespace CompanionFramework.IO.Utils
 		/// <param name="data">Data</param>
 		/// <param name="extension">extension of the filename in the zip</param>
 		/// <returns>Decompressed text data</returns>
-		public static string DecompressTextFileFromZip(byte[] data, string extension)
-		{
-			using (MemoryStream zipStream = new MemoryStream(data))
-			{
-				using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Read))
-				{
-					foreach (ZipArchiveEntry entry in archive.Entries)
-					{
-						if (entry.FullName.EndsWith(extension, StringComparison.OrdinalIgnoreCase))
-						{
-							using (Stream stream = entry.Open())
-							{
-								if (stream != null)
-								{
-									return FileUtils.GetStringFromStream(stream, null);
-								}
-							}
-						}
-					}
-				}
-
-				return null;
-			}
-		}
-
-		/// <summary>
-		/// Decompress a .zip file into string data. The file inside the zip must have the extension provided.
-		/// </summary>
-		/// <param name="data">Data</param>
-		/// <param name="extension">extension of the filename in the zip</param>
-		/// <returns>Decompressed text data</returns>
 		public static XmlDocument DecompressXmlDocumentFromZip(byte[] data, string extension)
 		{
 			using (MemoryStream zipStream = new MemoryStream(data))
