@@ -9,6 +9,13 @@
             Path this was read from (if available).
             </summary>
         </member>
+        <member name="M:Companion.Data.Catalogue.GetVersionInfo(System.String)">
+            <summary>
+            Get version information from the catalogue at the specified path.
+            </summary>
+            <param name="path">Path</param>
+            <returns>Version information</returns>
+        </member>
         <member name="M:Companion.Data.StringExtensions.Trim(System.String[])">
             <summary>
             Trim all the whitespace from the strings in this array.
@@ -19,6 +26,13 @@
             <summary>
             Path this was read from (if available).
             </summary>
+        </member>
+        <member name="M:Companion.Data.GameSystem.GetVersionInfo(System.String)">
+            <summary>
+            Get version information from the game system at the specified path.
+            </summary>
+            <param name="path">Path</param>
+            <returns>Version information</returns>
         </member>
         <member name="F:Companion.Data.SelectionEntry.parent">
             <summary>

@@ -1,4 +1,5 @@
-﻿using CompanionFramework.Core.Log;
+﻿using Companion.Data.System.Update;
+using CompanionFramework.Core.Log;
 using CompanionFramework.IO.Utils;
 using System;
 using System.Collections.Generic;
@@ -132,6 +133,17 @@ namespace Companion.Data
 				return null;
 			}
 
+		}
+
+		/// <summary>
+		/// Get version information from the catalogue at the specified path.
+		/// </summary>
+		/// <param name="path">Path</param>
+		/// <returns>Version information</returns>
+		public static DataIndexVersionInfo GetVersionInfo(string path)
+		{
+			byte[] data = FileUtils.ReadFile(path);
+			return DataIndexVersionInfo.GetVersionInfo(data, ".cat", "catalogue");
 		}
 
 		public static byte[] Decompress(byte[] data)
