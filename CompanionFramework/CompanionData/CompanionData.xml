@@ -78,6 +78,11 @@
             Parent selection if available.
             </summary>
         </member>
+        <member name="F:Companion.Data.Selection.categoriesSorted">
+            <summary>
+            Make sure this is only done once, we are likely not sorting it again.
+            </summary>
+        </member>
         <member name="M:Companion.Data.Selection.SortCategories">
             <summary>
             Sort the categories by primary = true.
