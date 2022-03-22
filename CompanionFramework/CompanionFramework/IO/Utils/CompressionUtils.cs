@@ -174,7 +174,7 @@ namespace CompanionFramework.IO.Utils
 			{
 				using (FileStream fileStream = File.OpenWrite(filePath))
 				{
-					using (ZipArchive archive = new ZipArchive(fileStream, ZipArchiveMode.Create))
+					using (ZipArchive archive = new ZipArchive(fileStream, ZipArchiveMode.Update))
 					{
 						ZipArchiveEntry entry = archive.CreateEntry(name);
 						using (Stream stream = entry.Open())

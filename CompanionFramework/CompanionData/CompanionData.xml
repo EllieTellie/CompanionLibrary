@@ -68,9 +68,19 @@
             </summary>
             <returns>True if it has valid costs</returns>
         </member>
+        <member name="M:Companion.Data.Roster.MergeSelections">
+            <summary>
+            Merge any selections in the forces if they match. This will go over every selection. This uses <see cref="M:Companion.Data.Utils.SortingUtils.MergeSelections(System.Collections.Generic.List{Companion.Data.Selection})"/>. This cannot be undone.
+            </summary>
+        </member>
         <member name="F:Companion.Data.Selection.parent">
             <summary>
             Parent selection if available.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.Selection.SortCategories">
+            <summary>
+            Sort the categories by primary = true.
             </summary>
         </member>
         <member name="F:Companion.Data.XmlData.comment">

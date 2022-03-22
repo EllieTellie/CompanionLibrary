@@ -28,6 +28,11 @@ namespace Companion.Data
 		/// </summary>
 		public Selection parent;
 
+		/// <summary>
+		/// Make sure this is only done once, we are likely not sorting it again.
+		/// </summary>
+		private bool categoriesSorted = false;
+
 		public Selection(XmlNode node) : base(node)
 		{
 		}
@@ -50,13 +55,24 @@ namespace Companion.Data
 			profiles = ParseXmlList<Profile>(node.GetNodesFromPath("profiles", "profile"));
 			rules = ParseXmlList<Rule>(node.GetNodesFromPath("rules", "rule"));
 
-			// sort it at parse time
-			categories.Sort(SortingUtils.CategoriesByPrimary); // TODO: Move this out of the parsing block and into the front end
-
 			SetupParent();
-			//Debug.Log("Pre: " + GetCombinedSelectionsText());
-			SortingUtils.MergeSelections(selections);  // TODO: Move this out of the parsing block and into the front end
-			//Debug.Log("Post: " + GetCombinedSelectionsText());
+
+			// category sorting moved to SortCategories()
+			// merging moved to Roster.MergeSelections()
+		}
+
+		/// <summary>
+		/// Sort the categories by primary = true.
+		/// </summary>
+		public void SortCategories()
+        {
+			if (categoriesSorted)
+				return;
+
+			// sort it at parse time
+			categories.Sort(SortingUtils.CategoriesByPrimary);
+
+			categoriesSorted = true;
 		}
 
         public override void WriteXml(XmlWriter writer)
@@ -121,8 +137,12 @@ namespace Companion.Data
 			return builder.ToString();
 		}
 
-		public string GetCombinedSelectionsText()
+		public string GetCombinedSelectionsText(bool sorted = true)
 		{
+			// make sure categories are sorted if required
+			if (sorted)
+				SortCategories();
+
 			StringBuilder builder = new StringBuilder();
 
 			foreach (Selection selection in selections)

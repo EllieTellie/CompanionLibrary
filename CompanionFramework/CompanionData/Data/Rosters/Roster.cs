@@ -1,4 +1,5 @@
-﻿using CompanionFramework.Core.Log;
+﻿using Companion.Data.Utils;
+using CompanionFramework.Core.Log;
 using CompanionFramework.IO.Utils;
 using System;
 using System.Collections.Generic;
@@ -230,5 +231,34 @@ namespace Companion.Data
 			AddField(costs);
 			AddField(costLimits);
 		}
-	}
+
+		/// <summary>
+		/// Merge any selections in the forces if they match. This will go over every selection. This uses <see cref="SortingUtils.MergeSelections(List{Selection})"/>. This cannot be undone.
+		/// </summary>
+		public void MergeSelections()
+        {
+			foreach (Force force in forces)
+            {
+				MergeSelectionRecursive(force.selections);
+            }
+        }
+
+        private void MergeSelectionRecursive(List<Selection> selections)
+        {
+			if (selections == null) // just in case
+				return;
+
+			// merge them if required
+			SortingUtils.MergeSelections(selections);
+
+			// go recursive
+			foreach (Selection selection in selections)
+            {
+				if (selection.selections != null && selection.selections.Count > 0)
+				{
+					MergeSelectionRecursive(selection.selections);
+				}
+            }
+        }
+    }
 }
