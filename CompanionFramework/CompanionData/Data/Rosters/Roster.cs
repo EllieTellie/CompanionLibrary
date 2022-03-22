@@ -44,22 +44,22 @@ namespace Companion.Data
 			writer.WriteAttributeString("id", id);
 			writer.WriteAttributeString("name", name);
 			writer.WriteAttributeString("battleScribeVersion", battleScribeVersion);
-			writer.WriteAttributeString("xmlns", "http://www.battlescribe.net/schema/rosterSchema");
+			//writer.WriteAttributeString("xmlns", "http://www.battlescribe.net/schema/rosterSchema");
 
-			foreach (Force force in forces)
-            {
-				force.WriteXml(writer);
-            }
+			//foreach (Force force in forces)
+   //         {
+			//	force.WriteXml(writer);
+   //         }
 
-			foreach (Cost cost in costs)
-			{
-				cost.WriteXml(writer);
-			}
+			//foreach (Cost cost in costs)
+			//{
+			//	cost.WriteXml(writer);
+			//}
 
-			foreach (CostLimit costLimit in costLimits)
-            {
-				costLimit.WriteXml(writer);
-            }
+			//foreach (CostLimit costLimit in costLimits)
+   //         {
+			//	costLimit.WriteXml(writer);
+   //         }
 
 			writer.WriteEndElement();
 		}
