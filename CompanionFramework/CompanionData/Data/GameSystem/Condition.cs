@@ -32,7 +32,22 @@ namespace Companion.Data
 			type = node.GetAttribute("type");
 		}
 
-		public bool IsConditionMet(GameSystem gameSystem, Roster roster, Selection selection)
+        public override void WriteXml(XmlWriter writer)
+        {
+			writer.WriteStartElement("condition");
+			writer.WriteAttribute("field", field);
+			writer.WriteAttribute("scope", scope);
+			writer.WriteAttribute("value", value);
+			writer.WriteAttribute("percentValue", percentValue);
+			writer.WriteAttribute("shared", shared);
+			writer.WriteAttribute("includeChildSelections", includeChildSelections);
+			writer.WriteAttribute("includeChildForces", includeChildForces);
+			writer.WriteAttribute("childId", childId);
+			writer.WriteAttribute("type", type);
+			writer.WriteEndElement();
+        }
+
+        public bool IsConditionMet(GameSystem gameSystem, Roster roster, Selection selection)
 		{
 			if (field == "selections")
 			{

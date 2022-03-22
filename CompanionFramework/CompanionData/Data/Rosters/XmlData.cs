@@ -492,5 +492,26 @@ namespace Companion.Data
 
 			return results;
 		}
+
+		/// <summary>
+		/// Helper to write a list of XmlData using <see cref="WriteXml(XmlWriter)"/> on each member in the list. If the list is null or empty it does not write anything.
+		/// </summary>
+		/// <typeparam name="T">Type of XmlData</typeparam>
+		/// <param name="writer">Xml Writer</param>
+		/// <param name="list">List to write</param>
+		/// <param name="elementName">Element name to contain these</param>
+		protected void WriteXmlList<T>(XmlWriter writer, List<T> list, string elementName) where T : XmlData
+		{
+			// don't write empty lists, not the xml way
+			if (list == null || list.Count == 0)
+				return;
+
+			writer.WriteStartElement(elementName);
+			foreach (T entry in list)
+			{
+				entry.WriteXml(writer);
+			}
+			writer.WriteEndElement();
+		}
 	}
 }

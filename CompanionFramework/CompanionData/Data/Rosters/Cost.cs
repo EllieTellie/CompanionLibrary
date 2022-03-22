@@ -1,10 +1,12 @@
-﻿using System.Xml;
+﻿using System.Globalization;
+using System.Xml;
 
 namespace Companion.Data
 {
 	public class Cost : XmlData, INameable
 	{
 		public string name;
+		public string typeId;
 		public double value;
 
 		public Cost(XmlNode node) : base(node)
@@ -14,10 +16,20 @@ namespace Companion.Data
 		protected override void OnParseNode()
 		{
 			name = node.GetAttribute("name");
-			value = node.GetAttributeDouble("value");
+			typeId = node.GetAttribute("typeId");
+			value = node.GetAttributeDouble("value");	
 		}
 
-		public string GetName()
+        public override void WriteXml(XmlWriter writer)
+        {
+			writer.WriteStartElement("cost");
+			writer.WriteAttribute("name", name);
+			writer.WriteAttribute("typeId", typeId);
+			writer.WriteAttribute("value", value);
+			writer.WriteEndElement();
+        }
+
+        public string GetName()
 		{
 			return name;
 		}

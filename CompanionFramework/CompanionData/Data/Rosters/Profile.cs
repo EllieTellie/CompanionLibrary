@@ -8,6 +8,10 @@ namespace Companion.Data
 		public string id;
 		public string name;
 		public string typeName;
+		public string publicationId;
+		public string page;
+		public string typeId;
+		public bool hidden;
 
 		public List<Characteristic> characteristics;
 
@@ -20,11 +24,31 @@ namespace Companion.Data
 			id = node.GetAttribute("id");
 			name = node.GetAttribute("name");
 			typeName = node.GetAttribute("typeName");
+			publicationId = node.GetAttribute("publicationId");
+			page = node.GetAttribute("page");
+			typeId = node.GetAttribute("typeId");
+			hidden = node.GetAttributeBool("hidden");
 
 			characteristics = ParseXmlList<Characteristic>(node.GetNodesFromPath("characteristics", "characteristic"));
 		}
 
-		public Characteristic GetCharacteristic(string name)
+        public override void WriteXml(XmlWriter writer)
+        {
+			writer.WriteStartElement("profile");
+			writer.WriteAttribute("id", id);
+			writer.WriteAttribute("name", name);
+			writer.WriteAttribute("publicationId", publicationId);
+			writer.WriteAttribute("page", page);
+			writer.WriteAttribute("hidden", hidden);
+			writer.WriteAttribute("typeId", typeId);
+			writer.WriteAttribute("typeName", typeName);
+
+			WriteXmlList(writer, characteristics, "characteristics");
+
+			writer.WriteEndElement();
+        }
+
+        public Characteristic GetCharacteristic(string name)
 		{
 			foreach (Characteristic characteristic in characteristics)
 			{

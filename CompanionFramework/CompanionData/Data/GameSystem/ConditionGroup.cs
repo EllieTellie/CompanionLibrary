@@ -19,5 +19,16 @@ namespace Companion.Data
 			conditions = ParseXmlList<Condition>(node.GetNodesFromPath("conditions", "condition"));
 			conditionGroups = ParseXmlList<ConditionGroup>(node.GetNodesFromPath("conditionGroups", "conditionGroup"));
 		}
-	}
+
+        public override void WriteXml(XmlWriter writer)
+        {
+			writer.WriteStartElement("conditionGroup");
+			writer.WriteAttribute("type", type);
+
+			WriteXmlList(writer, conditions, "conditions");
+			WriteXmlList(writer, conditionGroups, "conditionGroups");
+
+			writer.WriteEndElement();
+        }
+    }
 }

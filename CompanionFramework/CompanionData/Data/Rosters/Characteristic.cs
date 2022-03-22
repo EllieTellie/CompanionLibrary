@@ -23,5 +23,15 @@ namespace Companion.Data
 			typeId = node.GetAttribute("typeId");
 			value = node.InnerText;
 		}
-	}
+
+        public override void WriteXml(XmlWriter writer)
+        {
+			writer.WriteStartElement("characteristic");
+			writer.WriteAttribute("name", name);
+			writer.WriteAttribute("typeId", typeId);
+			if (!string.IsNullOrEmpty(value)) // just write /> instead of no text
+				writer.WriteValue(value);
+			writer.WriteEndElement();
+        }
+    }
 }

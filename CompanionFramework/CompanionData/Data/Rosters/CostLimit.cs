@@ -18,5 +18,14 @@ namespace Companion.Data
 			typeId = node.GetAttribute("typeId");
 			value = node.GetAttributeDouble("value");
 		}
+
+		public override void WriteXml(XmlWriter writer)
+		{
+			writer.WriteStartElement("costLimit");
+			writer.WriteAttribute("name", name);
+			writer.WriteAttribute("typeId", typeId);
+			writer.WriteAttribute("value", value);
+			writer.WriteEndElement();
+		}
 	}
 }

@@ -12,7 +12,9 @@ namespace Companion.Data
 		public string entryGroupId;
 		public string name;
 		public string type;
+		public string publicationId;
 
+		public string page; // can be multiple pages, so cannot be an integer
 		public int number;
 
 		public List<Cost> costs;
@@ -37,6 +39,8 @@ namespace Companion.Data
 			type = node.GetAttribute("type");
 			entryId = node.GetAttribute("entryId");
 			entryGroupId = node.GetAttribute("entryGroupId");
+			publicationId = node.GetAttribute("publicationId");
+			page = node.GetAttribute("page");
 
 			number = node.GetAttributeInt("number", 1);
 
@@ -47,15 +51,36 @@ namespace Companion.Data
 			rules = ParseXmlList<Rule>(node.GetNodesFromPath("rules", "rule"));
 
 			// sort it at parse time
-			categories.Sort(SortingUtils.CategoriesByPrimary);
+			categories.Sort(SortingUtils.CategoriesByPrimary); // TODO: Move this out of the parsing block and into the front end
 
 			SetupParent();
 			//Debug.Log("Pre: " + GetCombinedSelectionsText());
-			SortingUtils.MergeSelections(selections);
+			SortingUtils.MergeSelections(selections);  // TODO: Move this out of the parsing block and into the front end
 			//Debug.Log("Post: " + GetCombinedSelectionsText());
 		}
 
-		private void SetupParent()
+        public override void WriteXml(XmlWriter writer)
+        {
+			writer.WriteStartElement("selection");
+			writer.WriteAttribute("id", id);
+			writer.WriteAttribute("name", name);
+			writer.WriteAttribute("entryId", entryId);
+			writer.WriteAttribute("entryGroupId", entryGroupId);
+			writer.WriteAttribute("publicationId", publicationId);
+			writer.WriteAttribute("page", page);
+			writer.WriteAttribute("number", number);
+			writer.WriteAttribute("type", type);
+
+			WriteXmlList(writer, rules, "rules");
+			WriteXmlList(writer, profiles, "profiles");
+			WriteXmlList(writer, selections, "selections");
+			WriteXmlList(writer, costs, "costs");
+			WriteXmlList(writer, categories, "categories");
+
+			writer.WriteEndElement();
+		}
+
+        private void SetupParent()
 		{
 			foreach (Selection selection in selections)
 			{

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Xml;
 
 namespace Companion.Data
@@ -35,10 +36,10 @@ namespace Companion.Data
 
 			string value = result != null ? result.Value : null;
 
-			double intValue;
-			double.TryParse(value, out intValue);
+			double doubleValue;
+			double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out doubleValue);
 
-			return intValue;
+			return doubleValue;
 		}
 
 		public static bool GetAttributeBool(this XmlNode node, string name, bool defaultValue = false)
@@ -170,6 +171,44 @@ namespace Companion.Data
 
 				return null;
 			}
+		}
+
+		public static void WriteAttribute(this XmlWriter writer, string localName, string value)
+		{
+			// ignore empty values
+			if (value == null)
+            {
+				return;
+            }
+
+			// didn't work lol because & > &amp; which is ironic because this is just aimed for compatibility with BattleScribe
+			//value = value.Replace("\"", "&quot;");
+			//value = value.Replace("'", "&apos;");
+
+			writer.WriteAttributeString(localName, value);
+		}
+
+		public static void WriteAttribute(this XmlWriter writer, string localName, bool value)
+        {
+            writer.WriteAttributeString(localName, value.ToString()); // sometimes BattleScribe uses True and sometimes it uses true, hopefully they are both compatible or else we are doomed.
+        }
+
+        public static void WriteAttribute(this XmlWriter writer, string localName, int value)
+		{
+			writer.WriteAttributeString(localName, value.ToString());
+		}
+
+		/// <summary>
+		/// Write a double value out to the writer. This uses CultureInfo.InvariantCulture and aims to write as compatible as possible with battle scribe by alway writing a decimal place.
+		/// </summary>
+		/// <param name="writer">Xml Writer</param>
+		/// <param name="localName">Local name</param>
+		/// <param name="value">Value</param>
+		public static void WriteAttribute(this XmlWriter writer, string localName, double value)
+        {
+			// slightly meh formatting wise but supposedly the easiest way to enforce one decimal place to keep it compatible with battle scribe
+			string text = value % 1 == 0 ? value.ToString("0.0", CultureInfo.InvariantCulture) : value.ToString(CultureInfo.InvariantCulture);
+			writer.WriteAttributeString(localName, text);
 		}
 	}
 }

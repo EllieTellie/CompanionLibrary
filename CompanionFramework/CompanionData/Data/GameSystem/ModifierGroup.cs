@@ -17,5 +17,13 @@ namespace Companion.Data
 			modifiers = ParseXmlList<Modifier>(node.GetNodesFromPath("modifiers", "modifier"));
 			conditions = ParseXmlList<Condition>(node.GetNodesFromPath("conditions", "condition"));
 		}
-	}
+
+        public override void WriteXml(XmlWriter writer)
+        {
+			writer.WriteStartElement("modifierGroup");
+			WriteXmlList(writer, modifiers, "modifiers");
+			WriteXmlList(writer, conditions, "conditions");
+			writer.WriteEndElement();
+		}
+    }
 }

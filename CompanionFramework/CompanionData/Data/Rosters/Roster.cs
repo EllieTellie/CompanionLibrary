@@ -1,4 +1,5 @@
-﻿using CompanionFramework.IO.Utils;
+﻿using CompanionFramework.Core.Log;
+using CompanionFramework.IO.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -38,28 +39,19 @@ namespace Companion.Data
 			costLimits = ParseXmlList<CostLimit>(node.GetNodesFromPath("costLimits", "costLimit"));
 		}
 
-        public override void WriteXml(XmlWriter writer)
-        {
-			writer.WriteStartElement("roster");
-			writer.WriteAttributeString("id", id);
-			writer.WriteAttributeString("name", name);
-			writer.WriteAttributeString("battleScribeVersion", battleScribeVersion);
-			//writer.WriteAttributeString("xmlns", "http://www.battlescribe.net/schema/rosterSchema");
+		public override void WriteXml(XmlWriter writer)
+		{
+			writer.WriteStartElement("roster", "http://www.battlescribe.net/schema/rosterSchema"); // keeping the namespace even if it's a dead link, probably can be https too
+			writer.WriteAttribute("id", id);
+			writer.WriteAttribute("name", name);
+			writer.WriteAttribute("battleScribeVersion", battleScribeVersion);
+			writer.WriteAttribute("gameSystemId", gameSystemId);
+			writer.WriteAttribute("gameSystemName", gameSystemName);
+			writer.WriteAttribute("gameSystemRevision", gameSystemRevision);
 
-			//foreach (Force force in forces)
-   //         {
-			//	force.WriteXml(writer);
-   //         }
-
-			//foreach (Cost cost in costs)
-			//{
-			//	cost.WriteXml(writer);
-			//}
-
-			//foreach (CostLimit costLimit in costLimits)
-   //         {
-			//	costLimit.WriteXml(writer);
-   //         }
+			WriteXmlList(writer, costs, "costs");
+			WriteXmlList(writer, costLimits, "costLimits");
+			WriteXmlList(writer, forces, "forces");
 
 			writer.WriteEndElement();
 		}
@@ -127,6 +119,66 @@ namespace Companion.Data
 			XmlDocument xmlDocument = DecompressRosterXml(data);
 
 			return new Roster(xmlDocument.GetNode("roster"));
+		}
+
+		/// <summary>
+		/// Save roster xml.
+		/// </summary>
+		/// <returns>Return byte data of text</returns>
+		public byte[] SaveRosterXml()
+        {
+			XmlWriterSettings settings = new XmlWriterSettings();
+			settings.Encoding = FileUtils.DefaultEncoding;
+			settings.Indent = true;
+
+			using (MemoryStream stream = new MemoryStream())
+			{
+				using (StreamWriter streamWriter = new StreamWriter(stream, FileUtils.DefaultEncoding))
+				{
+					using (XmlWriter writer = XmlWriter.Create(streamWriter, settings))
+					{
+						writer.WriteStartDocument(true);
+
+						WriteXml(writer);
+					}
+				}
+
+				return stream.ToArray();
+			}
+		}
+
+		/// <summary>
+		/// Save this roster as xml to a .rosz file.
+		/// </summary>
+		/// <param name="path">Folder to save to</param>
+		/// <param name="name">File name minus the extension</param>
+		/// <param name="overwrite">Whether to overwrite the file</param>
+		/// <returns>Return true if successful</returns>
+		public bool SaveRosterXml(string path, string name, bool overwrite = false)
+		{
+			try
+			{
+				byte[] data = SaveRosterXml();
+
+				if (data == null)
+					return false;
+
+				string targetFile = Path.Combine(path, name + ".rosz");
+
+				if (!overwrite && File.Exists(targetFile))
+				{
+					return false;
+				}
+
+				CompressionUtils.CompressXmlDocumentToZipFile(targetFile, name + ".ros", data);
+
+				return true;
+			}
+			catch (Exception e)
+            {
+				FrameworkLogger.Exception(e);
+				return false;
+            }
 		}
 
 		public string GetName()

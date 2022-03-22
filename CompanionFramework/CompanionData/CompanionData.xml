@@ -22,6 +22,14 @@
             </summary>
             <param name="arr">Array</param>
         </member>
+        <member name="M:Companion.Data.XmlExtensions.WriteAttribute(System.Xml.XmlWriter,System.String,System.Double)">
+            <summary>
+            Write a double value out to the writer. This uses CultureInfo.InvariantCulture and aims to write as compatible as possible with battle scribe by alway writing a decimal place.
+            </summary>
+            <param name="writer">Xml Writer</param>
+            <param name="localName">Local name</param>
+            <param name="value">Value</param>
+        </member>
         <member name="F:Companion.Data.GameSystem.path">
             <summary>
             Path this was read from (if available).
@@ -38,6 +46,21 @@
             <summary>
             Parent selection if available.
             </summary>
+        </member>
+        <member name="M:Companion.Data.Roster.SaveRosterXml">
+            <summary>
+            Save roster xml.
+            </summary>
+            <returns>Return byte data of text</returns>
+        </member>
+        <member name="M:Companion.Data.Roster.SaveRosterXml(System.String,System.String,System.Boolean)">
+            <summary>
+            Save this roster as xml to a .rosz file.
+            </summary>
+            <param name="path">Folder to save to</param>
+            <param name="name">File name minus the extension</param>
+            <param name="overwrite">Whether to overwrite the file</param>
+            <returns>Return true if successful</returns>
         </member>
         <member name="M:Companion.Data.Roster.HasValidCosts">
             <summary>
@@ -80,6 +103,15 @@
             Set the root container.
             </summary>
             <param name="rootContainer">Root container</param>
+        </member>
+        <member name="M:Companion.Data.XmlData.WriteXmlList``1(System.Xml.XmlWriter,System.Collections.Generic.List{``0},System.String)">
+            <summary>
+            Helper to write a list of XmlData using <see cref="M:Companion.Data.XmlData.WriteXml(System.Xml.XmlWriter)"/> on each member in the list. If the list is null or empty it does not write anything.
+            </summary>
+            <typeparam name="T">Type of XmlData</typeparam>
+            <param name="writer">Xml Writer</param>
+            <param name="list">List to write</param>
+            <param name="elementName">Element name to contain these</param>
         </member>
         <member name="T:Companion.Data.GameSystemGroup">
             <summary>

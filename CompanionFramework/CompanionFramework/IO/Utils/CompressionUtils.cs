@@ -187,14 +187,14 @@ namespace CompanionFramework.IO.Utils
 								int position = 0;
 								while (length > 0)
 								{
-									stream.Write(buffer, position, length);
+									stream.Write(buffer, 0, length);
 
 									position += length;
 
 									if (position >= contents.Length)
 										break;
 
-									length = reader.Read(buffer, position, buffer.Length);
+									length = reader.Read(buffer, 0, buffer.Length);
 								}
 							}
 						}

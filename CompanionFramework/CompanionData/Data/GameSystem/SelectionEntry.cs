@@ -9,7 +9,7 @@ namespace Companion.Data
 		public string id;
 		public string name;
 		public string publicationId;
-		public int page;
+		public string page; // can be multiple pages, so cannot be an integer
 		public bool hidden;
 		public bool collective;
 		public bool import;
@@ -42,7 +42,7 @@ namespace Companion.Data
 			id = node.GetAttribute("id");
 			name = node.GetAttribute("name");
 			publicationId = node.GetAttribute("publicationId");
-			page = node.GetAttributeInt("page");
+			page = node.GetAttribute("page");
 			hidden = node.GetAttributeBool("hidden");
 			collective = node.GetAttributeBool("collective");
 			import = node.GetAttributeBool("import");

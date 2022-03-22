@@ -32,5 +32,21 @@ namespace Companion.Data
 			repeats = node.GetAttributeInt("repeats");
 			roundUp = node.GetAttributeBool("roundUp");
 		}
+
+		public override void WriteXml(XmlWriter writer)
+		{
+			writer.WriteStartElement("repeat");
+			writer.WriteAttribute("field", field);
+			writer.WriteAttribute("scope", scope);
+			writer.WriteAttribute("value", value);
+			writer.WriteAttribute("percentValue", percentValue);
+			writer.WriteAttribute("shared", shared);
+			writer.WriteAttribute("includeChildSelections", includeChildSelections);
+			writer.WriteAttribute("includeChildForces", includeChildForces);
+			writer.WriteAttribute("childId", childId);
+			writer.WriteAttribute("repeats", repeats);
+			writer.WriteAttribute("roundUp", roundUp);
+			writer.WriteEndElement();
+		}
 	}
 }

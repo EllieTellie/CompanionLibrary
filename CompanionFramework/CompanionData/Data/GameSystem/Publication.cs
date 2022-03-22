@@ -25,7 +25,19 @@ namespace Companion.Data
 			publisherUrl = node.GetAttribute("publisherUrl");
 		}
 
-		public string GetId()
+        public override void WriteXml(XmlWriter writer)
+        {
+			writer.WriteStartElement("publication");
+			writer.WriteAttribute("id", id);
+			writer.WriteAttribute("name", name);
+			writer.WriteAttribute("shortName", shortName);
+			writer.WriteAttribute("publisher", publisher);
+			writer.WriteAttribute("publicationDate", publicationDate);
+			writer.WriteAttribute("publisherUrl", publisherUrl);
+			writer.WriteEndElement();
+        }
+
+        public string GetId()
 		{
 			return id;
 		}

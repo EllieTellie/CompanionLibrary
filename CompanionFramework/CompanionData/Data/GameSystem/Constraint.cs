@@ -30,5 +30,20 @@ namespace Companion.Data
 			id = node.GetAttribute("id");
 			type = node.GetAttribute("type");
 		}
+
+		public override void WriteXml(XmlWriter writer)
+		{
+			writer.WriteStartElement("constraint");
+			writer.WriteAttribute("field", field);
+			writer.WriteAttribute("scope", scope);
+			writer.WriteAttribute("value", value);
+			writer.WriteAttribute("percentValue", percentValue);
+			writer.WriteAttribute("shared", shared);
+			writer.WriteAttribute("includeChildSelections", includeChildSelections);
+			writer.WriteAttribute("includeChildForces", includeChildForces);
+			writer.WriteAttribute("id", id);
+			writer.WriteAttribute("type", type);
+			writer.WriteEndElement();
+		}
 	}
 }

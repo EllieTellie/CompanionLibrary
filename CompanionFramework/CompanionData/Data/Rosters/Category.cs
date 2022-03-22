@@ -6,6 +6,7 @@ namespace Companion.Data
 	{
 		public string id;
 		public string name;
+		public string entryId;
 		public bool primary;
 
 		public Category(XmlNode node) : base(node)
@@ -16,10 +17,21 @@ namespace Companion.Data
 		{
 			id = node.GetAttribute("id");
 			name = node.GetAttribute("name");
+			entryId = node.GetAttribute("entryId");
 			primary = node.GetAttributeBool("primary");
 		}
 
-		public int GetCategoryOrder()
+        public override void WriteXml(XmlWriter writer)
+        {
+			writer.WriteStartElement("category");
+			writer.WriteAttribute("id", id);
+			writer.WriteAttribute("name", name);
+			writer.WriteAttribute("entryId", entryId);
+			writer.WriteAttribute("primary", primary);
+			writer.WriteEndElement();
+        }
+
+        public int GetCategoryOrder() // TODO: move to front end as this is game system specific
 		{
 			switch (name)
 			{
