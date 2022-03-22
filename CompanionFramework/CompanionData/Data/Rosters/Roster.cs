@@ -14,6 +14,7 @@ namespace Companion.Data
 		public string gameSystemName;
 		public string gameSystemRevision;
 		public string name;
+		public string battleScribeVersion;
 
 		public List<Force> forces;
 		public List<Cost> costs;
@@ -29,6 +30,7 @@ namespace Companion.Data
 			gameSystemId = node.GetAttribute("gameSystemId");
 			gameSystemName = node.GetAttribute("gameSystemName");
 			gameSystemRevision = node.GetAttribute("gameSystemRevision");
+			battleScribeVersion = node.GetAttribute("battleScribeVersion");
 			name = node.GetAttribute("name");
 
 			forces = ParseXmlList<Force>(node.GetNodesFromPath("forces", "force"));
@@ -36,7 +38,33 @@ namespace Companion.Data
 			costLimits = ParseXmlList<CostLimit>(node.GetNodesFromPath("costLimits", "costLimit"));
 		}
 
-		public List<Selection> GetUnits()
+        public override void WriteXml(XmlWriter writer)
+        {
+			writer.WriteStartElement("roster");
+			writer.WriteAttributeString("id", id);
+			writer.WriteAttributeString("name", name);
+			writer.WriteAttributeString("battleScribeVersion", battleScribeVersion);
+			writer.WriteAttributeString("xmlns", "http://www.battlescribe.net/schema/rosterSchema");
+
+			foreach (Force force in forces)
+            {
+				force.WriteXml(writer);
+            }
+
+			foreach (Cost cost in costs)
+			{
+				cost.WriteXml(writer);
+			}
+
+			foreach (CostLimit costLimit in costLimits)
+            {
+				costLimit.WriteXml(writer);
+            }
+
+			writer.WriteEndElement();
+		}
+
+        public List<Selection> GetUnits()
 		{
 			List<Selection> selections = new List<Selection>();
 

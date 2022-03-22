@@ -167,5 +167,40 @@ namespace CompanionFramework.IO.Utils
 				return null;
 			}
 		}
+
+		public static void CompressXmlDocumentToZipFile(string filePath, string name, byte[] contents)
+        {
+			using (BinaryReader reader = new BinaryReader(new MemoryStream(contents)))
+			{
+				using (FileStream fileStream = File.OpenWrite(filePath))
+				{
+					using (ZipArchive archive = new ZipArchive(fileStream, ZipArchiveMode.Create))
+					{
+						ZipArchiveEntry entry = archive.CreateEntry(name);
+						using (Stream stream = entry.Open())
+						{
+							using (StreamWriter writer = new StreamWriter(stream))
+							{
+								byte[] buffer = new byte[4096];
+
+								int length = reader.Read(buffer, 0, buffer.Length);
+								int position = 0;
+								while (length > 0)
+								{
+									stream.Write(buffer, position, length);
+
+									position += length;
+
+									if (position >= contents.Length)
+										break;
+
+									length = reader.Read(buffer, position, buffer.Length);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }

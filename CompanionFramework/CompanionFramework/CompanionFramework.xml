@@ -194,6 +194,12 @@
             </summary>
             <returns>True if using the message handler</returns>
         </member>
+        <member name="M:CompanionFramework.Core.Threading.Messaging.MessageHandler.InvokeSafe(System.Action)">
+            <summary>
+            Safe way to call something on the main thread. If the the message handler does not exist it simply calls it on the current thread.
+            </summary>
+            <param name="action">Action to invoke on the main thread</param>
+        </member>
         <member name="T:CompanionFramework.Core.Threading.Messaging.MessageQueue">
             <summary>
             A simple message queue for throwing events back to the Unity main loop.

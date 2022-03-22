@@ -1,4 +1,5 @@
 ﻿using Companion.Data.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
@@ -93,6 +94,11 @@ namespace Companion.Data
 			AddField(results); // automatically add
 			return results;
 		}
+
+		public virtual void WriteXml(XmlWriter writer)
+        {
+			throw new NotImplementedException();
+        }
 
 		/// <summary>
 		/// Set the root container.

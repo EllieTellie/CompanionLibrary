@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace CompanionFramework.Core.Threading.Messaging
 {
 	/// <summary>
@@ -58,5 +60,25 @@ namespace CompanionFramework.Core.Threading.Messaging
 		{
 			return instance != null;
 		}
+
+		/// <summary>
+		/// Safe way to call something on the main thread. If the the message handler does not exist it simply calls it on the current thread.
+		/// </summary>
+		/// <param name="action">Action to invoke on the main thread</param>
+		public static void InvokeSafe(Action action)
+        {
+			if (HasMessageHandler())
+            {
+				MessageQueue.Invoke((object source, EventArgs e) =>
+				{
+					if (action != null)
+						action();
+				});
+            }
+			else if (action != null)
+			{
+				action();
+			}
+        }
 	}
 }
