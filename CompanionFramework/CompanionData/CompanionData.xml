@@ -587,6 +587,11 @@
             Fired whenever a roster is added.
             </summary>
         </member>
+        <member name="E:RosterManager.OnRostersRemoved">
+            <summary>
+            Fired whenever a roster is added.
+            </summary>
+        </member>
         <member name="M:RosterManager.AddRoster(System.Byte[])">
             <summary>
             Parse the roster and add it to the roster manager.

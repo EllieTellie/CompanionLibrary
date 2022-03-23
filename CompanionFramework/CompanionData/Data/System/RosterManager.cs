@@ -20,6 +20,11 @@ public class RosterManager
 	/// </summary>
 	public event Action<Roster> OnRostersAdded;
 
+	/// <summary>
+	/// Fired whenever a roster is added.
+	/// </summary>
+	public event Action<Roster> OnRostersRemoved;
+
 	public static RosterManager Instance
 	{
 		get
@@ -102,7 +107,15 @@ public class RosterManager
 	/// <returns>True if removed</returns>
 	public bool RemoveRoster(Roster roster)
     {
-		return rosters.Remove(roster);
+		if (rosters.Remove(roster))
+        {
+			if (OnRostersRemoved != null)
+				OnRostersRemoved(roster);
+
+			return true;
+        }
+
+		return false;
     }
 
 	//public void ReadRoster(string path, Action<Roster> onRosterLoaded = null)
