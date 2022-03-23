@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CompanionFramework.Core.Log;
+using System;
 using System.Collections.Generic;
 using System.Xml;
 
@@ -41,6 +42,7 @@ namespace Companion.Data
 		{
 			id = node.GetAttribute("id");
 			name = node.GetAttribute("name");
+
 			publicationId = node.GetAttribute("publicationId");
 			page = node.GetAttribute("page");
 			hidden = node.GetAttributeBool("hidden");

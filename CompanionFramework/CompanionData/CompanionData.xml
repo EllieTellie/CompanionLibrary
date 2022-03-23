@@ -217,7 +217,7 @@
             </summary>
             <param name="gameSystemGroup">GameSystemGroup</param>
             <param name="name">Name</param>
-            <param name="contains">True if partial matches are allowed</param>
+            <param name="allowPartialMatches">True if partial matches are allowed</param>
             <param name="excludedEntry">Excluded entry</param>
             <returns>Selection result or null if not found</returns>
         </member>

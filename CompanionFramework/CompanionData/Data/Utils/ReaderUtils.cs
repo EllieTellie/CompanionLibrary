@@ -71,10 +71,12 @@ namespace Companion.Data.Utils
 				int nextEntriesIndex = entriesIndex + 1 < text.Length ? text.IndexOf(": ", entriesIndex + 1) : -1;
 
 				// handle case for: Strategem: Relics of the Chapter [-1CP]: Number of Extra Relics
+				// handle case for: Overlord [6 PL, 140pts]: Relic: Orb of Eternity
+				// handle case for: Technomancer: Arkana: Phylacterine Hive, Canoptek Cloak - > "1. Technomancer 2. Arkana: Phylacterine Hive etc"
 				// which has multiple ":"
 				if (nextEntriesIndex >= 0) // we could while loop this as well if we need to
                 {
-					bool valid = true;
+					bool valid = false;
 					int bracketCount = 0;
 
 					// check if there's any commas in between as that means it is not valid to advance to the next ":"
@@ -89,6 +91,7 @@ namespace Companion.Data.Utils
                         }
 						else if (c == '[')
                         {
+							valid = true; // just allow it for selections that have costs, but not for subselections which don't have costs
 							bracketCount++;
                         }
 						else if (c == ']')

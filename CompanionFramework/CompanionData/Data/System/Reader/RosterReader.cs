@@ -92,6 +92,10 @@ namespace Companion.Data
 				{
 					int tokenIndex = ReaderUtils.GetSelectionIndex(rosterToken.content);
 
+					// parent detection moved here
+					Selection parent = selectionStack.Count > 0 ? selectionStack.Peek() : null;
+					bool hasParent = parent != null && tokenIndex > 0; // if token index is > 0 and we have a parent then we know we are a child
+
 					SelectionToken selectionToken = SelectionToken.ParseToken(rosterToken);
 
 					if (selectionToken != null)
@@ -101,15 +105,12 @@ namespace Companion.Data
 
 						FrameworkLogger.Message("Found selection: " + selectionToken.name);
 
-						Selection parent = selectionStack.Count > 0 ? selectionStack.Peek() : null;
-
-						bool hasParent = parent != null && tokenIndex > 0; // if token index is > 0 and we have a parent then we know we are a child
-
 						// find the selection entry if possible
 						SelectionResult selectionResult;
 						if (hasParent && parentSelectionResult != null)
 						{
-							selectionResult = parentSelectionResult.GetSelectionEntryByName(gameSystemGroup, selectionName, false, parentSelectionResult.selectionEntry);
+							// we allow partial matches here because of cases like "*Custom Craftworld*" which are written out as "Custom Craftworld" for some reason
+							selectionResult = parentSelectionResult.GetSelectionEntryByName(gameSystemGroup, selectionName, true, parentSelectionResult.selectionEntry);
 
 							if (selectionResult != null)
 							{
@@ -149,7 +150,7 @@ namespace Companion.Data
 									SelectionResult subentry = null;
 									if (parentSelectionResult != null)
                                     {
-										subentry = parentSelectionResult.GetSelectionEntryByName(gameSystemGroup, subSelectionName, false, parentSelectionResult.selectionEntry);
+										subentry = parentSelectionResult.GetSelectionEntryByName(gameSystemGroup, subSelectionName, true, parentSelectionResult.selectionEntry);
                                     }
 
 									// try without contains first

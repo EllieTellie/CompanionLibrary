@@ -27,23 +27,40 @@ namespace Companion.Data
 		/// </summary>
 		/// <param name="gameSystemGroup">GameSystemGroup</param>
 		/// <param name="name">Name</param>
-		/// <param name="contains">True if partial matches are allowed</param>
+		/// <param name="allowPartialMatches">True if partial matches are allowed</param>
 		/// <param name="excludedEntry">Excluded entry</param>
 		/// <returns>Selection result or null if not found</returns>
-        public SelectionResult GetSelectionEntryByName(GameSystemGroup gameSystemGroup, string name, bool contains = false, SelectionEntry excludedEntry = null)
+        public SelectionResult GetSelectionEntryByName(GameSystemGroup gameSystemGroup, string name, bool allowPartialMatches = false, SelectionEntry excludedEntry = null)
         {
 			if (entryLink != null)
 			{
-				SelectionResult result = entryLink.GetSelectionEntryByName(gameSystemGroup, name, contains, excludedEntry);
+				SelectionResult result = entryLink.GetSelectionEntryByName(gameSystemGroup, name, false, excludedEntry);
 				if (result != null)
 					return result;
 			}
 
 			if (selectionEntry != null)
             {
-				SelectionResult result = selectionEntry.GetSelectionEntryByName(gameSystemGroup, name, contains, excludedEntry);
+				SelectionResult result = selectionEntry.GetSelectionEntryByName(gameSystemGroup, name, false, excludedEntry);
 				if (result != null)
 					return result;
+			}
+
+			if (allowPartialMatches) // do this after both above fail
+			{
+				if (entryLink != null)
+				{
+					SelectionResult result = entryLink.GetSelectionEntryByName(gameSystemGroup, name, true, excludedEntry);
+					if (result != null)
+						return result;
+				}
+
+				if (selectionEntry != null)
+				{
+					SelectionResult result = selectionEntry.GetSelectionEntryByName(gameSystemGroup, name, true, excludedEntry);
+					if (result != null)
+						return result;
+				}
 			}
 
 			return null;
