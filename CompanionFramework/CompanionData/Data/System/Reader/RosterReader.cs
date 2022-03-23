@@ -93,10 +93,6 @@ namespace Companion.Data
 				{
 					int tokenIndex = ReaderUtils.GetSelectionIndex(rosterToken.content);
 
-					// parent detection moved here
-					Selection parent = selectionStack.Count > 0 ? selectionStack.Peek() : null;
-					bool hasParent = parent != null && tokenIndex > 0; // if token index is > 0 and we have a parent then we know we are a child
-
 					SelectionToken selectionToken = SelectionToken.ParseToken(rosterToken);
 
 					if (selectionToken != null)
@@ -105,6 +101,9 @@ namespace Companion.Data
 						int selectionNumber = ReaderUtils.GetSelectionNumberFromName(selectionToken.name, out selectionName);
 
 						FrameworkLogger.Message("Found selection: " + selectionToken.name);
+
+						// check if we have a parent
+						bool hasParent = selectionStack.Peek() != null && tokenIndex > 0; // if token index is > 0 and we have a parent then we know we are a child
 
 						// find the selection entry if possible
 						SelectionResult selectionResult;
@@ -187,9 +186,9 @@ namespace Companion.Data
 
 							// grab parent from stack
 							// this must be done before Push() otherwise we might pop ourselves
-							Selection parentSelection = selectionStack.PopToParent(tokenIndex);
-							if (parentSelection != null)
-								parentSelection.AddSelection(selection);
+							Selection parent = selectionStack.PopToParent(tokenIndex);
+							if (parent != null)
+								parent.AddSelection(selection);
 							else
 								activeForce.AddSelection(selection);
 
