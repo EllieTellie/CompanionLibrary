@@ -95,6 +95,16 @@ public class RosterManager
 		return roster;
 	}
 
+	/// <summary>
+	/// Remove the roster if present.
+	/// </summary>
+	/// <param name="roster">Roster</param>
+	/// <returns>True if removed</returns>
+	public bool RemoveRoster(Roster roster)
+    {
+		return rosters.Remove(roster);
+    }
+
 	//public void ReadRoster(string path, Action<Roster> onRosterLoaded = null)
 	//{
 	//	Coroutiner.Start(ReadRosterInternal(path, onRosterLoaded));

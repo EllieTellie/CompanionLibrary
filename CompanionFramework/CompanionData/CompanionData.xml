@@ -53,6 +53,11 @@
             Parent selection if available.
             </summary>
         </member>
+        <member name="F:Companion.Data.Roster.path">
+            <summary>
+            Path this was read from (if available).
+            </summary>
+        </member>
         <member name="M:Companion.Data.Roster.SaveRosterXml">
             <summary>
             Save roster xml.
@@ -203,14 +208,14 @@
         </member>
         <member name="M:Companion.Data.SelectionStack.PopToParent(System.Int32)">
             <summary>
-            Find the parent in the previous selections. If the selection is already added we ignore it as a result just in case.
+            Find the parent index in the previous selections. It removes any selections on the stack up to that parent.
             </summary>
             <param name="index">Index</param>
             <returns>Parent</returns>
         </member>
         <member name="M:Companion.Data.SelectionStack.GetParent(System.Int32)">
             <summary>
-            Find the parent in the previous selections. If the selection is already added we ignore it as a result just in case.
+            Find the parent index in the previous selections.
             </summary>
             <param name="index">Index</param>
             <returns>Parent</returns>
@@ -587,6 +592,13 @@
             Parse the roster and add it to the roster manager.
             </summary>
             <param name="data">Roster data</param>
+        </member>
+        <member name="M:RosterManager.RemoveRoster(Companion.Data.Roster)">
+            <summary>
+            Remove the roster if present.
+            </summary>
+            <param name="roster">Roster</param>
+            <returns>True if removed</returns>
         </member>
         <member name="T:SystemManager">
             <summary>

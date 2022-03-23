@@ -22,6 +22,11 @@ namespace Companion.Data
 		public List<Cost> costs;
 		public List<CostLimit> costLimits;
 
+		/// <summary>
+		/// Path this was read from (if available).
+		/// </summary>
+		private string path;
+
 		public Roster(XmlNode node) : base(node)
 		{
 		}
@@ -88,8 +93,9 @@ namespace Companion.Data
 			//xmlDocument.LoadXml(text);
 
 			XmlDocument xmlDocument = DecompressRosterXml(rosterPath);
-
-			return new Roster(xmlDocument.GetNode("roster"));
+			Roster roster = new Roster(xmlDocument.GetNode("roster"));
+			roster.path = rosterPath;
+			return roster;
 		}
 
 		public static byte[] DecompressRoster(byte[] data)
@@ -260,5 +266,15 @@ namespace Companion.Data
 				}
             }
         }
-    }
+
+		public string GetPath()
+		{
+			return path;
+		}
+
+		public void SetPath(string path)
+        {
+			this.path = path;
+        }
+	}
 }
