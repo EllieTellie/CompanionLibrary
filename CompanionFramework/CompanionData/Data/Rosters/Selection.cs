@@ -1,4 +1,4 @@
-﻿using Companion.Data.Utils;
+using Companion.Data.Utils;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
@@ -207,6 +207,10 @@ namespace Companion.Data
 			return profilesFound;
 		}
 
+		/// <summary>
+		/// Returns true for models, units and upgrades that have units or models within them.
+		/// </summary>
+		/// <returns>True if unit selection</returns>
 		public bool IsUnitSelection()
 		{
 			if (type == "model" || type == "unit")

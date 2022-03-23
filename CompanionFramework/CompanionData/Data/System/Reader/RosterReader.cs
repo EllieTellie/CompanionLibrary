@@ -162,6 +162,16 @@ namespace Companion.Data
 
 						if (selectionResult != null && selectionResult.selectionEntry != null)
 						{
+							// we should really track the selection entry of the parent to override the selection result above
+							// or we can do this hacky way like below
+							if (hasParent)
+							{
+								// search in sub selections because most likely we are after those
+								SelectionResult subResult = selectionResult.selectionEntry.GetSelectionEntryByName(gameSystemGroup, selectionName, false, selectionResult.selectionEntry);
+								if (subResult != null)
+									selectionResult = subResult;
+							}
+
 							// maybe selection name needs to be the full name including the 9x Dire Avengers (depending).
 							Selection selection = CreateSelection(gameSystemGroup, selectionResult, selectionName, selectionNumber);
 
@@ -264,6 +274,9 @@ namespace Companion.Data
 
 			CalculateCosts(gameSystem, roster);
 
+			// just give it a random name
+			roster.name = DetermineRosterName(gameSystemGroup);
+
 			if (MessageHandler.HasMessageHandler())
 			{
 				MessageQueue.Invoke(OnRosterParsed, roster);
@@ -277,7 +290,28 @@ namespace Companion.Data
 			return roster;
 		}
 
-		private void ApplyModifiers(GameSystem gameSystem, Roster roster, Selection selection, SelectionEntry selectionEntry)
+        private string DetermineRosterName(GameSystemGroup gameSystemGroup)
+        {
+			List<Catalogue> catalogues = gameSystemGroup.GetCatalogues();
+
+			if (catalogues.Count > 0)
+			{
+				Catalogue catalogue = catalogues[0];
+
+				if (catalogue.publications.Count > 0)
+                {
+					return "Imported - " + catalogue.publications[0].name;
+                }
+
+				return "Imported - " + catalogues[0].name;
+			}
+			else
+			{
+				return "Imported Roster";
+			}
+        }
+
+        private void ApplyModifiers(GameSystem gameSystem, Roster roster, Selection selection, SelectionEntry selectionEntry)
 		{
 			foreach (Modifier modifier in selectionEntry.modifiers)
 			{
