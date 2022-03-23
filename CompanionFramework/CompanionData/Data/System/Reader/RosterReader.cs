@@ -37,7 +37,8 @@ namespace Companion.Data
 			Force activeForce = null;
 
 			// the active selection we are reading into
-			Stack<Selection> selectionStack = new Stack<Selection>();
+			SelectionStack selectionStack = new SelectionStack();
+
 			SelectionResult parentSelectionResult = null;
 
 			GameSystemGroup gameSystemGroup = new GameSystemGroup(gameSystem);
@@ -178,60 +179,28 @@ namespace Companion.Data
 							}
 
 							// add the selection to the appropriate place
-							if (parent != null)
-							{
-								int selectionIndex = parent.GetIndex();
+							if (tokenIndex == 0)
+                            {
+								// reset stack
+								selectionStack.Clear();
+                            }
 
-								if (tokenIndex == 0)
-								{
-									// reset and push current
-									selectionStack.Clear();
-									selectionStack.Push(selection); // always push selection every time
-
-									// add to force
-									activeForce.AddSelection(selection);
-								}
-								else if (tokenIndex < selectionIndex)
-								{
-									int pops = selectionIndex - tokenIndex;
-									for (int i = 0; i < pops; i++)
-									{
-										selectionIndex--;
-										selectionStack.Pop();
-									}
-
-									// add to this one
-									parent = selectionStack.Peek();
-									parent.AddSelection(selection, true);
-								}
-								else if (tokenIndex > selectionIndex + 1) // if it is more than 2 we need to push to the stack, hence the +1
-								{
-									// add as child to the last selection
-									parent = parent.GetLastSelection();
-									parent.AddSelection(selection, true);
-
-									// push the parent as the new parent
-									selectionStack.Push(parent);
-								}
-								else // if the token index is 1 more this is just a child
-								{
-									// add as child
-									parent.AddSelection(selection, true);
-								}
-							}
+							// grab parent from stack
+							// this must be done before Push() otherwise we might pop ourselves
+							Selection parentSelection = selectionStack.PopToParent(tokenIndex);
+							if (parentSelection != null)
+								parentSelection.AddSelection(selection);
 							else
-							{
-								selectionStack.Push(selection);
-
-								// add to force
 								activeForce.AddSelection(selection);
-							}
+
+							// always add every selection to the stack at the end
+							selectionStack.Push(selection);
 						}
-						else
-						{
-							FrameworkLogger.Message("Unable to find: " + selectionToken.name);
-						}
-					}
+                        else
+                        {
+                            FrameworkLogger.Message("Unable to find: " + selectionToken.name);
+                        }
+                    }
 				}
 			}
 

@@ -196,6 +196,25 @@
             <param name="gameSystem">Game system, optional</param>
             <returns>Roster or null if unable to parse</returns>
         </member>
+        <member name="T:Companion.Data.SelectionStack">
+            <summary>
+            Selection stack for roster detection. Backed by a list.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.SelectionStack.PopToParent(System.Int32)">
+            <summary>
+            Find the parent in the previous selections. If the selection is already added we ignore it as a result just in case.
+            </summary>
+            <param name="index">Index</param>
+            <returns>Parent</returns>
+        </member>
+        <member name="M:Companion.Data.SelectionStack.GetParent(System.Int32)">
+            <summary>
+            Find the parent in the previous selections. If the selection is already added we ignore it as a result just in case.
+            </summary>
+            <param name="index">Index</param>
+            <returns>Parent</returns>
+        </member>
         <member name="T:Companion.Data.WordReader">
             <summary>
             Simple reader that reads words. 
