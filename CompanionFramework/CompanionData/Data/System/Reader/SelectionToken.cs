@@ -31,7 +31,6 @@ namespace Companion.Data
 
 			// strip leading + and spaces
 			string text = ReaderUtils.StripFormatting(rosterToken.content);
-
 			
 			//int entriesIndex = text.IndexOf(": ");
 
@@ -42,7 +41,9 @@ namespace Companion.Data
 
 				string entriesSplit = text.Substring(entriesIndex + 1);
 				string[] entries = entriesSplit.Split(',');
-				entries.Trim();
+
+				//entries.Trim(); // trim leading and trailing, this is not desired as for some reason a lot of names may have a trailing space for some reason
+				entries.TrimStart(); // trim leading only, see above
 
 				List<string> costs = new List<string>();
 				string name = ReaderUtils.StripCosts(nameSplit, costs);

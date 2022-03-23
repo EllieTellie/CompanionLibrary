@@ -22,6 +22,12 @@
             </summary>
             <param name="arr">Array</param>
         </member>
+        <member name="M:Companion.Data.StringExtensions.TrimStart(System.String[])">
+            <summary>
+            Trim all the leading whitespace from the strings in this array.
+            </summary>
+            <param name="arr">Array</param>
+        </member>
         <member name="M:Companion.Data.XmlExtensions.WriteAttribute(System.Xml.XmlWriter,System.String,System.Double)">
             <summary>
             Write a double value out to the writer. This uses CultureInfo.InvariantCulture and aims to write as compatible as possible with battle scribe by alway writing a decimal place.
@@ -171,19 +177,19 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="E:Companion.Data.RosterReader.OnRosterParsed">
+        <member name="E:Companion.Data.AbstractRosterReader.OnRosterParsed">
             <summary>
             Dispatched on the main unity thread. Source is roster. EventArgs is null.
             </summary>
         </member>
-        <member name="M:Companion.Data.RosterReader.Parse(Companion.Data.GameSystem)">
+        <member name="M:Companion.Data.AbstractRosterReader.Parse(Companion.Data.GameSystem)">
             <summary>
             Attempt to parse the roster and detect the selections. If no <see cref="T:Companion.Data.GameSystem"/> is provided we attempt to detect the game system.
             </summary>
             <param name="gameSystem">Game system, optional</param>
             <returns>Roster or null if unable to parse</returns>
         </member>
-        <member name="M:Companion.Data.RosterReaderExperimental.Parse(Companion.Data.GameSystem)">
+        <member name="M:Companion.Data.RosterReader.Parse(Companion.Data.GameSystem)">
             <summary>
             Attempt to parse the roster and detect the selections. If no <see cref="T:Companion.Data.GameSystem"/> is provided we attempt to detect the game system.
             </summary>
@@ -204,6 +210,16 @@
             <summary>
             Fired when a download reports progress. This is most likely fired on whatever thread this is called from
             </summary>
+        </member>
+        <member name="M:Companion.Data.SelectionResult.GetSelectionEntryByName(Companion.Data.GameSystemGroup,System.String,System.Boolean,Companion.Data.SelectionEntry)">
+            <summary>
+            Get selection entry by name from the result. This attempts to find it in the entry link first and the selection entry second.
+            </summary>
+            <param name="gameSystemGroup">GameSystemGroup</param>
+            <param name="name">Name</param>
+            <param name="contains">True if partial matches are allowed</param>
+            <param name="excludedEntry">Excluded entry</param>
+            <returns>Selection result or null if not found</returns>
         </member>
         <member name="E:Companion.Data.System.Update.CoreUpdateProcess.LoadingComplete">
             <summary>
