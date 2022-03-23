@@ -80,5 +80,23 @@ namespace CompanionFramework.Core.Threading.Messaging
 				action();
 			}
         }
+
+		/// <summary>
+		/// Safe way to call something on the main thread. If the the message handler does not exist it simply calls it on the current thread.
+		/// </summary>
+		/// <param name="eventHandler">Event to invoke</param>
+		/// <param name="e">Event Args</param>
+		/// <param name="source">Source</param>
+		public static void InvokeSafe(EventHandler eventHandler, object source, EventArgs e)
+		{
+			if (HasMessageHandler())
+			{
+				MessageQueue.Invoke(eventHandler, source, e);
+			}
+			else if (eventHandler != null)
+			{
+				eventHandler(source, e);
+			}
+		}
 	}
 }

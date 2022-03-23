@@ -88,6 +88,12 @@
             Sort the categories by primary = true.
             </summary>
         </member>
+        <member name="M:Companion.Data.Selection.IsUnitSelection">
+            <summary>
+            Returns true for models, units and upgrades that have units or models within them.
+            </summary>
+            <returns>True if unit selection</returns>
+        </member>
         <member name="F:Companion.Data.XmlData.comment">
             <summary>
             Optional comment for data.
@@ -171,6 +177,13 @@
             </summary>
         </member>
         <member name="M:Companion.Data.RosterReader.Parse(Companion.Data.GameSystem)">
+            <summary>
+            Attempt to parse the roster and detect the selections. If no <see cref="T:Companion.Data.GameSystem"/> is provided we attempt to detect the game system.
+            </summary>
+            <param name="gameSystem">Game system, optional</param>
+            <returns>Roster or null if unable to parse</returns>
+        </member>
+        <member name="M:Companion.Data.RosterReaderExperimental.Parse(Companion.Data.GameSystem)">
             <summary>
             Attempt to parse the roster and detect the selections. If no <see cref="T:Companion.Data.GameSystem"/> is provided we attempt to detect the game system.
             </summary>

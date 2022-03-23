@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Companion.Data.Utils
@@ -61,7 +62,53 @@ namespace Companion.Data.Utils
 			}
 		}
 
-		public static int GetSelectionIndex(string text)
+		public static int FindSelectionSeparator(string text)
+		{
+			int entriesIndex = text.IndexOf(": ");
+
+			if (entriesIndex >= 0)
+            {
+				int nextEntriesIndex = entriesIndex + 1 < text.Length ? text.IndexOf(": ", entriesIndex + 1) : -1;
+
+				// handle case for: Strategem: Relics of the Chapter [-1CP]: Number of Extra Relics
+				// which has multiple ":"
+				if (nextEntriesIndex >= 0) // we could while loop this as well if we need to
+                {
+					bool valid = true;
+					int bracketCount = 0;
+
+					// check if there's any commas in between as that means it is not valid to advance to the next ":"
+					for (int i=entriesIndex; i<nextEntriesIndex; i++)
+                    {
+						char c = text[i];
+	
+						if (c == ',' && bracketCount == 0) // it's valid if we are in any [] cost block
+                        {
+							valid = false;
+							break;
+                        }
+						else if (c == '[')
+                        {
+							bracketCount++;
+                        }
+						else if (c == ']')
+                        {
+							bracketCount--;
+                        }
+                    }
+
+					if (valid)
+                    {
+						// advance index
+						entriesIndex = nextEntriesIndex;
+                    }
+                }
+			}
+
+			return entriesIndex;
+		}
+
+        public static int GetSelectionIndex(string text)
 		{
 			if (string.IsNullOrEmpty(text) || text.Length < 2)
 				return 0;

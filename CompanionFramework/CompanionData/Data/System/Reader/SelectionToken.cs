@@ -32,7 +32,10 @@ namespace Companion.Data
 			// strip leading + and spaces
 			string text = ReaderUtils.StripFormatting(rosterToken.content);
 
-			int entriesIndex = text.IndexOf(": ");
+			
+			//int entriesIndex = text.IndexOf(": ");
+
+			int entriesIndex = ReaderUtils.FindSelectionSeparator(text); // this version can find Strategem: Relics of the Chapter [-1CP]: Number of Extra Relics
 			if (entriesIndex > 0)
 			{
 				string nameSplit = text.Substring(0, entriesIndex);
