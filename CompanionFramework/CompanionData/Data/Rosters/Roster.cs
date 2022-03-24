@@ -239,30 +239,31 @@ namespace Companion.Data
 		}
 
 		/// <summary>
-		/// Merge any selections in the forces if they match. This will go over every selection. This uses <see cref="SortingUtils.MergeSelections(List{Selection})"/>. This cannot be undone.
+		/// Merge any selections in the forces if they match. This will go over every selection. This uses <see cref="SortingUtils.MergeSelections(List{Selection}, string[])"/>. This cannot be undone.
 		/// </summary>
-		public void MergeSelections()
+		/// <param name="ignoreTypes">Selection types to never merge</param>
+		public void MergeSelections(params string[] ignoreTypes)
         {
 			foreach (Force force in forces)
             {
-				MergeSelectionRecursive(force.selections);
+				MergeSelectionRecursive(force.selections, ignoreTypes);
             }
         }
 
-        private void MergeSelectionRecursive(List<Selection> selections)
+        private void MergeSelectionRecursive(List<Selection> selections, string[] ignoreTypes)
         {
 			if (selections == null) // just in case
 				return;
 
 			// merge them if required
-			SortingUtils.MergeSelections(selections);
+			SortingUtils.MergeSelections(selections, ignoreTypes);
 
 			// go recursive
 			foreach (Selection selection in selections)
             {
 				if (selection.selections != null && selection.selections.Count > 0)
 				{
-					MergeSelectionRecursive(selection.selections);
+					MergeSelectionRecursive(selection.selections, ignoreTypes);
 				}
             }
         }

@@ -79,10 +79,11 @@
             </summary>
             <returns>True if it has valid costs</returns>
         </member>
-        <member name="M:Companion.Data.Roster.MergeSelections">
+        <member name="M:Companion.Data.Roster.MergeSelections(System.String[])">
             <summary>
-            Merge any selections in the forces if they match. This will go over every selection. This uses <see cref="M:Companion.Data.Utils.SortingUtils.MergeSelections(System.Collections.Generic.List{Companion.Data.Selection})"/>. This cannot be undone.
+            Merge any selections in the forces if they match. This will go over every selection. This uses <see cref="M:Companion.Data.Utils.SortingUtils.MergeSelections(System.Collections.Generic.List{Companion.Data.Selection},System.String[])"/>. This cannot be undone.
             </summary>
+            <param name="ignoreTypes">Selection types to never merge</param>
         </member>
         <member name="F:Companion.Data.Selection.parent">
             <summary>

@@ -4,7 +4,7 @@ namespace Companion.Data.Utils
 {
 	public static class SortingUtils
 	{
-		public static void MergeSelections(List<Selection> selections)
+		public static void MergeSelections(List<Selection> selections, params string[] ignoreTypes)
 		{
 			List<Selection> selectionsToRemove = new List<Selection>();
 			for (int i = 0; i < selections.Count; i++)
@@ -21,7 +21,7 @@ namespace Companion.Data.Utils
 					if (selectionsToRemove.Contains(match))
 						continue;
 
-					if (selection.IsSame(match))
+					if (selection.IsSame(match) && !Contains(ignoreTypes, selection.type))
 					{
 						selectionsToRemove.Add(match);
 						selection.number += match.number;
@@ -33,6 +33,20 @@ namespace Companion.Data.Utils
 			{
 				selections.Remove(remove);
 			}
+		}
+
+		private static bool Contains(string[] ignoreTypes, string type)
+		{
+			if (ignoreTypes == null)
+				return false;
+
+			foreach (string ignoreType in ignoreTypes)
+			{
+				if (type == ignoreType)
+					return true;
+			}
+
+			return false;
 		}
 
 		private static List<Selection> GetSelectionsByEntryId(List<Selection> selections, string entryId, Selection excluded = null)
