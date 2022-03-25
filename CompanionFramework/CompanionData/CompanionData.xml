@@ -100,6 +100,13 @@
             Sort the categories by primary = true.
             </summary>
         </member>
+        <member name="M:Companion.Data.Selection.GetAllProfiles(System.Boolean)">
+            <summary>
+            Get all the profiles. This returns a new list every time with the profiles by reference.
+            </summary>
+            <param name="includeSubselections">If true include subselections (recursively)</param>
+            <returns></returns>
+        </member>
         <member name="M:Companion.Data.Selection.IsUnitSelection">
             <summary>
             Returns true for models, units and upgrades that have units or models within them.

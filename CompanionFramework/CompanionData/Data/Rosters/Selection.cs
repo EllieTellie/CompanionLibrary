@@ -184,6 +184,31 @@ namespace Companion.Data
 			return null;
 		}
 
+		/// <summary>
+		/// Get all the profiles. This returns a new list every time with the profiles by reference.
+		/// </summary>
+		/// <param name="includeSubselections">If true include subselections (recursively)</param>
+		/// <returns></returns>
+		public List<Profile> GetAllProfiles(bool includeSubselections = true)
+		{
+			List<Profile> profilesFound = new List<Profile>();
+			foreach (Profile profile in profiles)
+			{
+				profilesFound.Add(profile);
+			}
+
+			if (includeSubselections)
+			{
+				foreach (Selection selection in selections)
+				{
+					List<Profile> subProfiles = selection.GetAllProfiles(includeSubselections);
+					profilesFound.AddRange(subProfiles);
+				}
+			}
+
+			return profilesFound;
+		}
+
 		public List<Profile> GetProfilesOfType(string type, bool includeSubselections = true)
 		{
 			List<Profile> profilesFound = new List<Profile>();
