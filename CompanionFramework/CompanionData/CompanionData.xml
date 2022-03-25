@@ -16,6 +16,13 @@
             <param name="path">Path</param>
             <returns>Version information</returns>
         </member>
+        <member name="M:Companion.Data.Extensions.ProfileExtensions.GetCharacteristicCount(System.Collections.Generic.List{Companion.Data.Profile})">
+            <summary>
+            Count the number of characteristics in this profile list.
+            </summary>
+            <param name="profiles">Profile list</param>
+            <returns>Total characteristics count</returns>
+        </member>
         <member name="M:Companion.Data.StringExtensions.Trim(System.String[])">
             <summary>
             Trim all the whitespace from the strings in this array.
