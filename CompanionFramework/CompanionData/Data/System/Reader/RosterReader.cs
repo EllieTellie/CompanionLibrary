@@ -28,10 +28,11 @@ namespace Companion.Data
 			SystemManager manager = SystemManager.Instance;
 
 			Roster roster = new Roster(null);
+			roster.battleScribeVersion = gameSystem.battleScribeVersion;
 			roster.gameSystemId = gameSystem.id;
 			roster.gameSystemName = gameSystem.name;
 			roster.gameSystemRevision = gameSystem.revision;
-			roster.id = Guid.NewGuid().ToString();
+			roster.id = gameSystem.GenerateUniqueId();
 
 			// the active force we are reading into
 			Force activeForce = null;
@@ -55,6 +56,9 @@ namespace Companion.Data
 					if (forceToken != null)
 					{
 						Force force = new Force(null);
+						force.id = gameSystem.GenerateUniqueId();
+
+						// TODO: battle scribe takes rules from catalogue and info links and adds them to the force (where applicable)
 
 						// search catalogue in system manager
 						Catalogue catalogue = manager.SearchByName<Catalogue>(gameSystem, forceToken.faction);

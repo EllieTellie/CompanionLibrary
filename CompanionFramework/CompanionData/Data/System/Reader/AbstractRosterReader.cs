@@ -200,7 +200,9 @@ namespace Companion.Data
 
 			selection.profiles.AddRange(selectionEntry.profiles);
 			selection.rules.AddRange(selectionEntry.rules);
+
 			selection.costs.AddRange(selectionEntry.costs.Multiply(selection.number));
+			selection.costs.Sort((Cost x, Cost y) => { return x.name.CompareTo(y.name); }); // sort by name
 
 			foreach (InfoLink infoLink in selectionEntry.infoLinks)
 			{

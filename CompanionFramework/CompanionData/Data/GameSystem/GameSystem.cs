@@ -54,6 +54,28 @@ namespace Companion.Data
 			return idLookup.ContainsKey(uniqueId);
 		}
 
+		public string GenerateUniqueId()
+        {
+			string guid = Guid.NewGuid().ToString();
+			int count = 0;
+			
+			// check for duplicates
+			while (HasId(guid))
+            {
+				count++;
+				if (count >= 1000) // something is really wrong here
+                {
+					FrameworkLogger.Error("Exhausted 1000 tries to generate a non matching guid");
+					return guid; // just return this one in that case
+                }
+
+				// attempt to generate a new one
+				guid = Guid.NewGuid().ToString();
+			}
+
+			return guid;
+		}
+
 		public void AddIdLookup(IIdentifiable identifiable)
 		{
 			string id = identifiable.GetId();
