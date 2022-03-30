@@ -16,12 +16,37 @@
             <param name="path">Path</param>
             <returns>Version information</returns>
         </member>
+        <member name="M:Companion.Data.Catalogue.GetCatalogues(Companion.Data.GameSystem)">
+            <summary>
+            Get a list of catalogues referenced by this catalogue. This returns an empty list if none found.
+            </summary>
+            <param name="gameSystem">Game System</param>
+            <returns>List of catalogues</returns>
+        </member>
         <member name="M:Companion.Data.Extensions.ProfileExtensions.GetCharacteristicCount(System.Collections.Generic.List{Companion.Data.Profile})">
             <summary>
             Count the number of characteristics in this profile list.
             </summary>
             <param name="profiles">Profile list</param>
             <returns>Total characteristics count</returns>
+        </member>
+        <member name="M:Companion.Data.SearchExtensions.ContainsName``1(System.Collections.Generic.List{``0},System.String)">
+            <summary>
+            This uses <see cref="M:System.String.Contains(System.String)"/> to see if it contains this name.
+            </summary>
+            <typeparam name="T">Type</typeparam>
+            <param name="list">List</param>
+            <param name="name">Name</param>
+            <returns>True if it has an entry containing this name</returns>
+        </member>
+        <member name="M:Companion.Data.SearchExtensions.ContainsId``1(System.Collections.Generic.List{``0},System.String)">
+            <summary>
+            This uses <see cref="M:System.String.Equals(System.String)"/> to see if it contains this name.
+            </summary>
+            <typeparam name="T">Type</typeparam>
+            <param name="list">List</param>
+            <param name="id">Id</param>
+            <returns>True if it has an entry containig this id</returns>
         </member>
         <member name="M:Companion.Data.StringExtensions.Trim(System.String[])">
             <summary>
@@ -170,6 +195,12 @@
             Creates a new guid that is unique for this game system and catalogues.
             </summary>
             <returns>New guid</returns>
+        </member>
+        <member name="M:Companion.Data.GameSystemGroup.AddCatalogue(Companion.Data.Catalogue)">
+            <summary>
+            Add this catalogue to the group. If the catalogue has any links it will add those as well.
+            </summary>
+            <param name="catalogue">Catalogue to add</param>
         </member>
         <member name="T:Companion.Data.GameSystemLoading">
             <summary>

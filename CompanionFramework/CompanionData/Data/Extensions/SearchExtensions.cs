@@ -19,11 +19,36 @@ namespace Companion.Data
 		//	return null;
 		//}
 
+		/// <summary>
+		/// This uses <see cref="string.Contains(string)"/> to see if it contains this name.
+		/// </summary>
+		/// <typeparam name="T">Type</typeparam>
+		/// <param name="list">List</param>
+		/// <param name="name">Name</param>
+		/// <returns>True if it has an entry containing this name</returns>
 		public static bool ContainsName<T>(this List<T> list, string name) where T : XmlData, INameable
 		{
 			foreach (T data in list)
 			{
 				if (data.GetName() != null && data.GetName().Contains(name))
+					return true;
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// This uses <see cref="string.Equals(string)"/> to see if it contains this name.
+		/// </summary>
+		/// <typeparam name="T">Type</typeparam>
+		/// <param name="list">List</param>
+		/// <param name="id">Id</param>
+		/// <returns>True if it has an entry containig this id</returns>
+		public static bool ContainsId<T>(this List<T> list, string id) where T : XmlData, IIdentifiable
+		{
+			foreach (T data in list)
+			{
+				if (data.GetId() != null && data.GetId().Equals(id))
 					return true;
 			}
 

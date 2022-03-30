@@ -53,24 +53,32 @@ namespace Companion.Data
 				{
 					ForceToken forceToken = ForceToken.ParseToken(rosterToken);
 
+					// reset the group back to default
+					// otherwise it may contain catalogues for every force in this roster, which might be fine but we are going to make some assumptions on catalogues in CreateForce() below.
+					// bit slower this way most likely
+					gameSystemGroup.ResetCatalogues();
+
 					if (forceToken != null)
 					{
-						Force force = new Force(null);
-						force.id = gameSystem.GenerateUniqueId();
-
-						// TODO: battle scribe takes rules from catalogue and info links and adds them to the force (where applicable)
-
 						// search catalogue in system manager
 						Catalogue catalogue = manager.SearchByName<Catalogue>(gameSystem, forceToken.faction);
+
+						Force force;
 						if (catalogue != null)
 						{
-							force.catalogueId = catalogue.id;
-							force.catalogueName = catalogue.name;
-							force.catalogueRevision = catalogue.revision;
+							// add to the group for speed, this also adds any catalogue links
+							gameSystemGroup.AddCatalogue(catalogue);
+							
+							// create the force
+							force = CreateForce(gameSystemGroup, catalogue);
 						}
-
-						// store for speed
-						gameSystemGroup.AddCatalogue(catalogue);
+						else
+                        {
+							// just make a placeholder for now
+							// this should probably fail the process
+							force = new Force(null);
+							force.id = gameSystemGroup.gameSystem.GenerateUniqueId(); // might not be unique across all catalogues
+						}
 
 						// we can search for the force in game system only
 						gameSystem.SearchByName<EntryLink>(forceToken.name);
@@ -217,5 +225,85 @@ namespace Companion.Data
 
 			return roster;
 		}
-	}
+
+        protected Force CreateForce(GameSystemGroup gameSystemGroup, Catalogue catalogue)
+        {
+			Force force = new Force(null);
+			force.id = gameSystemGroup.gameSystem.GenerateUniqueId(); // might not be unique across all catalogues
+
+			// set force variables
+			force.catalogueId = catalogue.id;
+			force.catalogueName = catalogue.name;
+			force.catalogueRevision = catalogue.revision;
+
+			// add catalogue rules
+			List<Catalogue> catalogues = gameSystemGroup.GetCatalogues();
+			foreach (Catalogue cat in catalogues)
+			{
+				foreach (Rule rule in cat.rules)
+				{
+					if (!force.rules.ContainsId(rule.id))
+					{
+						force.rules.Add(rule);
+					}
+				}
+			}
+
+			// because battle scribe iterates over it this way we do it the same I guess even if we could do it all in one catalogues loop
+			foreach (Catalogue cat in catalogues)
+			{
+				// add info link rules only for now
+				foreach (InfoLink infoLink in cat.infoLinks)
+				{
+					if (infoLink.type == "rule")
+					{
+						Rule targetRule = infoLink.GetTarget(gameSystemGroup) as Rule;
+						if (targetRule != null)
+						{
+							// copy
+							Rule newRule = new Rule(targetRule.GetNode());
+							newRule.id = infoLink.id + "::" + targetRule.id; // link this shit
+
+							if (!force.rules.ContainsId(newRule.id)) // uses equals under the hood
+							{
+								force.rules.Add(newRule);
+							}
+						}
+					}
+					else
+					{
+						FrameworkLogger.Warning("Unhandled info link type: " + infoLink.type);
+					}
+				}
+			}
+
+			force.publications = new List<Publication>();
+
+			// add publications from catalogues
+			foreach (Catalogue cat in catalogues)
+			{
+				foreach (Publication publication in cat.publications)
+				{
+					force.publications.Add(CreatePublicationLink(publication));
+				}
+			}
+
+			// also add game system ones
+			foreach (Publication publication in gameSystemGroup.gameSystem.publications)
+            {
+				force.publications.Add(CreatePublicationLink(publication));
+			}
+
+			return force;
+		}
+
+		private Publication CreatePublicationLink(Publication publication)
+        {
+			// Roster only stores id and name apparently
+			Publication pub = new Publication(null);
+			pub.id = publication.id;
+			pub.name = publication.name;
+			return pub;
+		}
+    }
 }

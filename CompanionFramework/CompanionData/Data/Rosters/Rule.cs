@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace Companion.Data
 {
-	public class Rule : XmlData, INameable
+	public class Rule : XmlData, INameable, IIdentifiable
 	{
 		public string id;
 		public string name;
@@ -23,6 +23,11 @@ namespace Companion.Data
 		public string GetName()
 		{
 			return name;
+		}
+
+		public string GetId()
+		{
+			return id;
 		}
 
 		protected override void OnParseNode()

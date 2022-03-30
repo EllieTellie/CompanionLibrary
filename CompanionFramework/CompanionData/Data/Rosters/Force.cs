@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace Companion.Data
 {
-	public class Force : XmlData, INameable
+	public class Force : XmlData, INameable, IIdentifiable
 	{
 		public string id;
 		public string name;
@@ -81,6 +81,11 @@ namespace Companion.Data
 		public override string ToString()
 		{
 			return name;
+		}
+
+		public string GetId()
+		{
+			return id;
 		}
 	}
 }

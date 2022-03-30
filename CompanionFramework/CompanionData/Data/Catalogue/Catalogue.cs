@@ -175,5 +175,25 @@ namespace Companion.Data
 		{
 			return path;
 		}
+
+		/// <summary>
+		/// Get a list of catalogues referenced by this catalogue. This returns an empty list if none found.
+		/// </summary>
+		/// <param name="gameSystem">Game System</param>
+		/// <returns>List of catalogues</returns>
+		public List<Catalogue> GetCatalogues(GameSystem gameSystem)
+        {
+			// get any catalogue links
+			List<Catalogue> catalogues = new List<Catalogue>();
+			foreach (CatalogueLink catalogueLink in catalogueLinks)
+			{
+				Catalogue linkedCatalogue = SystemManager.Instance.GetCatalogueById(gameSystem, catalogueLink.targetId);
+				if (linkedCatalogue != null && !catalogues.Contains(linkedCatalogue))
+				{
+					catalogues.Add(linkedCatalogue);
+				}
+			}
+			return catalogues;
+		}
 	}
 }

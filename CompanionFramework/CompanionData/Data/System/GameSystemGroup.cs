@@ -62,6 +62,10 @@ namespace Companion.Data
 			return false;
 		}
 
+		/// <summary>
+		/// Add this catalogue to the group. If the catalogue has any links it will add those as well.
+		/// </summary>
+		/// <param name="catalogue">Catalogue to add</param>
 		public void AddCatalogue(Catalogue catalogue)
 		{
 			if (!catalogues.Contains(catalogue))
@@ -81,7 +85,12 @@ namespace Companion.Data
 			}
 		}
 
-		public List<T> SearchAllByName<T>(string name, bool recursive = false) where T : XmlData, INameable
+        public void ResetCatalogues()
+        {
+			catalogues.Clear();
+        }
+
+        public List<T> SearchAllByName<T>(string name, bool recursive = false) where T : XmlData, INameable
 		{
 			List<T> results = new List<T>();
 
