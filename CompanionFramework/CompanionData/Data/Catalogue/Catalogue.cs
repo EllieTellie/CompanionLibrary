@@ -110,17 +110,23 @@ namespace Companion.Data
 		{
 			try
 			{
-				//byte[] data = FileUtils.ReadFileSimple(path);
+				XmlDocument xmlDocument = null;
+				if (path.EndsWith(".cat"))
+				{
+					string text = FileUtils.ReadTextFile(path);
+					if (text != null)
+					{
+						xmlDocument = new XmlDocument();
+						xmlDocument.LoadXml(text);
+					}
+				}
+				else
+				{
+					xmlDocument = DecompressXml(path);
+				}
 
-				// unzip data
-				//byte[] uncompressedData = Decompress(data);
-
-				//string text = DecompressText(data); // FileUtils.GetString(uncompressedData);
-
-				//XmlDocument xmlDocument = DecompressXml(data); //new XmlDocument();
-				//xmlDocument.LoadXml(text);
-
-				XmlDocument xmlDocument = DecompressXml(path);
+				if (xmlDocument == null)
+					return null;
 
 				Catalogue catalogue = new Catalogue(xmlDocument.GetNode("catalogue"));
 				catalogue.path = path; // store path in case we need it

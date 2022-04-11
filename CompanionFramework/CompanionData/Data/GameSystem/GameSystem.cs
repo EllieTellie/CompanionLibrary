@@ -119,15 +119,23 @@ namespace Companion.Data
 		{
 			try
 			{
-				//byte[] data = FileUtils.ReadFileSimple(path);
+				XmlDocument xmlDocument = null;
+				if (path.EndsWith(".gst")) // support uncompressed game systems
+				{
+					string text = FileUtils.ReadTextFile(path);
+					if (text != null)
+					{
+						xmlDocument = new XmlDocument();
+						xmlDocument.LoadXml(text);
+					}
+				}
+				else // assume compressed (.gstz)
+				{
+					xmlDocument = DecompressXml(path);
+				}
 
-				// unzip data
-				//byte[] uncompressedData = Decompress(data);
-
-				//string text = DecompressText(data); //FileUtils.GetString(uncompressedData);
-				//xmlDocument.LoadXml(text);
-
-				XmlDocument xmlDocument = DecompressXml(path);
+				if (xmlDocument == null)
+					return null;
 
 				GameSystem gameSystem = new GameSystem(xmlDocument.GetNode("gameSystem"));
 				gameSystem.path = path;

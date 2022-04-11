@@ -82,17 +82,24 @@ namespace Companion.Data
 
 		public static Roster LoadRoster(string rosterPath)
 		{
-			//byte[] data = FileUtils.ReadFileSimple(rosterPath);
+			XmlDocument xmlDocument = null;
+			if (rosterPath.EndsWith(".ros")) // for uncompressed .ros support
+			{
+				string text = FileUtils.ReadTextFile(rosterPath);
+				if (text != null)
+				{
+					xmlDocument = new XmlDocument();
+					xmlDocument.LoadXml(text);
+				}
+			}
+			else // just assume compressed otherwise (.rosz)
+            {
+				xmlDocument = DecompressRosterXml(rosterPath);
+			}
 
-			//// unzip data
-			//byte[] uncompressedData = DecompressRoster(data);
+			if (xmlDocument == null)
+				return null;
 
-			//string text = FileUtils.GetString(uncompressedData);
-
-			//XmlDocument xmlDocument = new XmlDocument();
-			//xmlDocument.LoadXml(text);
-
-			XmlDocument xmlDocument = DecompressRosterXml(rosterPath);
 			Roster roster = new Roster(xmlDocument.GetNode("roster"));
 			roster.path = rosterPath;
 			return roster;
