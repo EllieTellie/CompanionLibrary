@@ -46,6 +46,32 @@ public class RosterManager
 		return rosters;
 	}
 
+	public List<Roster> GetRostersByGameSystem(GameSystem gameSystem)
+	{
+		List<Roster> rosterList = new List<Roster>();
+
+		foreach (Roster roster in rosters)
+		{
+			if (roster.gameSystemId == gameSystem.id)
+				rosterList.Add(roster);
+		}
+
+		return rosters;
+	}
+
+	public List<Roster> GetRostersByGameSystem(string gameSystemId)
+	{
+		List<Roster> rosterList = new List<Roster>();
+
+		foreach (Roster roster in rosters)
+		{
+			if (roster.gameSystemId == gameSystemId)
+				rosterList.Add(roster);
+		}
+
+		return rosters;
+	}
+
 	public Roster GetRosterByName(string name)
 	{
 		foreach (Roster roster in rosters)
