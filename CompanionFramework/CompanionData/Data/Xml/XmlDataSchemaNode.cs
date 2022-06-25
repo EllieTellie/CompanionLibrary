@@ -51,12 +51,12 @@ namespace Companion.Data.Xml
                 nodeList.Add(new XmlDataSchemaNode(node));
         }
 
-        public void Print(StringBuilder builder, int indent = 0)
+        public void Print(StringBuilder builder, int indent = 1)
         {
-            for (int i = 0; i < indent; i++)
+            for (int i = 0; i < indent - 1; i++)
                 builder.Append('\t');
 
-            builder.AppendLine(name);
+            builder.AppendLine("Node: " + name);
 
             foreach (string attribute in attributeNames)
             {                                                                 
@@ -66,7 +66,7 @@ namespace Companion.Data.Xml
                 builder.AppendLine("Attribute: " + attribute);
             }
 
-            int newIndent = indent++;
+            int newIndent = indent + 1;
             foreach (XmlDataSchemaNode node in nodeList)
             {
                 node.Print(builder, newIndent);
