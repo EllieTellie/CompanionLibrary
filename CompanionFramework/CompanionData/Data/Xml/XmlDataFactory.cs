@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 
-namespace Companion.Data.Utils
+namespace Companion.Data.Utils // make it .Xml for the namespace
 {
 	/// <summary>
 	/// Speed up xml serialization by creating the constructors manually.

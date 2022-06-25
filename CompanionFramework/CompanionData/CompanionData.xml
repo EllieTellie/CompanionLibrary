@@ -145,46 +145,6 @@
             </summary>
             <returns>True if unit selection</returns>
         </member>
-        <member name="F:Companion.Data.XmlData.comment">
-            <summary>
-            Optional comment for data.
-            </summary>
-        </member>
-        <member name="F:Companion.Data.XmlData.xmlns">
-            <summary>
-            Optional xml schema.
-            </summary>
-        </member>
-        <member name="F:Companion.Data.XmlData.rootContainer">
-            <summary>
-            Optional root container.
-            </summary>
-        </member>
-        <member name="F:Companion.Data.XmlData.fields">
-            <summary>
-            List of xml lists containing all the nodes after parsing.
-            </summary>
-        </member>
-        <member name="M:Companion.Data.XmlData.InitFields">
-            <summary>
-            Init the fields usually lists to a new empty list. By default does nothing.
-            </summary>
-        </member>
-        <member name="M:Companion.Data.XmlData.SetRootContainer(Companion.Data.IRootContainer)">
-            <summary>
-            Set the root container.
-            </summary>
-            <param name="rootContainer">Root container</param>
-        </member>
-        <member name="M:Companion.Data.XmlData.WriteXmlList``1(System.Xml.XmlWriter,System.Collections.Generic.List{``0},System.String)">
-            <summary>
-            Helper to write a list of XmlData using <see cref="M:Companion.Data.XmlData.WriteXml(System.Xml.XmlWriter)"/> on each member in the list. If the list is null or empty it does not write anything.
-            </summary>
-            <typeparam name="T">Type of XmlData</typeparam>
-            <param name="writer">Xml Writer</param>
-            <param name="list">List to write</param>
-            <param name="elementName">Element name to contain these</param>
-        </member>
         <member name="T:Companion.Data.GameSystemGroup">
             <summary>
             Group of catalogues and systems used in a roster. Mostly for roster detection speed.
@@ -622,6 +582,51 @@
             <typeparam name="T">Type to create</typeparam>
             <param name="node">Node to pass into constructor</param>
             <returns>New XmlData class</returns>
+        </member>
+        <member name="F:Companion.Data.XmlData.comment">
+            <summary>
+            Optional comment for data.
+            </summary>
+        </member>
+        <member name="F:Companion.Data.XmlData.xmlns">
+            <summary>
+            Optional xml schema.
+            </summary>
+        </member>
+        <member name="F:Companion.Data.XmlData.rootContainer">
+            <summary>
+            Optional root container.
+            </summary>
+        </member>
+        <member name="F:Companion.Data.XmlData.fields">
+            <summary>
+            List of xml lists containing all the nodes after parsing.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.XmlData.InitFields">
+            <summary>
+            Init the fields usually lists to a new empty list. By default does nothing.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.XmlData.SetRootContainer(Companion.Data.IRootContainer)">
+            <summary>
+            Set the root container.
+            </summary>
+            <param name="rootContainer">Root container</param>
+        </member>
+        <member name="M:Companion.Data.XmlData.WriteXmlList``1(System.Xml.XmlWriter,System.Collections.Generic.List{``0},System.String)">
+            <summary>
+            Helper to write a list of XmlData using <see cref="M:Companion.Data.XmlData.WriteXml(System.Xml.XmlWriter)"/> on each member in the list. If the list is null or empty it does not write anything.
+            </summary>
+            <typeparam name="T">Type of XmlData</typeparam>
+            <param name="writer">Xml Writer</param>
+            <param name="list">List to write</param>
+            <param name="elementName">Element name to contain these</param>
+        </member>
+        <member name="T:Companion.Data.Xml.XmlDataSchema">
+            <summary>
+            Class to gather information about single or multiple xml documents.
+            </summary>
         </member>
         <member name="E:RosterManager.OnRostersLoaded">
             <summary>

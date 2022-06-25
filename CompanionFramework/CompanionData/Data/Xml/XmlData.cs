@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 
-namespace Companion.Data
+namespace Companion.Data // make it .Xml for the namespace
 {
 	public abstract class XmlData
 	{
