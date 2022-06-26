@@ -11,13 +11,18 @@ namespace Companion.Data
 		public bool hidden;
 		public bool collective;
 		public bool import;
+		public string defaultSelectionEntryId;
+		public string publicationId;
+		public string page;
 
 		public List<Modifier> modifiers;
+		public List<ModifierGroup> modifierGroups;
 		public List<Constraint> constraints;
 		public List<EntryLink> entryLinks;
 		public List<SelectionEntryGroup> selectionEntryGroups;
 		public List<SelectionEntry> selectionEntries;
 		public List<Profile> profiles;
+		public List<CategoryLink> categoryLinks;
 
 		public SelectionEntryGroup(XmlNode node) : base(node)
 		{
@@ -30,13 +35,18 @@ namespace Companion.Data
 			hidden = node.GetAttributeBool("hidden");
 			collective = node.GetAttributeBool("collective");
 			import = node.GetAttributeBool("import");
+			defaultSelectionEntryId = node.GetAttribute("defaultSelectionEntryId");
+			publicationId = node.GetAttribute("publicationId");
+			page = node.GetAttribute("page");
 
 			modifiers = ParseXmlList<Modifier>(node.GetNodesFromPath("modifiers", "modifier"));
+			modifierGroups = ParseXmlList<ModifierGroup>(node.GetNodesFromPath("modifierGroups", "modifierGroup"));
 			constraints = ParseXmlList<Constraint>(node.GetNodesFromPath("constraints", "constraint"));
 			entryLinks = ParseXmlList<EntryLink>(node.GetNodesFromPath("entryLinks", "entryLink"));
 			selectionEntries = ParseXmlList<SelectionEntry>(node.GetNodesFromPath("selectionEntries", "selectionEntry"));
 			selectionEntryGroups = ParseXmlList<SelectionEntryGroup>(node.GetNodesFromPath("selectionEntryGroups", "selectionEntryGroup"));
 			profiles = ParseXmlList<Profile>(node.GetNodesFromPath("profiles", "profile"));
+			categoryLinks = ParseXmlList<CategoryLink>(node.GetNodesFromPath("categoryLinks", "categoryLink"));
 		}
 
 		public string GetId()

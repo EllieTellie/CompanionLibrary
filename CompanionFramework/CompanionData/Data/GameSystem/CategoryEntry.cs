@@ -14,6 +14,7 @@ namespace Companion.Data
 
 		public List<Modifier> modifiers;
 		public List<Constraint> constraints;
+		public List<InfoLink> infoLinks;
 
 		public CategoryEntry(XmlNode node) : base(node)
 		{
@@ -37,6 +38,7 @@ namespace Companion.Data
 
 			modifiers = ParseXmlList<Modifier>(node.GetNodesFromPath("modifiers", "modifier"));
 			constraints = ParseXmlList<Constraint>(node.GetNodesFromPath("constraints", "constraint"));
+			infoLinks = ParseXmlList<InfoLink>(node.GetNodesFromPath("infoLinks", "infoLink"));
 		}
 	}
 }

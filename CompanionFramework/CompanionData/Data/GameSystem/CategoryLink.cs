@@ -10,6 +10,7 @@ namespace Companion.Data
 		public bool hidden;
 		public string targetId;
 		public bool primary;
+		public string publicationId; // it's very possible this may also have a string page attribute alongside it but seems not set for wh40k
 
 		public List<Modifier> modifiers;
 		public List<Constraint> constraints;
@@ -37,6 +38,7 @@ namespace Companion.Data
 			hidden = node.GetAttributeBool("hidden");
 			targetId = node.GetAttribute("targetId");
 			primary = node.GetAttributeBool("primary");
+			publicationId = node.GetAttribute("publicationId");
 
 			modifiers = ParseXmlList<Modifier>(node.GetNodesFromPath("modifiers", "modifier"));
 			constraints = ParseXmlList<Constraint>(node.GetNodesFromPath("constraints", "constraint"));

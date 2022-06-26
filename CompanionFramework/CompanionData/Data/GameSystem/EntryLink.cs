@@ -13,6 +13,8 @@ namespace Companion.Data
 		public bool import;
 		public string targetId;
 		public string type;
+		public string publicationId;
+		public string page;
 
 		public List<CategoryLink> categoryLinks;
 		public List<Cost> costs;
@@ -41,6 +43,8 @@ namespace Companion.Data
 			import = node.GetAttributeBool("import");
 			targetId = node.GetAttribute("targetId");
 			type = node.GetAttribute("type");
+			publicationId = node.GetAttribute("publicationId");
+			page = node.GetAttribute("page");
 
 			categoryLinks = ParseXmlList<CategoryLink>(node.GetNodesFromPath("categoryLinks", "categoryLink"));
 			costs = ParseXmlList<Cost>(node.GetNodesFromPath("costs", "cost"));

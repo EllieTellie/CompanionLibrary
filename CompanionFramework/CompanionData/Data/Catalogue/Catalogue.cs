@@ -20,6 +20,8 @@ namespace Companion.Data
 		public string gameSystemId;
 		public string gameSystemRevision;
 
+		public string readme;
+
 		public List<Publication> publications;
 		public List<ProfileType> profileTypes;
 		public List<CategoryEntry> categoryEntries;
@@ -88,6 +90,9 @@ namespace Companion.Data
 			library = node.GetAttributeBool("library");
 			gameSystemId = node.GetAttribute("gameSystemId");
 			gameSystemRevision = node.GetAttribute("gameSystemRevision");
+
+			XmlNode readmeNode = node.GetNode("readme");
+			readme = readmeNode != null ? readmeNode.InnerText : null;
 
 			publications = ParseXmlList<Publication>(node.GetNodesFromPath("publications", "publication"), rootContainer);
 			profileTypes = ParseXmlList<ProfileType>(node.GetNodesFromPath("profileTypes", "profileType"), rootContainer);

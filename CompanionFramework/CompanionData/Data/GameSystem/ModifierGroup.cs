@@ -7,6 +7,9 @@ namespace Companion.Data
 	{
 		public List<Modifier> modifiers;
 		public List<Condition> conditions;
+		public List<ConditionGroup> conditionGroups;
+		public List<Repeat> repeats;
+		public List<ModifierGroup> modifierGroups;
 
 		public ModifierGroup(XmlNode node) : base(node)
 		{
@@ -16,6 +19,9 @@ namespace Companion.Data
 		{
 			modifiers = ParseXmlList<Modifier>(node.GetNodesFromPath("modifiers", "modifier"));
 			conditions = ParseXmlList<Condition>(node.GetNodesFromPath("conditions", "condition"));
+			conditionGroups = ParseXmlList<ConditionGroup>(node.GetNodesFromPath("conditionGroups", "conditionGroup"));
+			repeats = ParseXmlList<Repeat>(node.GetNodesFromPath("repeats", "repeat"));
+			modifierGroups = ParseXmlList<ModifierGroup>(node.GetNodesFromPath("modifierGroups", "modifierGroup"));
 		}
 
         public override void WriteXml(XmlWriter writer)
@@ -23,6 +29,9 @@ namespace Companion.Data
 			writer.WriteStartElement("modifierGroup");
 			WriteXmlList(writer, modifiers, "modifiers");
 			WriteXmlList(writer, conditions, "conditions");
+			WriteXmlList(writer, conditionGroups, "conditionGroups");
+			WriteXmlList(writer, repeats, "repeats");
+			WriteXmlList(writer, modifierGroups, "modifierGroups");
 			writer.WriteEndElement();
 		}
     }

@@ -9,6 +9,8 @@ namespace Companion.Data
 		public string id;
 		public string name;
 		public bool hidden;
+		public string publicationId;
+		public string page;
 
 		public List<Modifier> modifiers;
 		public List<Profile> profiles;
@@ -24,6 +26,8 @@ namespace Companion.Data
 			id = node.GetAttribute("id");
 			name = node.GetAttribute("name");
 			hidden = node.GetAttributeBool("hidden");
+			publicationId = node.GetAttribute("publicationId");
+			page = node.GetAttribute("page");
 
 			modifiers = ParseXmlList<Modifier>(node.GetNodesFromPath("modifiers", "modifier"));
 			profiles = ParseXmlList<Profile>(node.GetNodesFromPath("profiles", "profile"));

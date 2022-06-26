@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Collections.Generic;
+using System.Xml;
 
 namespace Companion.Data
 {
@@ -9,6 +10,10 @@ namespace Companion.Data
 		public bool hidden;
 		public string targetId;
 		public string type;
+		public string publicationId;
+		public string page;
+
+		public List<Modifier> modifiers;
 
 		protected XmlData cachedTarget;
 
@@ -23,6 +28,10 @@ namespace Companion.Data
 			hidden = node.GetAttributeBool("hidden");
 			targetId = node.GetAttribute("targetId");
 			type = node.GetAttribute("type");
+			publicationId = node.GetAttribute("publicationId");
+			page = node.GetAttribute("page");
+
+			modifiers = ParseXmlList<Modifier>(node.GetNodesFromPath("modifiers", "modifier"));
 		}
 
 		public string GetId()

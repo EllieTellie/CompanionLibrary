@@ -15,6 +15,7 @@ namespace Companion.Data
 
 		public List<Characteristic> characteristics;
 		public List<Modifier> modifiers;
+		public List<ModifierGroup> modifierGroups;
 
 		public Profile(XmlNode node) : base(node)
 		{
@@ -32,6 +33,7 @@ namespace Companion.Data
 
 			characteristics = ParseXmlList<Characteristic>(node.GetNodesFromPath("characteristics", "characteristic"));
 			modifiers = ParseXmlList<Modifier>(node.GetNodesFromPath("modifiers", "modifier"));
+			modifierGroups = ParseXmlList<ModifierGroup>(node.GetNodesFromPath("modifierGroups", "modifierGroup"));
 		}
 
         public override void WriteXml(XmlWriter writer)
@@ -47,6 +49,7 @@ namespace Companion.Data
 
 			WriteXmlList(writer, characteristics, "characteristics");
 			WriteXmlList(writer, modifiers, "modifiers");
+			WriteXmlList(writer, modifierGroups, "modifierGroups");
 
 			writer.WriteEndElement();
         }
