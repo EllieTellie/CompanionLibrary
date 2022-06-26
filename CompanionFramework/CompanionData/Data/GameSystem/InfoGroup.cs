@@ -4,7 +4,7 @@ using System.Xml;
 
 namespace Companion.Data
 {
-	public class InfoGroup : XmlData
+	public class InfoGroup : XmlData, INameable, IIdentifiable
 	{
 		public string id;
 		public string name;
@@ -19,6 +19,16 @@ namespace Companion.Data
 
 		public InfoGroup(XmlNode node) : base(node)
 		{
+		}
+
+		public string GetId()
+		{
+			return id;
+		}
+
+		public string GetName()
+		{
+			return name;
 		}
 
 		protected override void OnParseNode()
