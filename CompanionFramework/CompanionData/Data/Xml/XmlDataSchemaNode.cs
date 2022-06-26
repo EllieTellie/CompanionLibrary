@@ -12,11 +12,44 @@ namespace Companion.Data.Xml
 
         public List<XmlDataSchemaNode> nodeList = new List<XmlDataSchemaNode>();
 
+        public XmlDataSchemaNode(string name) // for empty node
+        {
+            this.name = name;
+        }
+
         public XmlDataSchemaNode(XmlNode node)
         {
             this.name = node.Name;
 
             Append(node);
+        }
+
+        internal XmlDataSchemaNode(XmlDataSchemaNode node)
+        {
+            this.name = node.name;
+            attributeNames.AddRange(node.attributeNames);
+
+            foreach (XmlDataSchemaNode child in node.nodeList)
+            {
+                // just simplify this as we are trying to flatten this
+                nodeList.Add(new XmlDataSchemaNode(child.name));
+            }
+        }
+
+        public void Merge(XmlDataSchemaNode node)
+        {
+            foreach (string attributeName in node.attributeNames)
+            {
+                if (!attributeNames.Contains(attributeName))
+                    attributeNames.Add(attributeName);
+            }
+
+            foreach (XmlDataSchemaNode child in node.nodeList)
+            {
+                XmlDataSchemaNode existingNode = GetNode(child.name);
+                if (existingNode == null)
+                    nodeList.Add(new XmlDataSchemaNode(child.name)); // simplify
+            }
         }
 
         public void Append(XmlNode node)
@@ -56,7 +89,10 @@ namespace Companion.Data.Xml
             for (int i = 0; i < indent - 1; i++)
                 builder.Append('\t');
 
-            builder.AppendLine("Node: " + name);
+            if (name == "#text")
+                builder.AppendLine("Text");
+            else
+                builder.AppendLine("Node: " + name);
 
             foreach (string attribute in attributeNames)
             {                                                                 
