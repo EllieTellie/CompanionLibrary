@@ -14,6 +14,7 @@ namespace Companion.Data
 		public bool hidden;
 
 		public List<Characteristic> characteristics;
+		public List<Modifier> modifiers;
 
 		public Profile(XmlNode node) : base(node)
 		{
@@ -30,6 +31,7 @@ namespace Companion.Data
 			hidden = node.GetAttributeBool("hidden");
 
 			characteristics = ParseXmlList<Characteristic>(node.GetNodesFromPath("characteristics", "characteristic"));
+			modifiers = ParseXmlList<Modifier>(node.GetNodesFromPath("modifiers", "modifier"));
 		}
 
         public override void WriteXml(XmlWriter writer)
@@ -44,6 +46,7 @@ namespace Companion.Data
 			writer.WriteAttribute("typeName", typeName);
 
 			WriteXmlList(writer, characteristics, "characteristics");
+			WriteXmlList(writer, modifiers, "modifiers");
 
 			writer.WriteEndElement();
         }

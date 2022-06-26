@@ -17,6 +17,7 @@ namespace Companion.Data
 		public List<EntryLink> entryLinks;
 		public List<SelectionEntryGroup> selectionEntryGroups;
 		public List<SelectionEntry> selectionEntries;
+		public List<Profile> profiles;
 
 		public SelectionEntryGroup(XmlNode node) : base(node)
 		{
@@ -35,6 +36,7 @@ namespace Companion.Data
 			entryLinks = ParseXmlList<EntryLink>(node.GetNodesFromPath("entryLinks", "entryLink"));
 			selectionEntries = ParseXmlList<SelectionEntry>(node.GetNodesFromPath("selectionEntries", "selectionEntry"));
 			selectionEntryGroups = ParseXmlList<SelectionEntryGroup>(node.GetNodesFromPath("selectionEntryGroups", "selectionEntryGroup"));
+			profiles = ParseXmlList<Profile>(node.GetNodesFromPath("profiles", "profile"));
 		}
 
 		public string GetId()

@@ -628,6 +628,11 @@
             Class to gather information about single or multiple xml documents.
             </summary>
         </member>
+        <member name="P:Companion.Data.Xml.XmlDataSchemaNode.Node">
+            <summary>
+            Get the node, this can be null if not from an XmlNode. Mostly for debugging.
+            </summary>
+        </member>
         <member name="E:RosterManager.OnRostersLoaded">
             <summary>
             Fired when all rosters are loaded.

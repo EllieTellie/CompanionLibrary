@@ -12,6 +12,12 @@ namespace Companion.Data.Xml
 
         public List<XmlDataSchemaNode> nodeList = new List<XmlDataSchemaNode>();
 
+        /// <summary>
+        /// Get the node, this can be null if not from an XmlNode. Mostly for debugging.
+        /// </summary>
+        public XmlNode Node { get { return node; } }
+        protected XmlNode node;
+
         public XmlDataSchemaNode(string name) // for empty node
         {
             this.name = name;
@@ -20,6 +26,7 @@ namespace Companion.Data.Xml
         public XmlDataSchemaNode(XmlNode node)
         {
             this.name = node.Name;
+            this.node = node;
 
             Append(node);
         }

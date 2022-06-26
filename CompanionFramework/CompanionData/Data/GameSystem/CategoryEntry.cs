@@ -9,6 +9,9 @@ namespace Companion.Data
 		public string name;
 		public bool hidden;
 
+		public string publicationId;
+		public string page;
+
 		public List<Modifier> modifiers;
 		public List<Constraint> constraints;
 
