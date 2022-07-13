@@ -30,6 +30,10 @@ namespace Companion.Data // make it .Xml for the namespace
 		/// </summary>
 		protected List<IList> fields = new List<IList>();
 
+		/// <summary>
+		/// Create a new data class from a node. This parses the node automatically.
+		/// </summary>
+		/// <param name="node">Node to parse</param>
 		public XmlData(XmlNode node)
 		{
 			this.node = node;
@@ -72,6 +76,9 @@ namespace Companion.Data // make it .Xml for the namespace
 			fields.Add((IList)field);
 		}
 
+		/// <summary>
+		/// Parse any global values that might be present in any nodes in the xml, for example: xmlns and comment.
+		/// </summary>
 		protected virtual void OnParseGlobalData()
 		{
 			XmlNode commentNode = node.GetNode("comment");
@@ -81,13 +88,29 @@ namespace Companion.Data // make it .Xml for the namespace
 			xmlns = node.GetAttribute("xmlns");
 		}
 
+		/// <summary>
+		/// Parse the node into data.
+		/// </summary>
 		protected abstract void OnParseNode();
 
+		/// <summary>
+		/// Parse a single XmlNode into an XmlData class.
+		/// </summary>
+		/// <typeparam name="T">Type of data</typeparam>
+		/// <param name="node">Node to parse</param>
+		/// <returns>Parsed XmlData</returns>
 		public T ParseXml<T>(XmlNode node) where T : XmlData
 		{
 			return XmlUtils.ParseXml<T>(node);
 		}
 
+		/// <summary>
+		/// Parse a list of XmlNodes into a list of XmlData and store it in the fields list. If a root container is provided it is set on every data in the list (for example a Catalogue/GameSystem root container). Always returns at least an empty list.
+		/// </summary>
+		/// <typeparam name="T">Type of data</typeparam>
+		/// <param name="nodes">Nodes to parse</param>
+		/// <param name="rootContainer">Optional root container</param>
+		/// <returns>List of XmlData</returns>
 		public List<T> ParseXmlList<T>(List<XmlNode> nodes, IRootContainer rootContainer = null) where T : XmlData
 		{
 			List<T> results = XmlUtils.ParseXmlList<T>(nodes, rootContainer);
@@ -95,6 +118,11 @@ namespace Companion.Data // make it .Xml for the namespace
 			return results;
 		}
 
+		/// <summary>
+		/// Write Xml to the writer. This must be implemented explicitly and by default throws an exception.
+		/// </summary>
+		/// <param name="writer">Writer to write to</param>
+		/// <exception cref="NotImplementedException"></exception>
 		public virtual void WriteXml(XmlWriter writer)
         {
 			throw new NotImplementedException();
@@ -112,11 +140,19 @@ namespace Companion.Data // make it .Xml for the namespace
 				rootContainer.AddIdLookup(identifiable);
 		}
 
+		/// <summary>
+		/// Get the node that was parsed. Cached for convenience.
+		/// </summary>
+		/// <returns>Node</returns>
 		public XmlNode GetNode()
 		{
 			return node;
 		}
 
+		/// <summary>
+		/// Get the xml name of the main node.
+		/// </summary>
+		/// <returns>Data type</returns>
 		public string GetDataType()
 		{
 			return node.Name;
