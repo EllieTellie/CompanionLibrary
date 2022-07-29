@@ -3,6 +3,9 @@ Simple library to read battle scribe data files in C#
 This is the library I wrote for using in my own Unity project, making it available in case people are interested in using it.
 Available for use in non-commercial projects, please read the license for more information.
 
+## Code Examples Project
+There is now a working console application included for examples. It's located in Examples/CodeExamples.sln. It's a Visual Studio solution targeting .NET 6.0 (made with Visual Studio 2022). It contains only a single class: [Example.cs](Examples/CodeExamples/CodeExamples/Example.cs).
+
 ## Usage
 Loading Roster from path:
 ```
@@ -118,5 +121,7 @@ updateManager.RetrieveRepositoryIndex(<your_repo_url>, false); // for example "h
 
 ## Building
 To help deploying the library files in the .csproj files there is a post build event:
+```
 "$(SolutionDir)DeployHelper.exe" -path="C:\\Projects\\" -lib="$(TargetDir)$(ProjectName).dll" -deploy="true" -debug="true" -tools="false"
+```
 This has a hard coded path so if it fails to build you can remove it or change it to an applicable path.
