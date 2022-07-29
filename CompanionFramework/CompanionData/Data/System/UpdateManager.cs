@@ -58,6 +58,28 @@ public class UpdateManager
 	/// </summary>
 	protected List<RepositoryData> loadedRepositories = new List<RepositoryData>();
 
+    /// <summary>
+    /// Load ALL repository data indices into the repository data. This is a brute force method to get every data index, ideally we just cache the repository data to avoid this lookup.
+    /// </summary>
+    /// <param name="repositoryData">Repository data to load</param>
+    /// <param name="async">Whether request should be done asynchronous</param>
+    /// <returns>Returns true if it was executed</returns>
+	internal bool RetrieveRepositoryDataIndex(RepositoryData repositoryData, bool async = true)
+	{
+		RepositoryIndex repositoryIndex = repositoryData.repositoryIndex;
+
+		// just get all of them, 140+ requests
+		foreach (Repository repository in repositoryIndex.repositories)
+        {
+            if (!RetrieveRepositoryDataIndex(repositoryIndex, repository, async))
+            {
+				return false;
+			}
+        }
+
+		return true;
+    }
+
 	/// <summary>
 	/// Retrieve the repository index from the source.
 	/// </summary>
@@ -71,13 +93,13 @@ public class UpdateManager
 		return RetrieveRepositoryIndexTask(repositoryData, async);
 	}
 
-	/// <summary>
-	/// Retrieve the repository index from the source.
-	/// </summary>
-	/// <param name="repositoryData">Repository data which will replace any currently cached data</param>
-	/// <param name="async">Whether request should be done asynchronous</param>
-	/// <returns>Returns true if it was executed</returns>
-	public bool RetrieveRepositoryIndex(RepositoryData repositoryData, bool async = true)
+    /// <summary>
+    /// Retrieve the repository index from the source.
+    /// </summary>
+    /// <param name="repositoryData">Repository data which will replace any currently cached data</param>
+    /// <param name="async">Whether request should be done asynchronous</param>
+    /// <returns>Returns true if it was executed</returns>
+    public bool RetrieveRepositoryIndex(RepositoryData repositoryData, bool async = true)
 	{
 		AddRepositoryData(repositoryData);
 
@@ -219,13 +241,17 @@ public class UpdateManager
 	public RepositoryUpdate UpdateFromRepository(RepositoryData repositoryData, Repository repository, string dataPath, bool async = true)
 	{
 		GameSystemData gameSystemData = repositoryData.GetGameSystem(repository);
-		return UpdateFromRepository(repositoryData, gameSystemData, dataPath, async);
+		return UpdateFromRepository(repositoryData, gameSystemData, repository, dataPath, async);
 	}
 
-	protected RepositoryUpdate UpdateFromRepository(RepositoryData repositoryData, GameSystemData gameSystemData, string dataPath, bool async)
+	protected RepositoryUpdate UpdateFromRepository(RepositoryData repositoryData, GameSystemData gameSystemData, Repository repository, string dataPath, bool async)
 	{
 		if (repositoryData == null || gameSystemData == null || dataPath == null)
+		{
 			return null;
+		}
+
+		// TODO: we want to maybe retrieve GameSystemData from the server if it's not present here
 
 		UpdateGameSystemProcess process = new UpdateGameSystemProcess(gameSystemData.repository, gameSystemData.dataIndex, dataPath, async);
 
@@ -263,6 +289,7 @@ public class UpdateManager
 			}
 		};
 
+		// execute update
 		process.Execute(repositoryData);
 
 		return repositoryUpdate;

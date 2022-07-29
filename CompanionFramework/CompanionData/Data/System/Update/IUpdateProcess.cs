@@ -28,11 +28,5 @@
 		/// Aborts the process.
 		/// </summary>
 		void Abort();
-
-		/// <summary>
-		/// The update state this process handles.
-		/// </summary>
-		/// <returns>update state</returns>
-		UpdateState GetState();
 	}
 }

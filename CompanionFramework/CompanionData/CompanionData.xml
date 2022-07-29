@@ -60,6 +60,105 @@
             </summary>
             <param name="arr">Array</param>
         </member>
+        <member name="M:Companion.Data.XmlExtensions.GetAttributeInt(System.Xml.XmlNode,System.String,System.Int32)">
+            <summary>
+            Get an attribute value with the specified name and attempt to convert it to an integer.
+            </summary>
+            <param name="node">Node</param>
+            <param name="name">Name</param>
+            <param name="defaultValue">Default value if it is not found or fails to parse</param>
+            <returns>Attribute value</returns>
+        </member>
+        <member name="M:Companion.Data.XmlExtensions.GetAttributeDouble(System.Xml.XmlNode,System.String,System.Double)">
+            <summary>
+            Get an attribute value with the specified name and attempt to convert it to a double.
+            </summary>
+            <param name="node">Node</param>
+            <param name="name">Name</param>
+            <param name="defaultValue">Default value if it is not found or fails to parse</param>
+            <returns>Attribute value</returns>
+        </member>
+        <member name="M:Companion.Data.XmlExtensions.GetAttributeBool(System.Xml.XmlNode,System.String,System.Boolean)">
+            <summary>
+            Get an attribute value with the specified name and attempt to convert it to an integer.
+            </summary>
+            <param name="node">Node</param>
+            <param name="name">Name</param>
+            <param name="defaultValue">Default value if it is not found or fails to parse</param>
+            <returns>Attribute value</returns>
+        </member>
+        <member name="M:Companion.Data.XmlExtensions.GetAttribute(System.Xml.XmlNode,System.String)">
+            <summary>
+            Get an attribute value with the specified name.
+            </summary>
+            <param name="node">Node</param>
+            <param name="name">Name</param>
+            <returns>Attribute value</returns>
+        </member>
+        <member name="M:Companion.Data.XmlExtensions.GetNodes(System.Xml.XmlNode,System.String)">
+            <summary>
+            Get the nodes by name recursively through all child nodes.
+            </summary>
+            <param name="element">Current node</param>
+            <param name="name">Name</param>
+            <returns>List of nodes found</returns>
+        </member>
+        <member name="M:Companion.Data.XmlExtensions.GetNodes(System.Xml.XmlNode,System.Collections.Generic.List{System.Xml.XmlNode},System.String)">
+            <summary>
+            Get the nodes by name recursively through all child nodes and add it to the list of nodes provided.
+            </summary>
+            <param name="element">Current node</param>
+            <param name="nodes">List to add results to</param>
+            <param name="name">Name</param>
+        </member>
+        <member name="M:Companion.Data.XmlExtensions.GetChildNodes(System.Xml.XmlNode,System.String)">
+            <summary>
+            Get a list of child nodes from the provided node. Always returns at least an empty list.
+            </summary>
+            <param name="element">Node</param>
+            <param name="name">Name</param>
+            <returns>List of child nodes</returns>
+        </member>
+        <member name="M:Companion.Data.XmlExtensions.GetNodesFromPath(System.Xml.XmlNode,System.String[])">
+            <summary>
+            Get a list of nodes from the path provided.
+            </summary>
+            <param name="element">Element to search from</param>
+            <param name="names">Names of the path to found</param>
+            <returns>List of nodes found or empty list if not found</returns>
+        </member>
+        <member name="M:Companion.Data.XmlExtensions.GetNode(System.Xml.XmlNode,System.String)">
+            <summary>
+            Get a single node by name. If the provided node has that name it will return that node otherwise it will attempt to find it in the children recursively.
+            </summary>
+            <param name="element">Node</param>
+            <param name="name">Name</param>
+            <returns>Node or null if not found</returns>
+        </member>
+        <member name="M:Companion.Data.XmlExtensions.WriteAttribute(System.Xml.XmlWriter,System.String,System.String)">
+            <summary>
+            Write a string value out to the writer.
+            </summary>
+            <param name="writer">Xml Writer</param>
+            <param name="localName">Local name</param>
+            <param name="value">Value</param>
+        </member>
+        <member name="M:Companion.Data.XmlExtensions.WriteAttribute(System.Xml.XmlWriter,System.String,System.Boolean)">
+            <summary>
+            Write a boolean value out to the writer.
+            </summary>
+            <param name="writer">Xml Writer</param>
+            <param name="localName">Local name</param>
+            <param name="value">Value</param>
+        </member>
+        <member name="M:Companion.Data.XmlExtensions.WriteAttribute(System.Xml.XmlWriter,System.String,System.Int32)">
+            <summary>
+            Write an integer value out to the writer.
+            </summary>
+            <param name="writer">Xml Writer</param>
+            <param name="localName">Local name</param>
+            <param name="value">Value</param>
+        </member>
         <member name="M:Companion.Data.XmlExtensions.WriteAttribute(System.Xml.XmlWriter,System.String,System.Double)">
             <summary>
             Write a double value out to the writer. This uses CultureInfo.InvariantCulture and aims to write as compatible as possible with battle scribe by alway writing a decimal place.
@@ -441,11 +540,45 @@
             Aborts the process.
             </summary>
         </member>
-        <member name="M:Companion.Data.System.Update.IUpdateProcess.GetState">
+        <member name="T:Companion.Data.System.Update.MultipleUpdateProcess">
             <summary>
-            The update state this process handles.
+            Multiple update process.
             </summary>
-            <returns>update state</returns>
+        </member>
+        <member name="E:Companion.Data.System.Update.MultipleUpdateProcess.LoadingComplete">
+            <summary>
+            Fired when the process completed.
+            </summary>
+        </member>
+        <member name="E:Companion.Data.System.Update.MultipleUpdateProcess.LoadingAborted">
+            <summary>
+            Fired when the process is aborted.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.System.Update.MultipleUpdateProcess.Abort">
+            <summary>
+            Aborts the process. Fires the abort event.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.System.Update.MultipleUpdateProcess.Abort(Companion.Data.System.Update.UpdateError,System.String)">
+            <summary>
+            Aborts the process. Fires the abort event.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.System.Update.MultipleUpdateProcess.Complete">
+            <summary>
+            Complete the process. Fires the complete event.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.System.Update.MultipleUpdateProcess.Complete(System.Object)">
+            <summary>
+            Complete the process. Fires the complete event.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.System.Update.MultipleUpdateProcess.Cleanup">
+            <summary>
+            Cleanup. Fired from Abort() and Complete(). By default does nothing.
+            </summary>
         </member>
         <member name="T:Companion.Data.System.Update.RetrieveDataIndexProcess">
             <summary>
@@ -570,6 +703,86 @@
             </summary>
             <returns>Safe data name</returns>
         </member>
+        <member name="M:Companion.Data.Utils.XmlUtils.ParseXml``1(System.Xml.XmlNode)">
+            <summary>
+            Parse a single XmlNode into an XmlData class.
+            </summary>
+            <typeparam name="T">Type of data</typeparam>
+            <param name="node">Node to parse</param>
+            <returns>Parsed XmlData</returns>
+        </member>
+        <member name="M:Companion.Data.Utils.XmlUtils.ParseXmlList``1(System.Collections.Generic.List{System.Xml.XmlNode},Companion.Data.IRootContainer)">
+            <summary>
+            Parse a list of XmlNodes into a list of XmlData. If a root container is provided it is set on every data in the list (for example a Catalogue/GameSystem root container). Always returns at least an empty list.
+            </summary>
+            <typeparam name="T">Type of data</typeparam>
+            <param name="nodes">Nodes to parse</param>
+            <param name="rootContainer">Optional root container</param>
+            <returns>List of XmlData</returns>
+        </member>
+        <member name="M:Companion.Data.Utils.XmlUtils.GetPath(System.Xml.XmlNode)">
+            <summary>
+            Construct a string that has the node path for debugging.
+            </summary>
+            <param name="node">Node</param>
+            <returns>Path to node</returns>
+        </member>
+        <member name="M:Companion.Data.Utils.XmlUtils.GetAttribute(System.Xml.XmlNode,System.String)">
+            <summary>
+            Get an attribute value with the specified name.
+            </summary>
+            <param name="node">Node</param>
+            <param name="name">Name</param>
+            <returns>Attribute value</returns>
+        </member>
+        <member name="M:Companion.Data.Utils.XmlUtils.GetAttributeInt(System.Xml.XmlNode,System.String)">
+            <summary>
+            Get an attribute value with the specified name and attempt to convert it to an integer.
+            </summary>
+            <param name="node">Node</param>
+            <param name="name">Name</param>
+            <returns>Attribute value</returns>
+        </member>
+        <member name="M:Companion.Data.Utils.XmlUtils.GetNodes(System.Xml.XmlNode,System.String)">
+            <summary>
+            Get the nodes by name recursively through all child nodes.
+            </summary>
+            <param name="element">Current node</param>
+            <param name="name">Name</param>
+            <returns>List of nodes found</returns>
+        </member>
+        <member name="M:Companion.Data.Utils.XmlUtils.GetNodes(System.Xml.XmlNode,System.Collections.Generic.List{System.Xml.XmlNode},System.String)">
+            <summary>
+            Get the nodes by name recursively through all child nodes and add it to the list of nodes provided.
+            </summary>
+            <param name="element">Current node</param>
+            <param name="nodes">List to add results to</param>
+            <param name="name">Name</param>
+        </member>
+        <member name="M:Companion.Data.Utils.XmlUtils.GetChildNodes(System.Xml.XmlNode,System.String)">
+            <summary>
+            Get a list of child nodes from the provided node. Always returns at least an empty list.
+            </summary>
+            <param name="element">Node</param>
+            <param name="name">Name</param>
+            <returns>List of child nodes</returns>
+        </member>
+        <member name="M:Companion.Data.Utils.XmlUtils.GetNodesFromPath(System.Xml.XmlNode,System.String[])">
+            <summary>
+            Get a list of nodes from the path provided.
+            </summary>
+            <param name="element">Element to search from</param>
+            <param name="names">Names of the path to found</param>
+            <returns>List of nodes found or empty list if not found</returns>
+        </member>
+        <member name="M:Companion.Data.Utils.XmlUtils.GetNode(System.Xml.XmlNode,System.String)">
+            <summary>
+            Get a single node by name. If the provided node has that name it will return that node otherwise it will attempt to find it in the children recursively.
+            </summary>
+            <param name="element">Node</param>
+            <param name="name">Name</param>
+            <returns>Node or null if not found</returns>
+        </member>
         <member name="T:Companion.Data.Utils.XmlDataFactory">
             <summary>
             Speed up xml serialization by creating the constructors manually.
@@ -603,16 +816,68 @@
             List of xml lists containing all the nodes after parsing.
             </summary>
         </member>
+        <member name="M:Companion.Data.XmlData.#ctor(System.Xml.XmlNode)">
+            <summary>
+            Create a new data class from a node. This parses the node automatically.
+            </summary>
+            <param name="node">Node to parse</param>
+        </member>
         <member name="M:Companion.Data.XmlData.InitFields">
             <summary>
             Init the fields usually lists to a new empty list. By default does nothing.
             </summary>
+        </member>
+        <member name="M:Companion.Data.XmlData.OnParseGlobalData">
+            <summary>
+            Parse any global values that might be present in any nodes in the xml, for example: xmlns and comment.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.XmlData.OnParseNode">
+            <summary>
+            Parse the node into data.
+            </summary>
+        </member>
+        <member name="M:Companion.Data.XmlData.ParseXml``1(System.Xml.XmlNode)">
+            <summary>
+            Parse a single XmlNode into an XmlData class.
+            </summary>
+            <typeparam name="T">Type of data</typeparam>
+            <param name="node">Node to parse</param>
+            <returns>Parsed XmlData</returns>
+        </member>
+        <member name="M:Companion.Data.XmlData.ParseXmlList``1(System.Collections.Generic.List{System.Xml.XmlNode},Companion.Data.IRootContainer)">
+            <summary>
+            Parse a list of XmlNodes into a list of XmlData and store it in the fields list. If a root container is provided it is set on every data in the list (for example a Catalogue/GameSystem root container). Always returns at least an empty list.
+            </summary>
+            <typeparam name="T">Type of data</typeparam>
+            <param name="nodes">Nodes to parse</param>
+            <param name="rootContainer">Optional root container</param>
+            <returns>List of XmlData</returns>
+        </member>
+        <member name="M:Companion.Data.XmlData.WriteXml(System.Xml.XmlWriter)">
+            <summary>
+            Write Xml to the writer. This must be implemented explicitly and by default throws an exception.
+            </summary>
+            <param name="writer">Writer to write to</param>
+            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="M:Companion.Data.XmlData.SetRootContainer(Companion.Data.IRootContainer)">
             <summary>
             Set the root container.
             </summary>
             <param name="rootContainer">Root container</param>
+        </member>
+        <member name="M:Companion.Data.XmlData.GetNode">
+            <summary>
+            Get the node that was parsed. Cached for convenience.
+            </summary>
+            <returns>Node</returns>
+        </member>
+        <member name="M:Companion.Data.XmlData.GetDataType">
+            <summary>
+            Get the xml name of the main node.
+            </summary>
+            <returns>Data type</returns>
         </member>
         <member name="M:Companion.Data.XmlData.WriteXmlList``1(System.Xml.XmlWriter,System.Collections.Generic.List{``0},System.String)">
             <summary>
@@ -822,6 +1087,14 @@
             <summary>
             List of loaded repositories.
             </summary>
+        </member>
+        <member name="M:UpdateManager.RetrieveRepositoryDataIndex(Companion.Data.System.Update.RepositoryData,System.Boolean)">
+            <summary>
+            Load ALL repository data indices into the repository data. This is a brute force method to get every data index, ideally we just cache the repository data to avoid this lookup.
+            </summary>
+            <param name="repositoryData">Repository data to load</param>
+            <param name="async">Whether request should be done asynchronous</param>
+            <returns>Returns true if it was executed</returns>
         </member>
         <member name="M:UpdateManager.RetrieveRepositoryIndex(System.String,System.Boolean)">
             <summary>
